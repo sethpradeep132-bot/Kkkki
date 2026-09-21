@@ -1,0 +1,139 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: #F8FAFC;
+    color: #0F172A;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  
+  /* Apply ultra-crisp font rendering globally */
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+}
+
+/* Ultra HD Polish: Prevent colors from looking faded (fika) while keeping exact same color codes */
+#root {
+  filter: contrast(1.06) saturate(1.18);
+}
+
+.font-brand {
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+}
+
+.font-display {
+  font-family: 'Montserrat', 'Outfit', sans-serif;
+}
+
+.font-stylish {
+  font-family: 'Syne', 'Outfit', sans-serif;
+}
+
+.font-poppins {
+  font-family: 'Poppins', 'Plus Jakarta Sans', sans-serif;
+}
+
+.text-gradient-blue {
+  background: linear-gradient(135deg, #0055FF 0%, #0036B8 50%, #00227A 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-orange {
+  background: linear-gradient(135deg, #FFA000 0%, #FF5A00 50%, #E63500 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+@keyframes slideLeft {
+  from {
+    left: 100%;
+    transform: translateX(0);
+  }
+  to {
+    left: 0%;
+    transform: translateX(-100%);
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Hide bottom banners when keyboard is open */
+body.keyboard-open nav.fixed.bottom-0,
+body.keyboard-open nav.sticky.bottom-0,
+body.keyboard-open .fixed.bottom-2 {
+  display: none !important;
+}
+
+@keyframes ellipsis {
+  0% { content: ""; }
+  25% { content: "."; }
+  50% { content: ".."; }
+  75% { content: "..."; }
+  100% { content: ""; }
+}
+.loading-ellipsis::after {
+  content: "";
+  animation: ellipsis 1.5s infinite;
+}
+@keyframes slideUpFade {
+  0% { opacity: 1; transform: translateY(10px); }
+  20% { opacity: 1; transform: translateY(-5px); }
+  80% { opacity: 1; transform: translateY(-10px); }
+  100% { opacity: 0; transform: translateY(-20px); }
+}
+
+@layer utilities {
+  .overflow-y-auto {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: none;
+  }
+}
+
+
+
+
+
+#root {
+  height: 100dvh;
+  width: 100%;
+}
+
+html, body {
+  overscroll-behavior: none;
+  min-height: 100dvh;
+  width: 100%;
+  overflow-y: auto; 
+  overflow-x: hidden;
+}
+#root {
+  min-height: 100dvh;
+  width: 100%;
+}

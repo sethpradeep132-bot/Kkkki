@@ -1,0 +1,1189 @@
+export const TaskDetailView = ({ task, seller, onBack, isHubView }: { task: any, seller: any, onBack: () => void, isHubView?: boolean }) => {
+  const [liveProductImages, setLiveProductImages] = useState<string[]>([]);
+  const productImages = liveProductImages.length > 0 ? liveProductImages : (task['product image'] || '').split('|||').filter(Boolean);
+  const displayImage = productImages.length > 0 ? productImages[0] : null;
+  
+  useEffect(() => {
+    const fetchLiveImage = async () => {
+      if (isHubView && task?.id) {
+        const { data } = await supabase
+          .from('accepted_shipments')
+          .select('product image')
+          .eq('id', task.id)
+          .maybeSingle();
+        if (data && data['product image']) {
+          setLiveProductImages(data['product image'].split('|||').filter(Boolean));
+        } else {
+          setLiveProductImages((task['product image'] || '').split('|||').filter(Boolean));
+        }
+      } else {
+        setLiveProductImages((task['product image'] || '').split('|||').filter(Boolean));
+      }
+    };
+    fetchLiveImage();
+  }, [task, isHubView]);
+  
+
+  const [qcBrand, setQcBrand] = useState<'pass' | 'fail' | null>(null);
+  const [qcCondition, setQcCondition] = useState<'pass' | 'fail' | null>(null);
+  const [qcSame, setQcSame] = useState<'pass' | 'fail' | null>(null);
+  
+  const [pinInput, setPinInput] = useState('');
+  const [pinError, setPinError] = useState(false);
+  const [showCallID, setShowCallID] = useState<string | false>(false);
+  const [showUnableOptions, setShowUnableOptions] = useState(false);
+  const [unableReason, setUnableReason] = useState<string | null>(null);
+
+  const [showFullImage, setShowFullImage] = useState(false);
+  const [capturedImages, setCapturedImages] = useState<string[]>([]);
+  const [signatureData, setSignatureData] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [signatory, setSignatory] = useState<string>('');
+  
+  
+
+  
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const isDrawing = useRef(false);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = '#000';
+  }, []);
+
+  const startDrawing = (e: any) => {
+    isDrawing.current = true;
+    draw(e);
+  };
+  
+  const stopDrawing = () => {
+    isDrawing.current = false;
+    const canvas = canvasRef.current;
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      if (ctx) ctx.beginPath();
+      setSignatureData(canvas.toDataURL());
+    }
+  };
+  
+  const draw = (e: any) => {
+    if (!isDrawing.current) return;
+    const canvas = canvasRef.current;
+    const ctx = canvas?.getContext('2d');
+    if (!canvas || !ctx) return;
+    const rect = canvas.getBoundingClientRect();
+    
+    let clientX, clientY;
+    if (e.touches && e.touches.length > 0) {
+       clientX = e.touches[0].clientX;
+       clientY = e.touches[0].clientY;
+       e.preventDefault();
+    } else {
+       clientX = e.clientX;
+       clientY = e.clientY;
+    }
+    
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
+    
+    ctx.lineTo(x, y);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+  };
+
+  const isQcPass = qcBrand === 'pass' && qcCondition === 'pass' && qcSame === 'pass';
+  const isQcFail = qcBrand === 'fail' || qcCondition === 'fail' || qcSame === 'fail';
+  const isQcComplete = isQcPass || isQcFail;
+  
+  
+  
+  const compressImage = (base64Str: string): Promise<string> => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.src = base64Str;
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const MAX_DIMENSION = 800;
+        let width = img.width;
+        let height = img.height;
+        if (Math.max(width, height) > MAX_DIMENSION) {
+          const ratio = MAX_DIMENSION / Math.max(width, height);
+          width *= ratio;
+          height *= ratio;
+        }
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL('image/jpeg', 0.7));
+        } else {
+          resolve(base64Str);
+        }
+      };
+      img.onerror = () => resolve(base64Str);
+    });
+  };
+
+  const generateUniqueAwb = async () => {
+    const yearStr = new Date().getFullYear().toString().slice(-2);
+    let length = 8;
+    let awb = '';
+    let isUnique = false;
+    let attempts = 0;
+    while (!isUnique) {
+      awb = `SURI${yearStr}${Math.floor(Math.random() * Math.pow(10, length)).toString().padStart(length, '0')}`;
+      const { data: d1 } = await supabase.from('accepted_shipments').select('id').eq('awb number', awb).maybeSingle();
+      const { data: d2 } = await supabase.from('customer_orders').select('id').eq('awb number', awb).maybeSingle();
+      if (!d1 && !d2) {
+        isUnique = true;
+      } else {
+        attempts++;
+        if (attempts > 5) {
+          length += 1;
+          attempts = 0;
+        }
+      }
+    }
+    return awb;
+  };
+
+  const getSignatureWithText = () => {
+     if (!canvasRef.current) return null;
+     const finalCanvas = document.createElement('canvas');
+     finalCanvas.width = canvasRef.current.width;
+     finalCanvas.height = canvasRef.current.height + 40;
+     const ctx = finalCanvas.getContext('2d');
+     if(!ctx) return null;
+     ctx.fillStyle = 'white';
+     ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
+     ctx.drawImage(canvasRef.current, 0, 0);
+     ctx.fillStyle = 'black';
+     ctx.font = 'bold 12px Arial';
+     ctx.fillText(`${new Date().toLocaleString('en-IN')} - ${signatory}`, 10, finalCanvas.height - 15);
+     return finalCanvas.toDataURL('image/jpeg', 0.8);
+  };
+
+  const isAllFilled = isQcComplete && (isQcPass ? true : capturedImages.length > 0) && signatureData && signatory && (isQcPass ? pinInput.length >= 8 : true);
+
+    const handleMarkAsDone = async () => {
+    if (isQcPass && pinInput !== task['pickup pin']) {
+      setPinError(true);
+      return;
+    }
+    if (!signatory) {
+      alert("Please select Self, Customer, or Other for signature.");
+      return;
+    }
+    setPinError(false);
+    setLoading(true);
+
+    try {
+      const dateStr = new Date().toLocaleString('en-IN');
+      let qty = parseInt(task['total quantity'] || task['quantity'] || '1', 10);
+      if (isNaN(qty) || qty < 1) qty = 1;
+
+      // Just generate one AWB since each quantity unit is now its own separate task/row
+      const awb = await generateUniqueAwb();
+      
+
+      const sigBase64 = getSignatureWithText();
+      let capturedImage = capturedImages.length > 0 ? capturedImages[0] : null;
+      if (capturedImage) {
+         capturedImage = await compressImage(capturedImage);
+      }
+
+      const currentOrderStatus = task['order status'] || '';
+      const currentShipmentStatus = task['shipment status'] || '';
+      const currentCallDetails = task['call details'] || '';
+
+      // Fetch latest order status from customer_orders to ensure we append perfectly without losing history
+      let latestCoStatus = currentOrderStatus;
+      if (task['order ID']) {
+        const { data: coData } = await supabase.from('customer_orders').select('"order status"').eq('order ID', task['order ID']).maybeSingle();
+        if (coData) latestCoStatus = coData['order status'] || '';
+      }
+
+
+      const newCallDetails = currentCallDetails + `\nCall attempt: 1, Call duration: 00:00, Call recording - ${dateStr}`;
+
+      let riderName = 'Unknown';
+      let riderId = task['Rider id'] || '';
+      if (riderId) {
+         const { data: riderData } = await supabase.from('riders').select('rider_name').eq('id', riderId).maybeSingle();
+         if (riderData && riderData.rider_name) riderName = riderData.rider_name;
+      }
+
+      if (isQcPass) {
+         const orderUpdateLine = `Your order has been picked up successfully on ${dateStr} - Order ID: ${task['order ID']}`;
+         const shipmentUpdateLine = `Order Picked up AWB Number: ${awb} by ${riderName} (ID: ${riderId}) on ${dateStr}`;
+
+         const newOrderStatus = currentOrderStatus + (currentOrderStatus ? '\n' : '') + orderUpdateLine;
+         const newShipmentStatus = currentShipmentStatus + (currentShipmentStatus ? '\n' : '') + shipmentUpdateLine;
+
+         const payload: any = {
+             'shipment type': 'picked up',
+             'order status': newOrderStatus,
+             'shipment status': newShipmentStatus,
+             'awb number': awb,
+             'pickup pin': '',
+             'call details': newCallDetails,
+             'digital signature': sigBase64
+         };
+         if (capturedImage) {
+             payload['captured images'] = task['captured images'] ? task['captured images'] + '|||' + capturedImage : capturedImage;
+         }
+
+         await supabase.from('accepted_shipments').update(payload).eq('id', task.id);
+         
+         // Update exactly one corresponding row in customer_orders to avoid overwriting all split rows
+         const { data: coRows } = await supabase.from('customer_orders').select('id, "order status", "awb number"').eq('order ID', task['order ID']);
+         if (coRows && coRows.length > 0) {
+            let targetRow = coRows.find(r => !r['awb number'] || r['awb number'].trim() === '');
+            if (!targetRow) targetRow = coRows[0];
+            const currentCoStatus = targetRow['order status'] || '';
+            await supabase.from('customer_orders').update({ 
+               'order status': currentCoStatus + (currentCoStatus ? ' || ' : '') + orderUpdateLine, 
+               'awb number': awb 
+            }).eq('id', targetRow.id);
+         }
+         
+      } else {
+         const shipmentUpdateLine = `Your order has been cancelled on ${dateStr} - Order ID: ${task['order ID']}`;
+         const newShipmentStatus = currentShipmentStatus + (currentShipmentStatus ? '\n' : '') + shipmentUpdateLine;
+         
+         const payload: any = {
+             'shipment type': 'faild pickup',
+             'shipment status': newShipmentStatus,
+             'awb number': awb,
+             'call details': newCallDetails,
+             'digital signature': sigBase64
+         };
+         if (capturedImage) {
+             payload['captured images'] = task['captured images'] ? task['captured images'] + '|||' + capturedImage : capturedImage;
+         }
+         
+         await supabase.from('accepted_shipments').update(payload).eq('id', task.id);
+         
+         // Update customer_orders
+         const { data: coRows } = await supabase.from('customer_orders').select('id, "order status", "awb number"').eq('order ID', task['order ID']);
+         if (coRows && coRows.length > 0) {
+            let targetRow = coRows.find(r => !r['awb number'] || r['awb number'].trim() === '');
+            if (!targetRow) targetRow = coRows[0];
+            const currentCoStatus = targetRow['order status'] || '';
+            await supabase.from('customer_orders').update({
+                'order status': currentCoStatus + (currentCoStatus ? ' || ' : '') + shipmentUpdateLine,
+                'awb number': awb
+            }).eq('id', targetRow.id);
+         }
+      }
+      alert('Task completed successfully!');
+      onBack();
+    } catch(e) {
+      console.error(e);
+      alert('Failed to update task: ' + ((e as any).message || JSON.stringify(e)));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+    const handleUnableSubmit = async () => {
+    if (!unableReason) return;
+    setLoading(true);
+    
+    try {
+      let type = '';
+      let statusPrefix = '';
+      if (unableReason === 'No response') {
+         type = 'no responsed pickup';
+         statusPrefix = 'no responsed';
+      } else if (unableReason === 'Reschedule') {
+         type = 'rescheduled pickup';
+         statusPrefix = 'rescheduled';
+      } else {
+         type = 'not attanded pickup';
+         statusPrefix = 'not attended';
+      }
+
+      let riderName = 'Unknown';
+      let riderId = task['Rider id'] || '';
+      if (riderId) {
+         const { data: riderData } = await supabase.from('riders').select('rider_name').eq('id', riderId).maybeSingle();
+         if (riderData && riderData.rider_name) riderName = riderData.rider_name;
+      }
+
+      const dateStr = new Date().toLocaleString('en-IN');
+      const awb = await generateUniqueAwb();
+      
+      const currentShipmentStatus = task['shipment status'] || '';
+      const currentCallDetails = task['call details'] || '';
+
+      const newCallDetails = currentCallDetails + `\nCall attempt: 1, Call duration: 00:00, Call recording - ${dateStr}`;
+      const shipmentUpdateLine = `${statusPrefix} by ${riderName} (ID: ${riderId}) on ${dateStr}`;
+      const newShipmentStatus = currentShipmentStatus + (currentShipmentStatus ? '\n' : '') + shipmentUpdateLine;
+
+      const payload: any = {
+        'shipment type': type,
+        'shipment status': newShipmentStatus,
+        'awb number': awb,
+        'call details': newCallDetails
+      };
+
+      await supabase.from('accepted_shipments').update(payload).eq('id', task.id);
+      
+      // Update customer_orders
+      const { data: coRows } = await supabase.from('customer_orders').select('id, "order status", "awb number"').eq('order ID', task['order ID']);
+      if (coRows && coRows.length > 0) {
+         let targetRow = coRows.find(r => !r['awb number'] || r['awb number'].trim() === '');
+         if (!targetRow) targetRow = coRows[0];
+         const currentCoStatus = targetRow['order status'] || '';
+         await supabase.from('customer_orders').update({
+             'order status': currentCoStatus + (currentCoStatus ? ' || ' : '') + shipmentUpdateLine,
+             'awb number': awb
+         }).eq('id', targetRow.id);
+      }
+      alert('Task marked as unable to complete: ' + unableReason);
+      onBack();
+    } catch(e) {
+      console.error(e);
+      alert('Failed to update task: ' + ((e as any).message || JSON.stringify(e)));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const [scannedAwb, setScannedAwb] = useState('');
+  const [isAwbVerified, setIsAwbVerified] = useState(false);
+  const [awbError, setAwbError] = useState('');
+  const [isPrinting, setIsPrinting] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [dots, setDots] = useState('');
+
+  useEffect(() => {
+    let interval: any;
+    if (isPrinting || isDownloading) {
+      interval = setInterval(() => {
+        setDots(prev => prev.length >= 3 ? '' : prev + '.');
+      }, 400);
+    } else {
+      setDots('');
+    }
+    return () => clearInterval(interval);
+  }, [isPrinting, isDownloading]);
+  
+  const generateAwbPdfDoc = () => {
+    const width = 588;
+    const height = 358;
+
+    const doc = new jsPDF({
+      orientation: 'landscape',
+      unit: 'pt',
+      format: [width, height]
+    });
+
+    const marginX = 15;
+    const marginY = 15;
+    
+    // Dynamic calculation for pt units
+    const totalBoxWidth = width - (marginX * 2);
+    const box1Width = totalBoxWidth * 0.52; // slightly larger for customer info
+    const box2Width = totalBoxWidth * 0.48;
+    const boxHeight = (height - marginY * 2) * 0.65; 
+    const barcodeBoxHeight = (height - marginY * 2) * 0.35;
+
+    doc.setLineWidth(1);
+    
+    // Box 1: Customer Details
+    doc.rect(marginX, marginY, box1Width, boxHeight);
+    // Box 2: Order Info (touching Box 1)
+    doc.rect(marginX + box1Width, marginY, box2Width, boxHeight);
+    // Box 3: Barcode (touching Box 1 & 2 bottom)
+    doc.rect(marginX, marginY + boxHeight, box1Width + box2Width, barcodeBoxHeight);
+
+    // Customer Details Text
+    doc.setFontSize(18);
+    doc.setFont('helvetica', 'bold');
+    doc.text("Customer Details:", marginX + 10, marginY + 45);
+    
+    let leftY = marginY + 65;
+    const drawLeft = (label: string, value: string) => {
+      doc.setFontSize(14);
+      doc.setFont('helvetica', 'bold');
+      doc.text(label, marginX + 10, leftY);
+      const labelWidth = doc.getTextWidth(label) + 5;
+      doc.setFont('helvetica', 'normal');
+      const lines = doc.splitTextToSize(String(value || 'N/A'), box1Width - 20 - labelWidth);
+      doc.text(lines, marginX + 10 + labelWidth, leftY);
+      leftY += Math.max(1, lines.length) * 18;
+    };
+
+    const maskStr = (str: string | undefined | null) => {
+      if (!str) return 'N/A';
+      const s = String(str);
+      if (s.length <= 6) return s;
+      return 'X'.repeat(s.length - 6) + s.slice(-6);
+    };
+
+    const mobileStr = maskStr(task['mobile number']);
+    
+    drawLeft("Name:", task['full name']);
+    drawLeft("Mobile:", mobileStr);
+    drawLeft("Address:", task['full address']);
+    drawLeft("Pincode:", task['pincode']);
+    drawLeft("Landmark:", task['landmark']);
+    drawLeft("Type:", task['address type']);
+
+    // Order Details Text
+    doc.setFontSize(18);
+    doc.setFont('helvetica', 'bold');
+    doc.text("Order Details:", marginX + box1Width + 10, marginY + 45);
+    
+    let rightY = marginY + 65;
+    const drawRight = (label: string, value: string) => {
+      doc.setFontSize(14);
+      doc.setFont('helvetica', 'bold');
+      doc.text(label, marginX + box1Width + 10, rightY);
+      const labelWidth = doc.getTextWidth(label) + 5;
+      doc.setFont('helvetica', 'normal');
+      const lines = doc.splitTextToSize(String(value || 'N/A'), box2Width - 20 - labelWidth);
+      doc.text(lines, marginX + box1Width + 10 + labelWidth, rightY);
+      rightY += Math.max(1, lines.length) * 18;
+    };
+
+    drawRight("Order ID:", maskStr(task['order ID']));
+    drawRight("Tracking ID:", maskStr(task['tracking id number'])); 
+    drawRight("AWB No:", task['awb number']);
+    drawRight("Payment:", task['payment method']);
+
+    // Open Box Delivery Note
+    rightY += 10;
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.text("Note :-", marginX + box1Width + 10, rightY);
+    
+    rightY += 15;
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    const noteLines = doc.splitTextToSize(
+      "This product is under open box delivery policy. If there is any torn, damaged, or different product, please refuse to accept it.\n\nThank you for choosing Suriyawan Saffari.", 
+      box2Width - 20
+    );
+    doc.text(noteLines, marginX + box1Width + 10, rightY);
+
+    // Barcode
+    const canvas = document.createElement('canvas');
+    JsBarcode(canvas, task['awb number'] || 'UNKNOWN', {
+      format: 'CODE128',
+      displayValue: true,
+      fontSize: 32,
+      margin: 10,
+      height: 120,
+      width: 4
+    });
+    const barcodeData = canvas.toDataURL('image/jpeg', 1.0);
+    // Center barcode dynamically
+    const bcWidth = totalBoxWidth * 0.75;
+    const bcHeight = barcodeBoxHeight * 0.75;
+    const bcX = marginX + (totalBoxWidth - bcWidth) / 2;
+    const bcY = marginY + boxHeight + (barcodeBoxHeight - bcHeight) / 2;
+    doc.addImage(barcodeData, 'JPEG', bcX, bcY, bcWidth, bcHeight);
+
+    return doc;
+  };
+
+  const handlePrintAwb = () => {
+    setIsPrinting(true);
+    setTimeout(() => {
+      try {
+        const doc = generateAwbPdfDoc();
+        doc.save(`Shipping_Label_${task['awb number'] || 'LABEL'}.pdf`);
+        setIsPrinting(false);
+      } catch (e) {
+        console.error(e);
+        alert("Failed to generate PDF");
+        setIsPrinting(false);
+      }
+    }, 300);
+  };
+
+  const getHubManagerInfo = async () => {
+      let hId = null;
+      const stored = localStorage.getItem('portal_auth_hub');
+      if (stored) hId = JSON.parse(stored).id;
+      if (!hId) {
+         const { data: authData } = await supabase.auth.getUser();
+         if (authData?.user) hId = authData.user.id;
+      }
+      if (hId) {
+         const { data } = await supabase.from('hub_managers').select('id, hub_name, registered_pincode').eq('id', hId).maybeSingle();
+         if (data) return `${data.id} || ${data.hub_name || ''} || ${data.registered_pincode || ''}`;
+      }
+      return 'Unknown Hub';
+  };
+
+  const handleHubReceive = async () => {
+    setLoading(true);
+    try {
+      const dateStr = new Date().toLocaleString('en-IN');
+      const hubInfo = await getHubManagerInfo();
+      
+      const orderUpdateLine = `Your order has been received at hub on ${dateStr} - AWB: ${task['awb number'] || 'N/A'}`;
+      const shipmentUpdateLine = `Received at Hub on ${dateStr} by ${hubInfo} - AWB: ${task['awb number'] || 'N/A'}`;
+      
+      const currentCoStatus = task['order status'] || '';
+      const currentShipmentStatus = task['shipment status'] || '';
+      
+      // Update customer_orders (order status only)
+      const { data: coRows } = await supabase.from('customer_orders').select('id, "order status", "awb number"').eq('order ID', task['order ID']);
+      if (coRows && coRows.length > 0) {
+         let targetRow = coRows.find(r => r['awb number'] === task['awb number']);
+         if (!targetRow) targetRow = coRows.find(r => !r['awb number'] || r['awb number'].trim() === '');
+         if (!targetRow) targetRow = coRows[0];
+         await supabase.from('customer_orders').update({
+             'order status': currentCoStatus + (currentCoStatus ? ' || ' : '') + orderUpdateLine
+         }).eq('id', targetRow.id);
+      }
+      
+      // Update accepted_shipments
+      await supabase.from('accepted_shipments').update({
+          'shipment status': currentShipmentStatus + (currentShipmentStatus ? '\n' : '') + shipmentUpdateLine,
+          'shipment type': 'received at hub',
+          'shipment tag': 'customer delivery',
+          'pickupsheet id': null,
+          'attempt': null
+      }).eq('id', task.id);
+      
+      alert('Shipment Received at Hub successfully!');
+      onBack();
+    } catch(err) {
+       console.error(err);
+    } finally {
+       setLoading(false);
+    }
+  };
+
+  const handleHubFail = async () => {
+    setLoading(true);
+    try {
+      const dateStr = new Date().toLocaleString('en-IN');
+      const hubInfo = await getHubManagerInfo();
+      
+      const orderUpdateLine = `Your order has been cancelled on ${dateStr} - Order ID: ${task['order ID']}`;
+      const shipmentUpdateLine = `QC Failed Pickup on ${dateStr} by ${hubInfo}`;
+      
+      const currentCoStatus = task['order status'] || '';
+      const currentShipmentStatus = task['shipment status'] || '';
+      
+      // Update customer_orders (order status only)
+      const { data: coRows } = await supabase.from('customer_orders').select('id, "order status", "awb number"').eq('order ID', task['order ID']);
+      if (coRows && coRows.length > 0) {
+         let targetRow = coRows.find(r => r['awb number'] === task['awb number']);
+         if (!targetRow) targetRow = coRows.find(r => !r['awb number'] || r['awb number'].trim() === '');
+         if (!targetRow) targetRow = coRows[0];
+         await supabase.from('customer_orders').update({
+             'order status': currentCoStatus + (currentCoStatus ? ' || ' : '') + orderUpdateLine
+         }).eq('id', targetRow.id);
+      }
+      
+      // Update accepted_shipments
+      await supabase.from('accepted_shipments').update({
+          'shipment status': currentShipmentStatus + (currentShipmentStatus ? '\n' : '') + shipmentUpdateLine,
+          'shipment type': 'qc faild pickup',
+          'pickupsheet id': null,
+          'attempt': null
+      }).eq('id', task.id);
+      
+      alert('Shipment marked as QC Failed!');
+      onBack();
+    } catch(err) {
+       console.error(err);
+    } finally {
+       setLoading(false);
+    }
+  };
+
+  const handleHubReattempt = async () => {
+    setLoading(true);
+    try {
+      const dateStr = new Date().toLocaleString('en-IN');
+      const hubInfo = await getHubManagerInfo();
+      
+      const shipmentUpdateLine = `Failed Pickup Re-attempted on ${dateStr} by ${hubInfo}`;
+      const currentShipmentStatus = task['shipment status'] || '';
+      
+      // NO update to customer_orders!
+      
+      // Update accepted_shipments
+      await supabase.from('accepted_shipments').update({
+          'shipment status': currentShipmentStatus + (currentShipmentStatus ? '\n' : '') + shipmentUpdateLine,
+          'shipment type': 'ready to pickup',
+          'Rider id': null,
+          'hub manager id': null,
+          'pickupsheet id': null
+      }).eq('id', task.id);
+      
+      alert('Shipment queued for re-attempt!');
+      onBack();
+    } catch(err) {
+       console.error(err);
+    } finally {
+       setLoading(false);
+    }
+  };
+
+  const handleHubDone = async () => {
+    setLoading(true);
+    try {
+      const dateStr = new Date().toLocaleString('en-IN');
+      const originalType = (task['shipment type'] || '').toLowerCase();
+      
+      const currentShipmentStatus = task['shipment status'] || '';
+      const currentAttempt = parseInt(task['attempt'] || '1');
+      
+      if (currentAttempt >= 3) {
+          const cancelUpdateLine = `Your order has been cancelled on ${dateStr} - Order ID: ${task['order ID']}`;
+          
+          // Update customer_orders
+          const { data: coRows } = await supabase.from('customer_orders').select('id, "order status", "awb number"').eq('order ID', task['order ID']);
+          if (coRows && coRows.length > 0) {
+             let targetRow = coRows.find(r => r['awb number'] === task['awb number']);
+             if (!targetRow) targetRow = coRows.find(r => !r['awb number'] || r['awb number'].trim() === '');
+             if (!targetRow) targetRow = coRows[0];
+             
+             const existingCoStatus = targetRow['order status'] || '';
+             await supabase.from('customer_orders').update({
+                 'order status': existingCoStatus + (existingCoStatus ? ' || ' : '') + cancelUpdateLine
+             }).eq('id', targetRow.id);
+          }
+          
+          const hubInfo = await getHubManagerInfo();
+          // Update accepted_shipments
+          await supabase.from('accepted_shipments').update({
+             'shipment status': currentShipmentStatus + (currentShipmentStatus ? '\n' : '') + `Pickup attempt faild on ${dateStr} by ${hubInfo}`,
+             'shipment type': 'pickup attempt faild',
+             'pickupsheet id': null
+          }).eq('id', task.id);
+          
+          alert('Max attempts reached. Order cancelled!');
+      } else {
+          const shipmentUpdateLine = `${originalType} re-attempt on ${dateStr}`;
+          
+          // Update accepted_shipments and increment attempt
+          await supabase.from('accepted_shipments').update({
+              'attempt': (currentAttempt + 1).toString(),
+              'shipment status': currentShipmentStatus + (currentShipmentStatus ? '\n' : '') + shipmentUpdateLine,
+              'shipment type': 'ready to pickup',
+              'Rider id': null,
+          'hub manager id': null,
+          'pickupsheet id': null
+      }).eq('id', task.id);
+          
+          alert('Shipment queued for re-attempt!');
+      }
+      onBack();
+    } catch(err) {
+       console.error(err);
+    } finally {
+       setLoading(false);
+    }
+  };
+
+  const handleDownloadAwb = () => {
+     setIsDownloading(true);
+     setTimeout(() => {
+       try {
+         const doc = generateAwbPdfDoc();
+         doc.save(`Shipping_Label_${task['awb number'] || 'LABEL'}.pdf`);
+       } catch (err) {}
+       setIsDownloading(false);
+     }, 1000);
+  };
+
+  const capturedImagesArr = (task['captured images'] || '').split('|||').filter(Boolean);
+  const isHubPickedUp = isHubView && (task['shipment type'] || '').toLowerCase() === 'picked up';
+  const isHubFailed = isHubView && (task['shipment type'] || '').toLowerCase() === 'faild pickup';
+  const isHubOther = isHubView && ['rescheduled pickup', 'not attanded pickup', 'no responsed pickup'].includes((task['shipment type'] || '').toLowerCase());
+  
+
+  if (isHubView) {
+    return (
+      <div className="fixed inset-0 z-50 bg-[#fafafa] flex flex-col font-poppins text-black h-full">
+        <div className="flex items-center p-3 h-14 bg-white border-b border-gray-200 shrink-0 shadow-sm relative z-20">
+          <button onClick={onBack} className="p-2 -ml-2 bg-transparent text-gray-700">
+            <ArrowLeft size={20} />
+          </button>
+          <h2 className="text-sm font-bold ml-2">Shipment Details</h2>
+        </div>
+        <div className="flex-1 overflow-y-auto p-4 space-y-5">
+        
+          
+          
+             <div className="bg-white border border-slate-200 p-3 rounded-none shadow-sm flex flex-col gap-3">
+               <div className="flex flex-col min-w-0">
+                 {task['pickup ID'] && (
+                   <div className="mb-1">
+                     <span className="text-[10px] font-bold text-slate-500 uppercase">PICKUP ID: </span>
+                     <span className="text-[10px] font-bold text-slate-800">{task['pickup ID']}</span>
+                   </div>
+                 )}
+                 <h3 className="text-xs font-bold text-slate-800 line-clamp-2 leading-tight">{task['product name']}</h3>
+                 <p className="text-[10px] font-semibold text-slate-600 mt-1 line-clamp-1">{task['product tittle name']}</p>
+                 <p className="text-[9px] text-slate-500 mt-1 line-clamp-2">{task['product discription']}</p>
+                 <div className="mt-1.5 flex gap-2">
+                   <span className="bg-slate-100 text-slate-700 text-[10px] px-2 py-0.5 font-bold">Qty: {task['total quantity'] || 1}</span>
+                 </div>
+               </div>
+               <div className="grid grid-cols-4 gap-2">
+                 {productImages.slice(0, 4).map((img, idx) => (
+                   <div 
+                     key={idx}
+                     className="aspect-square bg-slate-100 flex items-center justify-center border border-slate-200 overflow-hidden cursor-pointer"
+                     onClick={() => setShowFullImage(true)}
+                   >
+                     <img src={img} alt={`Product ${idx+1}`} className="w-full h-full object-cover" />
+                   </div>
+                 ))}
+                 {productImages.length === 0 && (
+                    <div className="aspect-square bg-slate-100 flex items-center justify-center border border-slate-200 col-span-1">
+                      <span className="text-[10px] text-slate-400">No Image</span>
+                    </div>
+                 )}
+               </div>
+             </div>
+          
+          <div className="bg-white border border-slate-200 p-4 rounded-none shadow-sm space-y-4">
+             {isHubFailed && (
+               <div>
+                 <h3 className="text-xs font-bold text-slate-500 uppercase mb-2">Captured Images</h3>
+                 {capturedImagesArr.length > 0 ? (
+                   <div className="flex gap-2 overflow-x-auto">
+                     {capturedImagesArr.map((src, i) => (
+                       <img key={i} src={src} alt="Captured" className="w-16 h-16 object-cover border border-slate-300" onClick={() => setShowFullImage(true)} />
+                     ))}
+                   </div>
+                 ) : (
+                   <span className="text-xs text-slate-400 font-semibold">No images</span>
+                 )}
+               </div>
+             )}
+             
+             <div className="grid grid-cols-2 gap-4 border-t border-slate-100 pt-4 mt-2">
+                 <div>
+                   <h3 className="text-xs font-bold text-slate-500 uppercase">Shipment Type</h3>
+                   <p className="text-sm font-bold text-slate-800 uppercase mt-1">{task['shipment type']}</p>
+                 </div>
+                 <div>
+                   <h3 className="text-xs font-bold text-slate-500 uppercase">Attempt</h3>
+                   <p className="text-sm font-bold text-slate-800 mt-1">{parseInt(task['attempt'] || '1')} / 3</p>
+                 </div>
+             </div>
+             <div>
+               <h3 className="text-xs font-bold text-slate-500 uppercase">Call Details</h3>
+               <p className="text-xs font-semibold text-slate-700 mt-1 whitespace-pre-wrap">{task['call details'] || 'No call details'}</p>
+             </div>
+          </div>
+
+          {isHubPickedUp && (
+            <>
+            <div className="bg-white p-4 border border-slate-200 shadow-sm">
+              <h3 className="text-xs font-bold uppercase mb-4 text-slate-800">Quality Check</h3>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-slate-700">1. Brand Name</span>
+                  <div className="flex gap-2">
+                    <button onClick={() => setQcBrand('pass')} className={`px-4 py-1 text-xs font-bold border rounded-sm ${qcBrand === 'pass' ? 'bg-emerald-500 text-white border-emerald-600' : 'bg-white text-slate-600 border-slate-300'}`}>Pass</button>
+                    <button onClick={() => setQcBrand('fail')} className={`px-4 py-1 text-xs font-bold border rounded-sm ${qcBrand === 'fail' ? 'bg-red-500 text-white border-red-600' : 'bg-white text-slate-600 border-slate-300'}`}>Fail</button>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-slate-700">2. Old / Damage / Dirty</span>
+                  <div className="flex gap-2">
+                    <button onClick={() => setQcCondition('pass')} className={`px-4 py-1 text-xs font-bold border rounded-sm ${qcCondition === 'pass' ? 'bg-emerald-500 text-white border-emerald-600' : 'bg-white text-slate-600 border-slate-300'}`}>Pass</button>
+                    <button onClick={() => setQcCondition('fail')} className={`px-4 py-1 text-xs font-bold border rounded-sm ${qcCondition === 'fail' ? 'bg-red-500 text-white border-red-600' : 'bg-white text-slate-600 border-slate-300'}`}>Fail</button>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-slate-700">3. Same Product</span>
+                  <div className="flex gap-2">
+                    <button onClick={() => setQcSame('pass')} className={`px-4 py-1 text-xs font-bold border rounded-sm ${qcSame === 'pass' ? 'bg-emerald-500 text-white border-emerald-600' : 'bg-white text-slate-600 border-slate-300'}`}>Pass</button>
+                    <button onClick={() => setQcSame('fail')} className={`px-4 py-1 text-xs font-bold border rounded-sm ${qcSame === 'fail' ? 'bg-red-500 text-white border-red-600' : 'bg-white text-slate-600 border-slate-300'}`}>Fail</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white p-5 border border-slate-200 shadow-sm flex flex-col gap-6">
+                <div className="grid grid-cols-2 gap-5">
+                   <button onClick={handlePrintAwb} disabled={isPrinting} className="py-3 text-[13px] font-bold text-blue-600 border-[1.5px] border-blue-600 rounded-none bg-white hover:bg-blue-50 uppercase min-w-0 break-words whitespace-normal text-center flex flex-row items-center justify-center gap-2">
+                      {isPrinting ? `Printing${dots}` : 'Print'}
+                   </button>
+                   <button onClick={handleDownloadAwb} disabled={isDownloading} className="py-3 text-[13px] font-bold text-purple-600 border-[1.5px] border-purple-600 rounded-none bg-white hover:bg-purple-50 uppercase min-w-0 break-words whitespace-normal text-center flex flex-row items-center justify-center gap-2">
+                      {isDownloading ? `Downloading${dots}` : (
+                         <>
+                            <span>AWB & Label</span>
+                            <Download size={18} className="text-purple-600" />
+                         </>
+                      )}
+                   </button>
+                </div>
+                <div className="flex gap-4 h-[50px]">
+                   <input 
+                      type="text" 
+                      placeholder="Scan AWB" 
+                      value={scannedAwb}
+                      onChange={(e) => {
+                         setScannedAwb(e.target.value);
+                         if (e.target.value.trim() === task['awb number']) {
+                            setIsAwbVerified(true);
+                            setAwbError('');
+                         } else {
+                            setIsAwbVerified(false);
+                         }
+                      }}
+                      className="flex-1 min-w-0 border-[1.5px] border-black rounded-none px-4 text-sm font-bold outline-none"
+                   />
+                   <button 
+                      onClick={() => {
+                          if (scannedAwb.trim() === task['awb number']) {
+                             setIsAwbVerified(true);
+                             setAwbError('');
+                          } else {
+                             setAwbError('invalid awb number or barcode');
+                             setIsAwbVerified(false);
+                          }
+                      }}
+                      className={`px-8 shrink-0 text-sm font-bold border-[1.5px] rounded-none transition-colors ${isAwbVerified ? 'bg-green-500 border-green-600 text-white' : 'bg-gray-100 border-gray-400 text-gray-600'}`}>
+                      Verify
+                   </button>
+                </div>
+                {awbError && <p className="text-red-500 text-xs font-bold">{awbError}</p>}
+            </div>
+            </>
+          )}
+        </div>
+
+        <div className="p-4 bg-white border-t border-gray-200 shrink-0">
+          {isHubPickedUp && (
+             <div className="flex gap-3 mt-1">
+                <button onClick={handleHubReceive} disabled={!isAwbVerified || loading} className={`flex-1 py-3 text-sm font-bold border rounded-none ${isAwbVerified && !loading ? 'text-white bg-blue-600 border-blue-600 hover:bg-blue-700' : 'text-gray-400 bg-gray-100 border-gray-300 cursor-not-allowed'}`}>{loading ? 'Saving...' : 'Receive'}</button>
+                <button onClick={onBack} className="flex-1 py-3 text-sm font-bold text-red-600 border border-red-600 rounded-none bg-white hover:bg-red-50">Cancel</button>
+             </div>
+          )}
+          {isHubFailed && (
+             <div className="flex gap-3">
+                <button onClick={handleHubFail} disabled={loading} className="flex-1 py-3 text-sm font-bold text-red-600 border border-red-600 rounded-none bg-white hover:bg-red-50 disabled:opacity-50">{loading ? 'Saving...' : 'Fail'}</button>
+                <button onClick={handleHubReattempt} disabled={loading} className="flex-1 py-3 text-sm font-bold text-yellow-600 border border-yellow-600 rounded-none bg-white hover:bg-yellow-50 disabled:opacity-50">{loading ? 'Saving...' : 'Re-attempt'}</button>
+             </div>
+          )}
+          {isHubOther && (
+             <div className="flex gap-3">
+                <button onClick={handleHubDone} disabled={loading} className="flex-1 py-3 text-sm font-bold text-blue-600 border border-blue-600 rounded-none bg-white hover:bg-blue-50 disabled:opacity-50">{loading ? 'Saving...' : 'Done'}</button>
+                <button onClick={onBack} disabled={parseInt(task['attempt'] || '1') >= 3 || loading} className={`flex-1 py-3 text-sm font-bold text-gray-600 border border-gray-600 rounded-none bg-white ${parseInt(task['attempt'] || '1') >= 3 ? 'opacity-50 cursor-not-allowed bg-gray-100 border-gray-300 text-gray-400' : 'hover:bg-gray-50'}`}>Cancel</button>
+             </div>
+          )}
+        </div>
+        
+        {showFullImage && productImages.length > 0 && (
+          <div className="fixed inset-0 z-[60] bg-black flex flex-col items-center justify-center" onClick={() => setShowFullImage(false)}>
+            <button className="absolute top-4 right-4 text-white p-2 font-bold bg-black/50 rounded-full w-10 h-10 flex items-center justify-center text-xl z-10">&times;</button>
+            <div className="w-full flex gap-2 overflow-x-auto snap-x">
+               {productImages.map((src, i) => (
+                 <img key={i} src={src} alt="Full Screen" className="w-full h-auto max-h-[90vh] object-contain shrink-0 snap-center" />
+               ))}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 bg-[#fafafa] flex flex-col font-poppins text-black h-full">
+      <div className="flex items-center p-3 h-14 bg-white border-b border-gray-200 shrink-0 shadow-sm relative z-20">
+        <button onClick={onBack} className="p-2 -ml-2 bg-transparent text-gray-700">
+          <ArrowLeft size={20} />
+        </button>
+        <h2 className="text-sm font-bold ml-2">Task Details</h2>
+      </div>
+
+      <div className="flex-1 overflow-y-auto p-4 space-y-5">
+        
+        
+        {/* Product Details */}
+        <div>
+          <div className="bg-white border border-slate-200 p-3 rounded-none shadow-sm flex flex-col gap-3">
+            <div className="flex flex-col min-w-0">
+              {task['pickup ID'] && (
+                <div className="mb-1">
+                  <span className="text-[10px] font-bold text-slate-500 uppercase">PICKUP ID: </span>
+                  <span className="text-[10px] font-bold text-slate-800">{task['pickup ID']}</span>
+                </div>
+              )}
+              <h3 className="text-xs font-bold text-slate-800 line-clamp-2 leading-tight">{task['product name']}</h3>
+              <p className="text-[10px] font-semibold text-slate-600 mt-1 line-clamp-1">{task['product tittle name']}</p>
+              <p className="text-[9px] text-slate-500 mt-1 line-clamp-2">{task['product discription']}</p>
+              <div className="mt-1.5 flex gap-2">
+                <span className="bg-slate-100 text-slate-700 text-[10px] px-2 py-0.5 font-bold">Qty: {task['total quantity'] || 1}</span>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-4 gap-2">
+              {productImages.slice(0, 4).map((img, idx) => (
+                <div 
+                  key={idx}
+                  className="aspect-square bg-slate-100 flex items-center justify-center border border-slate-200 overflow-hidden cursor-pointer"
+                  onClick={() => setShowFullImage(true)}
+                >
+                  <img src={img} alt={`Product ${idx+1}`} className="w-full h-full object-cover" />
+                </div>
+              ))}
+              {productImages.length === 0 && (
+                <div className="aspect-square bg-slate-100 flex items-center justify-center border border-slate-200 col-span-1">
+                  <span className="text-[10px] text-slate-400">No Image</span>
+                </div>
+              )}
+            </div>
+          </div>
+          
+          {/* Action Buttons below Product Details */}
+          <div className="flex gap-2 w-full mt-2">
+            <button 
+              onClick={(e) => { e.stopPropagation(); setShowCallID(task?.['mobile number'] || '8000800080'); }}
+              className="flex-1 py-2 text-xs font-bold border border-emerald-600 text-emerald-700 uppercase bg-emerald-50 rounded-none flex items-center justify-center"
+            >
+              Call
+            </button>
+            <button 
+              onClick={() => window.open('https://maps.google.com/?q=' + encodeURIComponent(seller.registered_full_address || ''))}
+              className="flex-1 py-2 text-xs font-bold border border-blue-600 text-blue-700 uppercase bg-blue-50 rounded-none flex items-center justify-center"
+            >
+              Map
+            </button>
+          </div>
+        </div>
+
+        {/* Quality Check */}
+        <div className="bg-white p-4 border border-slate-200">
+          <h3 className="text-xs font-bold uppercase mb-4 text-slate-800">Quality Check</h3>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-slate-700">1. Brand Name</span>
+              <div className="flex gap-2">
+                <button onClick={() => setQcBrand('pass')} className={`px-4 py-1 text-xs font-bold border rounded-sm ${qcBrand === 'pass' ? 'bg-emerald-500 text-white border-emerald-600' : 'bg-white text-slate-600 border-slate-300'}`}>Pass</button>
+                <button onClick={() => setQcBrand('fail')} className={`px-4 py-1 text-xs font-bold border rounded-sm ${qcBrand === 'fail' ? 'bg-red-500 text-white border-red-600' : 'bg-white text-slate-600 border-slate-300'}`}>Fail</button>
+              </div>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-slate-700">2. Old / Damage / Dirty</span>
+              <div className="flex gap-2">
+                <button onClick={() => setQcCondition('pass')} className={`px-4 py-1 text-xs font-bold border rounded-sm ${qcCondition === 'pass' ? 'bg-emerald-500 text-white border-emerald-600' : 'bg-white text-slate-600 border-slate-300'}`}>Pass</button>
+                <button onClick={() => setQcCondition('fail')} className={`px-4 py-1 text-xs font-bold border rounded-sm ${qcCondition === 'fail' ? 'bg-red-500 text-white border-red-600' : 'bg-white text-slate-600 border-slate-300'}`}>Fail</button>
+              </div>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-slate-700">3. Same Product</span>
+              <div className="flex gap-2">
+                <button onClick={() => setQcSame('pass')} className={`px-4 py-1 text-xs font-bold border rounded-sm ${qcSame === 'pass' ? 'bg-emerald-500 text-white border-emerald-600' : 'bg-white text-slate-600 border-slate-300'}`}>Pass</button>
+                <button onClick={() => setQcSame('fail')} className={`px-4 py-1 text-xs font-bold border rounded-sm ${qcSame === 'fail' ? 'bg-red-500 text-white border-red-600' : 'bg-white text-slate-600 border-slate-300'}`}>Fail</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Capture Image */}
+        <div className={`flex flex-col gap-1 ${isQcPass ? 'opacity-50 pointer-events-none' : ''}`}>
+          <label className="text-[10px] font-bold text-slate-500 uppercase">Capture 2-3 images {isQcPass && '(Not Required)'}</label>
+          <label className={`w-full py-3 flex items-center justify-center gap-2 border border-black text-black font-bold text-sm ${isQcPass ? 'bg-gray-100 cursor-not-allowed' : 'bg-white cursor-pointer hover:bg-slate-50'} rounded-none`}>
+            <Camera size={18} />
+            Capture Image
+            <input type="file" accept="image/*" capture="environment" multiple className="hidden" disabled={isQcPass} onChange={(e) => { 
+               if (e.target.files) { 
+                 const newFiles = Array.from(e.target.files as FileList);
+                 newFiles.forEach(file => {
+                   const reader = new FileReader();
+                   reader.onload = (ev) => {
+                     if (ev.target?.result) {
+                        setCapturedImages(prev => [...prev, ev.target.result as string]);
+                     }
+                   }
+                   reader.readAsDataURL(file);
+                 });
+               }
+            }} />
+          </label>
+          {capturedImages.length > 0 && (
+             <div className="flex gap-2 overflow-x-auto mt-2">
+               {capturedImages.map((src, i) => <img key={i} src={src} className="w-12 h-12 border border-slate-300 object-cover rounded-sm" />)}
+             </div>
+          )}
+        </div>
+
+        {/* Pickup Pin */}
+        <div>
+          <label className="text-xs font-bold uppercase mb-1 block">Enter Pickup Pin</label>
+          <input 
+            type="text" 
+            value={pinInput}
+            onChange={(e) => { setPinInput(e.target.value.toUpperCase()); setPinError(false); }}
+            placeholder={isQcFail ? "PIN not required (QC Failed)" : "Enter 8-digit PIN"}
+            disabled={isQcFail}
+            className={`w-full p-3 border rounded-none text-sm font-bold tracking-widest ${isQcFail ? 'bg-gray-100 border-gray-300 text-gray-400' : pinError ? 'border-red-500 bg-red-50' : 'border-black'}`}
+          />
+          {pinError && !isQcFail && <p className="text-xs text-red-600 font-bold mt-1">invalid</p>}
+        </div>
+
+        
+                {/* Digital Signature */}
+        <div className="border border-black p-0 bg-white h-32 relative w-full">
+          {!signatureData && <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400 pointer-events-none"><PenTool size={24} className="mb-2 opacity-50" /><span className="text-xs font-bold">Digital Signature</span></div>}
+          <canvas 
+             ref={canvasRef}
+             onMouseDown={startDrawing}
+             onMouseUp={stopDrawing}
+             onMouseOut={stopDrawing}
+             onMouseMove={draw}
+             onTouchStart={startDrawing}
+             onTouchEnd={stopDrawing}
+             onTouchMove={draw}
+             className="w-full h-full cursor-crosshair relative z-10 touch-none"
+          />
+        </div>
+        <div className="mt-2 flex flex-wrap gap-2 md:gap-3 text-xs font-bold items-center border border-black p-2 bg-white">
+           <span className="text-slate-600">Select:</span>
+                      <label className="flex items-center gap-1 cursor-pointer">
+             <input type="radio" name="signatory" value="Self" onChange={() => setSignatory('Self')} className="accent-black" /> Self
+           </label>
+           <label className="flex items-center gap-1 cursor-pointer">
+             <input type="radio" name="signatory" value="Seller" onChange={() => setSignatory('Seller')} className="accent-black" /> Seller
+           </label>
+           <label className="flex items-center gap-1 cursor-pointer">
+             <input type="radio" name="signatory" value="Customer" onChange={() => setSignatory('Customer')} className="accent-black" /> Customer
+           </label>
+           <label className="flex items-center gap-1 cursor-pointer">
+             <input type="radio" name="signatory" value="Other" onChange={() => setSignatory('Other')} className="accent-black" /> Other
+           </label>
+        </div>
+
+        {/* Unable Options */}
+        {showUnableOptions && (
+          <div className="p-4 border border-red-200 bg-red-50 space-y-3">
+            <h4 className="text-xs font-bold text-red-800 uppercase">Reason for Unable to Complete</h4>
+            {['No response', 'Reschedule', 'Not attend'].map((reason) => (
+              <div 
+                key={reason} 
+                onClick={() => setUnableReason(reason)}
+                className="flex items-center gap-3 p-3 border border-black bg-white cursor-pointer rounded-none"
+              >
+                <div className={`w-4 h-4 rounded-full border border-black flex items-center justify-center shrink-0 ${unableReason === reason ? 'bg-white' : ''}`}>
+                  {unableReason === reason && <div className="w-2.5 h-2.5 rounded-full bg-red-600"></div>}
+                </div>
+                <span className="text-xs font-bold">{reason}</span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        
+
+        {/* BOTTOM ACTIONS (Shifted below signature instead of fixed) */}
+        <div className="flex flex-col gap-3 mt-4 mb-8">
+          {showUnableOptions ? (
+            <button 
+              onClick={handleUnableSubmit}
+                disabled={!unableReason || loading}
+              
+              className={`w-full py-3.5 rounded-none font-bold text-sm transition-all border ${unableReason ? 'bg-red-600 text-white border-red-600' : 'bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed'}`}
+            >
+              {loading ? 'Processing...' : 'Mark as Done (Unable)'}
+            </button>
+          ) : (
+            <>
+              <button 
+                onClick={handleMarkAsDone}
+                disabled={!isAllFilled || loading}
+                className={`w-full py-3.5 rounded-none font-bold text-sm flex items-center justify-center gap-2 transition-colors border ${isAllFilled ? 'border-blue-600 bg-blue-600 text-white hover:bg-blue-700' : 'border-gray-300 bg-gray-100 text-gray-400'}`}
+              >
+                {loading ? <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div> : <CheckCircle2 size={18} />}
+                {loading ? 'Processing...' : 'Mark as Done'}
+              </button>
+              
+              <button 
+                onClick={() => setShowUnableOptions(true)}
+                className="w-full py-3 rounded-none border border-red-600 text-red-600 font-bold text-sm bg-white hover:bg-red-50"
+              >
+                Unable to Complete
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+
+      {showFullImage && productImages.length > 0 && (
+        <div className="fixed inset-0 z-[60] bg-black flex flex-col items-center justify-center" onClick={() => setShowFullImage(false)}>
+          <button className="absolute top-4 right-4 text-white p-2 font-bold bg-black/50 rounded-full w-10 h-10 flex items-center justify-center text-xl z-10">&times;</button>
+          <div className="w-full flex gap-2 overflow-x-auto snap-x">
+             {productImages.map((src, i) => (
+               <img key={i} src={src} alt="Full Screen" className="w-full h-auto max-h-[90vh] object-contain shrink-0 snap-center" />
+             ))}
+          </div>
+        </div>
+      )}
+          {showCallID && (
+        <div className="fixed inset-0 z-[70] bg-black/60 flex items-center justify-center p-4">
+          <div className="bg-white w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl relative animate-in fade-in zoom-in duration-300">
+            <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-r from-blue-600 to-orange-500 rounded-b-[40px] opacity-20"></div>
+            
+            <div className="p-6 pt-10 flex flex-col items-center relative z-10 text-center">
+              <div className="w-20 h-20 bg-white rounded-full shadow-lg border-4 border-white flex items-center justify-center mb-4 overflow-hidden">
+                <span className="text-3xl font-black bg-gradient-to-r from-blue-700 to-orange-600 bg-clip-text text-transparent">SS</span>
+              </div>
+              
+              <h2 className="text-2xl font-black tracking-tight mb-1 flex items-center gap-2">
+                <span className="text-blue-700 uppercase">SURIYAWAN</span>
+                <span className="text-orange-600 uppercase">SAFFARI</span>
+              </h2>
+              
+              <div className="bg-blue-50 text-blue-800 px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase mb-6 border border-blue-100 shadow-sm">
+                Verified Caller Identity
+              </div>
+              
+              <p className="text-slate-500 text-sm mb-2 font-medium">Connecting call to</p>
+              <p className="text-3xl font-bold tracking-wider text-slate-800 mb-8">{typeof showCallID === 'string' && showCallID.startsWith('+') ? showCallID : '+91 ' + (showCallID || '8000 8000 80')}</p>
+              
+              <div className="flex gap-3 w-full">
+                <button 
+                  onClick={() => setShowCallID(false)}
+                  className="flex-1 py-3.5 rounded-2xl bg-slate-100 text-slate-700 font-bold hover:bg-slate-200 transition-colors"
+                >
+                  Cancel
+                </button>
+                <a 
+                  href="tel:+918000800080"
+                  onClick={() => setTimeout(() => setShowCallID(false), 2000)}
+                  className="flex-1 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/50 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                  Connect
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+
+
+

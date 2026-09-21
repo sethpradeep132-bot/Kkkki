@@ -1,0 +1,151 @@
+            if (hubPincode) {
+               setSelectedPincodes([hubPincode]);
+            }
+          }
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    
+
+  useEffect(() => {
+    if (activePage === 'create_pickupsheet') {
+      fetchReadyToPickup();
+    }
+  }, [activePage]);
+
+  if (activePage === 'create_runsheet') {
+    return (
+      <div className="fixed inset-0 z-50 bg-[#fafafa] flex flex-col overflow-hidden">
+        <div className="flex items-center p-3 h-12 bg-white border-b border-gray-200 shrink-0 shadow-sm relative z-20">
+          <button onClick={() => setActivePage('main')} className="p-1.5 -ml-1 bg-gray-50 rounded-full shadow-sm text-gray-700">
+            <ArrowLeft size={16} />
+          </button>
+          <h2 className="text-base font-bold ml-2 text-gray-800">Create Runsheet</h2>
+        </div>
+
+        <div className="flex-1 overflow-y-auto p-4 flex flex-col">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="flex-1 relative">
+              <input 
+                type="text" 
+                value={runsheetAwbError ? runsheetAwbError : runsheetAwbSuccess ? runsheetAwbSuccess : runsheetAwbInput}
+                onChange={(e) => !runsheetAwbError && !runsheetAwbSuccess && setRunsheetAwbInput(e.target.value)}
+                onKeyDown={(e) => { if(e.key === 'Enter') handleRunsheetAwbScan(); }}
+                placeholder="Scan or Enter AWB..." 
+                className={`w-full border border-black rounded-none px-3 py-2 text-sm focus:outline-none ${runsheetAwbError ? 'text-red-600 font-bold bg-red-50' : runsheetAwbSuccess ? 'text-green-600 font-bold bg-green-50' : 'bg-white'}`}
+                readOnly={!!runsheetAwbError || !!runsheetAwbSuccess}
+              />
+            </div>
+            
+            <div className="relative shrink-0 w-[180px]">
+              <button 
+                onClick={() => setIsRunsheetRiderDropdownOpen(!isRunsheetRiderDropdownOpen)}
+                className="w-full bg-white border border-gray-300 rounded-none px-3 py-2 text-left text-xs font-bold flex justify-between items-center"
+              >
+                <span className="truncate">{runsheetSelectedRider ? runsheetSelectedRider.rider_name : 'Select Rider'}</span>
+                <ChevronDown size={14} className="text-gray-500" />
+              </button>
+              {isRunsheetRiderDropdownOpen && (
+                <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 shadow-lg z-30 max-h-48 overflow-y-auto">
+                  {savedRiders.map((rider, i) => (
+                    <div 
+                      key={i}
+                      onClick={() => { setRunsheetSelectedRider(rider); setIsRunsheetRiderDropdownOpen(false); }}
+                      className="p-2 border-b border-gray-100 text-xs cursor-pointer hover:bg-gray-50 font-bold text-gray-700"
+                    >
+                      {rider.rider_name} - {rider.id.slice(-4)}<br/>
+                      <span className="text-[10px] text-gray-500 font-medium">Mob: {rider.registered_mobile_number || 'N/A'}</span>
+                    </div>
+                  ))}
+                  {savedRiders.length === 0 && (
+                    <div className="p-2 text-xs text-gray-500 text-center">No saved riders found</div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="flex-1 bg-white border border-gray-200 shadow-sm flex flex-col mb-4 overflow-hidden">
+             <div className="px-3 py-2 border-b border-gray-200 bg-gray-50">
+                <span className="text-xs font-bold text-gray-700 uppercase tracking-wide">Scanned Shipments ({runsheetScannedShipments.length})</span>
+             </div>
+             <div className="flex-1 overflow-y-auto p-2 space-y-2">
+                {runsheetScannedShipments.map((s, idx) => (
+                   <div key={idx} className="border border-gray-200 p-2 text-xs flex justify-between items-center">
+                     <div>
+                       <div className="font-bold">AWB: {s['awb number'] || 'N/A'}</div>
+                       <div className="text-gray-500 mt-0.5">Order ID: {s['order ID'] || 'N/A'}</div>
+                     </div>
+                     <span className="px-2 py-0.5 bg-green-50 text-green-700 border border-green-200 rounded text-[10px] font-bold uppercase">Ready</span>
+                   </div>
+                ))}
+                {runsheetScannedShipments.length === 0 && (
+                   <div className="flex items-center justify-center h-full text-xs text-gray-400 font-medium">
+                      No shipments scanned yet
+                   </div>
+                )}
+             </div>
+          </div>
+
+          <div className="flex gap-3 shrink-0">
+             <button 
+                onClick={() => { setRunsheetScannedShipments([]); setActivePage('main'); setRunsheetSelectedRider(null); }}
+                className="flex-1 border border-gray-400 bg-gray-100 text-gray-700 py-3 text-sm font-bold active:scale-95 transition-all"
+             >
+                Cancel
+             </button>
+             <button 
+                onClick={handleConfirmRunsheet}
+                disabled={isConfirmingRunsheet || runsheetScannedShipments.length === 0 || !runsheetSelectedRider}
+                className="flex-1 border border-purple-600 bg-purple-600 text-white py-3 text-sm font-bold active:scale-95 transition-all disabled:opacity-50"
+             >
+                {isConfirmingRunsheet ? 'Confirming...' : 'Confirm Runsheet'}
+             </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (activePage === 'create_pickupsheet') {
+      fetchReadyToPickup();
+    }
+  }, [activePage]);
+
+
+  
+  const handleRunsheetAwbScan = async () => {
+    if (!runsheetAwbInput.trim()) return;
+    const awb = runsheetAwbInput.trim();
+    setRunsheetAwbInput('');
+    setRunsheetAwbError('');
+    setRunsheetAwbSuccess('');
+
+    if (runsheetScannedShipments.some(s => s['awb number'] === awb)) {
+      setRunsheetAwbError('AWB already scanned');
+      setTimeout(() => setRunsheetAwbError(''), 2000);
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from('accepted_shipments')
+        .select('*')
+        .eq('awb number', awb)
+        .maybeSingle();
+
+      if (error || !data) {
+        setRunsheetAwbError('Shipment not found');
+        setTimeout(() => setRunsheetAwbError(''), 2000);
+        return;
+      }
+
+      if ((data['shipment type'] || '').toLowerCase() !== 'ready to delivery') {
+        setRunsheetAwbError('Not in Ready to delivery status');

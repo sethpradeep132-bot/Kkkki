@@ -1,0 +1,14 @@
+           const currentStatus = ship['shipment status'] || '';
+           const updatedStatus = currentStatus ? currentStatus + ' || ' + newStatusEntry : newStatusEntry;
+              
+           const payload = {
+             'attempt': '1/3',
+             'shipment type': 'out for pickup',
+             'pickup pin': pickupPin,
+             'pickup ID': generatedPickupId,
+             'shipment status': updatedStatus,
+             'updated_at': new Date().toISOString()
+           };
+
+           await supabase.from('accepted_shipments').update(payload).eq('id', ship.id);
+           await supabase.from('finished_shipments').update(payload).eq('order ID', ship['order ID']);

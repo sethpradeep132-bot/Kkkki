@@ -1,0 +1,56 @@
+            : `Your order has been cancelled on ${dateStr} - Order ID: ${task['order ID']}`;
+         const newShipmentStatus = currentShipmentStatus + (currentShipmentStatus ? '\n' : '') + shipmentUpdateLine;
+            
+         const currentAttempt = parseInt(task['attempt'] || '0');
+         let newShipType = 'faild pickup';
+         let newShipTag = task['shipment tag'];
+         if (task['shipment type'] === 'out for pickup' && task['shipment tag'] === 'customer pickup') {
+             newShipType = 'delivered';
+             newShipTag = 'customer delivery';
+         }
+         const payload: any = {
+             'shipment type': newShipType,
+             'shipment tag': newShipTag,
+             'awb number': awb,
+             'call details': newCallDetails,
+             'digital signature': sigBase64 ? (signatory ? `${sigBase64}|||Selected Option: ${signatory}` : sigBase64) : ''
+         };
+         payload['shipment status'] = await buildShipmentStatus('Failed pickup', task, payload);
+         const nextAttempt = await getNextAttempt(task, false);
+         if (nextAttempt) payload['attempt'] = nextAttempt;
+         if (finalCapturedImages) {
+             payload['captured images'] = task['captured images'] ? task['captured images'] + '|||' + finalCapturedImages : finalCapturedImages;
+         }
+         
+         await updateAcceptedShipment(payload, task.id, task);
+         
+         // Update customer_orders
+         const { data: coRows } = await supabase.from('customer_orders').select('id, "order status", "awb number"').eq('order ID', task['order ID']);
+         if (coRows && coRows.length > 0) {
+            let targetRow = coRows.find(r => !r['awb number'] || r['awb number'].trim() === '');
+            if (!targetRow) targetRow = coRows[0];
+            const currentCoStatus = targetRow['order status'] || '';
+            /* disabled customer_orders update */
+         }
+      }
+      onBack();
+    } catch(e) {
+      console.error(e);
+      alert('Failed to update task: ' + ((e as any).message || JSON.stringify(e)));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+    const handleUnableSubmit = async () => {
+    if (!unableReason) return;
+
+    if (isCustomerDelivery && unableReason === 'Reject by customer') {
+        if (pinInput !== String(task['cancellation code'] || '').toUpperCase()) {
+            setPinError(true);
+            return;
+        }
+    }
+    
+    if (onLocalUpdate) {
+        onLocalUpdate({ type: 'unable', reason: unableReason });

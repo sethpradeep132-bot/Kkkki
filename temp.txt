@@ -1,0 +1,173 @@
+          (() => {
+            const isCompletedTab = activeChip === 'Failed/Completed';
+            const filteredTasks = tasks;
+
+            const getTagColor = (tag: string) => {
+              const t = (tag || '').toLowerCase();
+              if (t.includes('customer pickup') || t.includes('customer delivery')) {
+                return 'bg-blue-50 text-blue-700 border-blue-200';
+              }
+              if (t.includes('seller pickup') || t.includes('seller delivery')) {
+                return 'bg-purple-50 text-purple-700 border-purple-200';
+              }
+              return 'bg-slate-100 text-slate-800 border-slate-300';
+            };
+
+            let groups: any = {};
+            filteredTasks.forEach(task => {
+              const sInfo = sellersInfo[task['selller id']] || {};
+              const sType = task['shipment type'] || '';
+              const sTag = task['shipment tag'] || '';
+              const sTagLower = sTag.toLowerCase().replace(/["']/g, '').replace(/\s+/g, ' ').trim();
+              const sTypeLower = sType.toLowerCase().replace(/["']/g, '').replace(/\s+/g, ' ').trim();
+              
+              const isSellerDelivery = sTagLower.includes('seller delivery') || sTagLower.includes('selller delivery');
+              const isCustomerDelivery = sTagLower.includes('customer delivery') || (!isSellerDelivery && sTypeLower === 'out for delivery');
+              
+              const isCustomerPickup = sTagLower.includes('customer pickup');
+              const isSellerPickup = sTagLower.includes('seller pickup') || sTagLower.includes('selller pickup') || (!isCustomerPickup && sTypeLower === 'out for pickup');
+
+              let hashKey = isCompletedTab 
+                ? (task.id || Math.random().toString())
+                : `${task['full name'] || ''}|${task['mobile number'] || ''}|${task['full address'] || ''}|${task['pincode'] || ''}|${task['landmark'] || ''}|${task['address type'] || ''}|${task['product image'] || ''}|${task['product name'] || ''}|${task['product tittle name'] || ''}|${task['product discription'] || ''}|${task['key features'] || ''}|${task['total quantity'] || ''}|${task['size'] || ''}|${task['colour'] || ''}|${task['weight'] || ''}|${task['total price info'] || ''}|${task['total selling price'] || ''}|${task['total discount'] || ''}|${task['total delevery charge'] || ''}|${task['total amount'] || ''}|${task['payment method'] || ''}|${task['gift cash donation'] || ''}`;
+
+              if (isCustomerDelivery || isCustomerPickup) {
+                if (!groups[hashKey]) groups[hashKey] = {
+                  orderIds: new Set(),
+                  pickupIds: new Set(),
+                  isCustomerTask: true,
+                  tasks: [],
+                  sellerName: task['full name'] || 'Customer',
+                  address: task['full address'] || task.address || '',
+                  landmark: task.landmark || '',
+                  pincode: task.pincode || '',
+                  mobileNumber: task['mobile number'] || '',
+                  firstTask: task
+                };
+                groups[hashKey].orderIds.add(task['order ID'] || task['awb number']);
+                if (isCustomerPickup) groups[hashKey].pickupIds.add(task['pickup ID'] || task['order ID'] || task['awb number']);
+                groups[hashKey].tasks.push(task);
+              } else {
+                const sId = task['selller id'] || 'unknown';
+                const sellerHashKey = isCompletedTab ? hashKey : `${sId}-${hashKey}`;
+                if (!groups[sellerHashKey]) groups[sellerHashKey] = {
+                  sellerId: sId,
+                  pickupIds: new Set(),
+                  tasks: [],
+                  shopName: sInfo.shop_name,
+                  sellerName: sInfo.seller_name,
+                  address: sInfo.registered_full_address || task['full address'] || task.address || '',
+                  landmark: task.landmark || '',
+                  pincode: sInfo.registered_pincode || task.pincode || '',
+                  mobileNumber: sInfo.registered_mobile_number || task['mobile number'] || '',
+                  firstTask: task
+                };
+                groups[sellerHashKey].pickupIds.add(task['pickup ID'] || 'unknown');
+                groups[sellerHashKey].tasks.push(task);
+              }
+            });
+            if (Object.keys(groups).length === 0) return <div className="text-center py-10 text-slate-500 text-sm font-medium">No tasks found.</div>;
+
+            return (
+              <>
+                {Object.values(groups).map((group: any, i: number) => {
+                  const totalQty = group.tasks.reduce((sum: number, t: any) => sum + parseInt(t['total quantity'] || t.quantity || '1', 10), 0);
+                  if (group.isCustomerTask) {
+                    return (
+                      <div 
+                        key={'group-'+i} 
+                        onClick={() => !isCompletedTab && setScanningGroup(group)} 
+                        className={`bg-white border-[1.5px] border-black shadow-sm flex flex-col rounded-none relative overflow-hidden min-h-[124px] shrink-0 ${isCompletedTab ? 'opacity-50 pointer-events-none' : 'hover:bg-slate-50 cursor-pointer active:scale-[0.99] transition-all'}`}
+                      >
+                        <div className={`flex flex-col h-full ${!isCompletedTab ? 'p-2.5' : 'p-3 pl-4'}`}>
+                          <div className={`flex flex-nowrap items-center gap-1.5 overflow-hidden shrink-0 ${!isCompletedTab ? 'mb-1.5' : 'mb-2'}`}>
+                            <div className="flex gap-1 overflow-x-auto no-scrollbar shrink-0 max-w-[35%] min-w-0">
+                              {Array.from(group.orderIds || []).map((id: any) => (
+                                <div key={id} className="bg-slate-100 text-slate-800 px-1.5 py-0.5 text-[9px] font-bold uppercase rounded-none border border-slate-300 truncate shrink-0">
+                                  {id || 'C-TASK'}
+                                </div>
+                              ))}
+                            </div>
+                            <div className="bg-slate-100 text-slate-800 px-1.5 py-0.5 text-[9px] font-bold uppercase rounded-none border border-slate-300 truncate shrink min-w-0">
+                              {group.firstTask['shipment type']}
+                            </div>
+                            <div className={`px-1.5 py-0.5 text-[9px] font-bold uppercase rounded-none border truncate shrink min-w-0 ${getTagColor(group.firstTask['shipment tag'])}`}>
+                              {group.firstTask['shipment tag']}
+                            </div>
+                            <div className="ml-auto bg-slate-50 text-slate-700 px-1.5 py-0.5 text-[9px] font-bold rounded-none border border-slate-200 shrink-0">
+                              Qty: {totalQty}
+                            </div>
+                          </div>
+                          
+                          <div className="flex-1 overflow-y-auto min-h-0 pr-1 no-scrollbar">
+                            <h4 className="text-sm font-bold text-gray-800 leading-snug mb-1 shrink-0 line-clamp-1">
+                              {group.sellerName}
+                            </h4>
+                            <p className="text-xs text-gray-600 leading-relaxed pb-1 line-clamp-2">
+                              {group.address}
+                              {group.landmark ? `, ${group.landmark}` : ''}
+                              {group.pincode ? `, - ${group.pincode}` : ''}
+                            </p>
+                          </div>
+                          {!isCompletedTab && (
+                            <div className={`flex items-center gap-2 shrink-0 ${!isCompletedTab ? 'mt-1.5' : 'mt-2'}`}>
+                              <a 
+                                href={`tel:${group?.mobileNumber || group?.firstTask?.['mobile number'] || ''}`}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  const dateStr = new Date().toLocaleString('en-IN');
+                                  group.tasks.forEach((task: any) => {
+                                      const currentDetails = task['call details'] || '';
+                                      const newAttempt = (currentDetails.match(/Call attempt/g) || []).length + 1;
+                                      const appendDetails = `\nCall attempt: ${newAttempt}, Call button clicked at ${dateStr}`;
+                                      const updatedDetails = (currentDetails + appendDetails).trim();
+                                      task['call details'] = updatedDetails;
+                                      supabase.from('accepted_shipments').update({'call details': updatedDetails}).eq('id', task.id).then();
+                                  });
+                                }}
+                                className="flex-1 py-1.5 bg-green-500 text-white font-bold text-xs uppercase border border-green-700 rounded-none shadow-sm active:scale-95 transition-all flex items-center justify-center"
+                              >
+                                Call
+                              </a>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  window.open('https://maps.google.com/?q=' + encodeURIComponent(`${group.address || ''} ${group.pincode || ''}`));
+                                }}
+                                className="flex-1 py-1.5 bg-yellow-400 text-black font-bold text-xs uppercase border border-yellow-600 rounded-none shadow-sm active:scale-95 transition-all flex items-center justify-center"
+                              >
+                                Map
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  }
+                  return (
+                  <div 
+                    key={'group-'+i} 
+                    onClick={() => !isCompletedTab && setScanningGroup(group)} 
+                    className={`bg-white border-[1.5px] border-black shadow-sm flex flex-col rounded-none relative overflow-hidden min-h-[124px] shrink-0 ${isCompletedTab ? 'opacity-50 pointer-events-none' : 'hover:bg-slate-50 cursor-pointer active:scale-[0.99] transition-all'}`}
+                      >
+                        <div className={`flex flex-col h-full ${!isCompletedTab ? 'p-2.5' : 'p-3 pl-4'}`}>
+                      <div className={`flex flex-nowrap items-center gap-1.5 overflow-hidden shrink-0 ${!isCompletedTab ? 'mb-1.5' : 'mb-2'}`}>
+                        <div className="flex gap-1 overflow-x-auto no-scrollbar shrink-0 max-w-[35%] min-w-0">
+                          {Array.from(group.pickupIds || []).map((id: any) => (
+                            <div key={id} className="bg-slate-100 text-slate-800 px-1.5 py-0.5 text-[9px] font-bold uppercase rounded-sm border border-slate-300 truncate shrink-0">
+                              {id || group.sellerId}
+                            </div>
+                          ))}
+                        </div>
+                        <div className="bg-slate-100 text-slate-800 px-1.5 py-0.5 text-[9px] font-bold uppercase rounded-sm border border-slate-300 truncate shrink min-w-0">
+                          {group.firstTask['shipment type']}
+                        </div>
+                        <div className={`px-1.5 py-0.5 text-[9px] font-bold uppercase rounded-sm border truncate shrink min-w-0 ${getTagColor(group.firstTask['shipment tag'])}`}>
+                          {group.firstTask['shipment tag']}
+                        </div>
+                        <div className="ml-auto bg-slate-50 text-slate-700 px-1.5 py-0.5 text-[9px] font-bold rounded-sm border border-slate-200 shrink-0">
+                          Qty: {totalQty}
+                        </div>
+                      </div>
+                      
+                      <div className="flex-1 overflow-y-auto min-h-0 pr-1 no-scrollbar">

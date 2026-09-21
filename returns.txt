@@ -1,0 +1,400 @@
+src/components/portals/UploadProductForm.tsx:44:    return '';
+src/components/portals/UploadProductForm.tsx:65:  return canvas.toDataURL('image/webp', 0.85);
+src/components/portals/UploadProductForm.tsx:108:  if (!q || q.length < 1) return [];
+src/components/portals/UploadProductForm.tsx:111:  if (tokens.length === 0) return [];
+src/components/portals/UploadProductForm.tsx:157:  return combined.slice(0, maxResults);
+src/components/portals/UploadProductForm.tsx:181:  if (!word) return '';
+src/components/portals/UploadProductForm.tsx:197:    if (lower.endsWith(item)) return trimmed;
+src/components/portals/UploadProductForm.tsx:200:  if (lower.endsWith('ss') || lower.endsWith('is') || lower.endsWith('us') || lower.endsWith('ics')) return trimmed;
+src/components/portals/UploadProductForm.tsx:201:  if (lower.endsWith('ies')) return trimmed.slice(0, -3) + 'y';
+src/components/portals/UploadProductForm.tsx:202:  if (lower.endsWith('ves')) return trimmed.slice(0, -3) + 'f';
+src/components/portals/UploadProductForm.tsx:203:  if (lower.endsWith('boxes') || lower.endsWith('dishes') || lower.endsWith('watches') || lower.endsWith('brushes') || lower.endsWith('torches') || lower.endsWith('pouches')) return trimmed.slice(0, -2);
+src/components/portals/UploadProductForm.tsx:204:  if (lower.endsWith('s') && !lower.endsWith('ss')) return trimmed.slice(0, -1);
+src/components/portals/UploadProductForm.tsx:205:  return trimmed;
+src/components/portals/UploadProductForm.tsx:235:  return `${best} (${r},${g},${b})`;
+src/components/portals/UploadProductForm.tsx:386:      return { ...charge, val, isTax, amount };
+src/components/portals/UploadProductForm.tsx:405:      return { ...charge, amount: finalAmount };
+src/components/portals/UploadProductForm.tsx:411:    return {
+src/components/portals/UploadProductForm.tsx:448:      return arr;
+src/components/portals/UploadProductForm.tsx:450:    return Array(10).fill('');
+src/components/portals/UploadProductForm.tsx:467:    if (initialProduct?.['product_sku_code']) return;
+src/components/portals/UploadProductForm.tsx:530:    return getFastCategorySuggestions(deferredProductName, 40);
+src/components/portals/UploadProductForm.tsx:602:    return base;
+src/components/portals/UploadProductForm.tsx:782:    return finalSellerId;
+src/components/portals/UploadProductForm.tsx:985:  return (
+src/components/portals/UploadProductForm.tsx:1384:                  return (
+src/components/portals/UploadProductForm.tsx:1545:                return (
+src/components/portals/UploadProductForm.tsx:1562:                          return;
+src/components/portals/UploadProductForm.tsx:1786:          return (
+src/components/portals/UploadProductForm.tsx:1883:                    return (
+src/components/portals/UploadProductForm.tsx:1893:                                return;
+src/components/portals/UploadProductForm.tsx:1896:                                return;
+src/components/portals/UploadProductForm.tsx:1924:                      return (
+src/components/portals/UploadProductForm.tsx:1984:                      return (
+src/components/portals/UploadProductForm.tsx:2027:                      return (
+src/components/portals/LogoutModal.tsx:13:    case 'Customer': return 'portal_auth_customer';
+src/components/portals/LogoutModal.tsx:14:    case 'Seller': return 'portal_auth_seller';
+src/components/portals/LogoutModal.tsx:15:    case 'Hub Manager': return 'portal_auth_hub';
+src/components/portals/LogoutModal.tsx:16:    case 'Rider': return 'portal_auth_rider';
+src/components/portals/LogoutModal.tsx:17:    case 'Admin': return 'ss_admin_auth';
+src/components/portals/LogoutModal.tsx:18:    default: return '';
+src/components/portals/LogoutModal.tsx:46:  return (
+src/components/portals/SellerProductsView.tsx:181:      if (!targetProduct) return;
+src/components/portals/SellerProductsView.tsx:297:    if (!searchQuery.trim()) return true;
+src/components/portals/SellerProductsView.tsx:306:    return name.includes(q) || title.includes(q) || sku.includes(q) || tags.includes(q) || catTags.includes(q) || mainCat.includes(q) || pStatus.includes(q);
+src/components/portals/SellerProductsView.tsx:310:    return (
+src/components/portals/SellerProductsView.tsx:418:                 return (
+src/components/portals/SellerProductsView.tsx:481:  return (
+src/components/portals/SellerProductsView.tsx:547:              return (
+src/components/portals/SellerProductsView.tsx:592:            return (
+src/components/portals/AuthLogin.tsx:12:    case 'Customer': return 'portal_auth_customer';
+src/components/portals/AuthLogin.tsx:13:    case 'Seller': return 'portal_auth_seller';
+src/components/portals/AuthLogin.tsx:14:    case 'Hub Manager': return 'portal_auth_hub';
+src/components/portals/AuthLogin.tsx:15:    case 'Rider': return 'portal_auth_rider';
+src/components/portals/AuthLogin.tsx:16:    default: return 'portal_auth_user';
+src/components/portals/AuthLogin.tsx:47:      case 'Customer': return { primary: 'bg-blue-600', hover: 'hover:bg-blue-700', border: 'focus:border-blue-500', text: 'text-blue-600', ring: 'focus:ring-blue-500/20', iconBoxBg: 'bg-blue-50 text-blue-600', inputFocus: 'focus:border-blue-600 focus:ring-2 focus:ring-blue-600/15' };
+src/components/portals/AuthLogin.tsx:48:      case 'Seller': return { primary: 'bg-orange-600', hover: 'hover:bg-orange-700', border: 'focus:border-orange-500', text: 'text-orange-600', ring: 'focus:ring-orange-500/20', iconBoxBg: 'bg-orange-50 text-orange-600', inputFocus: 'focus:border-orange-500 focus:ring-2 focus:ring-orange-500/15' };
+src/components/portals/AuthLogin.tsx:49:      case 'Hub Manager': return { primary: 'bg-purple-600', hover: 'hover:bg-purple-700', border: 'focus:border-purple-500', text: 'text-purple-600', ring: 'focus:ring-purple-500/20', iconBoxBg: 'bg-purple-50 text-purple-600', inputFocus: 'focus:border-purple-600 focus:ring-2 focus:ring-purple-600/15' };
+src/components/portals/AuthLogin.tsx:50:      case 'Rider': return { primary: 'bg-emerald-600', hover: 'hover:bg-emerald-700', border: 'focus:border-emerald-500', text: 'text-emerald-600', ring: 'focus:ring-emerald-500/20', iconBoxBg: 'bg-emerald-50 text-emerald-600', inputFocus: 'focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/15' };
+src/components/portals/AuthLogin.tsx:51:      default: return { primary: 'bg-slate-800', hover: 'hover:bg-slate-900', border: 'focus:border-slate-500', text: 'text-slate-800', ring: 'focus:ring-slate-500/20', iconBoxBg: 'bg-slate-100 text-slate-600', inputFocus: 'focus:border-slate-600 focus:ring-2 focus:ring-slate-600/15' };
+src/components/portals/AuthLogin.tsx:192:    return (
+src/components/portals/AuthLogin.tsx:220:    return (
+src/components/portals/AuthLogin.tsx:380:  return (
+src/components/portals/SellerPortal.tsx:123:    return (
+src/components/portals/SellerPortal.tsx:177:    return (
+src/components/portals/SellerPortal.tsx:236:    return (
+src/components/portals/SellerPortal.tsx:266:  return (
+src/components/portals/SellerPortal.tsx:361:      return Boolean(localStorage.getItem('portal_auth_seller'));
+src/components/portals/SellerPortal.tsx:363:    return false;
+src/components/portals/SellerPortal.tsx:479:    return (
+src/components/portals/SellerPortal.tsx:502:  return (
+src/components/portals/SellerPortal.tsx:632:            return (
+src/components/portals/CustomerPortal.tsx:14:  if (!statusText) return 'Pending';
+src/components/portals/CustomerPortal.tsx:18:  if (lower.includes('cancel') || lower.includes('fail')) return 'Cancelled';
+src/components/portals/CustomerPortal.tsx:19:  if (lower.includes('deliver')) return 'Delivered';
+src/components/portals/CustomerPortal.tsx:20:  if (lower.includes('ship')) return 'Shipped';
+src/components/portals/CustomerPortal.tsx:21:  if (lower.includes('accept')) return 'Accepted';
+src/components/portals/CustomerPortal.tsx:22:  if (lower.includes('reject')) return 'Rejected';
+src/components/portals/CustomerPortal.tsx:23:  if (lower.includes('process')) return 'Processed';
+src/components/portals/CustomerPortal.tsx:24:  if (lower.includes('pick')) return 'Picked Up';
+src/components/portals/CustomerPortal.tsx:25:  if (lower.includes('hub')) return 'At Hub';
+src/components/portals/CustomerPortal.tsx:26:  if (lower.includes('place') || lower.includes('pending')) return 'Placed';
+src/components/portals/CustomerPortal.tsx:27:  return latestStatus.length > 15 ? latestStatus.substring(0, 15) + '...' : latestStatus;
+src/components/portals/CustomerPortal.tsx:31:  if (color === 'red') return {
+src/components/portals/CustomerPortal.tsx:36:  if (color === 'blue') return {
+src/components/portals/CustomerPortal.tsx:41:  return {
+src/components/portals/CustomerPortal.tsx:55:  if (isNaN(value) || value === 0) return '0';
+src/components/portals/CustomerPortal.tsx:56:  if (value >= 1000000) return (value / 1000000).toFixed(2) + 'm';
+src/components/portals/CustomerPortal.tsx:57:  if (value >= 1000) return (value / 1000).toFixed(2) + 'k';
+src/components/portals/CustomerPortal.tsx:58:  return value.toString();
+src/components/portals/CustomerPortal.tsx:181:    return name ? name.substring(0, 2).toUpperCase() : 'US';
+src/components/portals/CustomerPortal.tsx:202:    return (
+src/components/portals/CustomerPortal.tsx:241:    return (
+src/components/portals/CustomerPortal.tsx:273:    return (
+src/components/portals/CustomerPortal.tsx:382:    return (
+src/components/portals/CustomerPortal.tsx:450:                   return { title, desc: part, color };
+src/components/portals/CustomerPortal.tsx:462:                  return (
+src/components/portals/CustomerPortal.tsx:497:    return (
+src/components/portals/CustomerPortal.tsx:531:  return (
+src/components/portals/CustomerPortal.tsx:645:  return newArr;
+src/components/portals/CustomerPortal.tsx:651:      return Boolean(localStorage.getItem('portal_auth_customer'));
+src/components/portals/CustomerPortal.tsx:653:    return false;
+src/components/portals/CustomerPortal.tsx:752:    if (!userId) return;
+src/components/portals/CustomerPortal.tsx:772:      return;
+src/components/portals/CustomerPortal.tsx:849:    if (!deferredShopSearch || deferredShopSearch.trim().length === 0) return [];
+src/components/portals/CustomerPortal.tsx:874:    if (!qRaw) return;
+src/components/portals/CustomerPortal.tsx:879:    if (!q) return;
+src/components/portals/CustomerPortal.tsx:887:       return pName.includes(q) || pNameNorm.includes(qNorm);
+src/components/portals/CustomerPortal.tsx:904:                   return; // Found and set!
+src/components/portals/CustomerPortal.tsx:923:            return;
+src/components/portals/CustomerPortal.tsx:995:          return;
+src/components/portals/CustomerPortal.tsx:1126:        if (prev.length > 0) return shuffleArray(prev);
+src/components/portals/CustomerPortal.tsx:1127:        return prev;
+src/components/portals/CustomerPortal.tsx:1155:             return tags.includes(activeCategory) || p['main category'] === activeCategory || p['sub category'] === activeCategory || prodType === activeCategory;
+src/components/portals/CustomerPortal.tsx:1169:                    return bDate - aDate;
+src/components/portals/CustomerPortal.tsx:1171:                    return aDate - bDate;
+src/components/portals/CustomerPortal.tsx:1173:                    return aPrice - bPrice;
+src/components/portals/CustomerPortal.tsx:1175:                    return bPrice - aPrice;
+src/components/portals/CustomerPortal.tsx:1177:                    return 0;
+src/components/portals/CustomerPortal.tsx:1181:    return items;
+src/components/portals/CustomerPortal.tsx:1188:  return (
+src/components/portals/CustomerPortal.tsx:1282:                    return (
+src/components/portals/CustomerPortal.tsx:1324:                    return (
+src/components/portals/CustomerPortal.tsx:1397:                  return (
+src/components/portals/CustomerPortal.tsx:1533:                    return (
+src/components/portals/CustomerPortal.tsx:1618:                  return (
+src/components/portals/CustomerPortal.tsx:1657:                    return (
+src/components/portals/CustomerPortal.tsx:1708:                         return matchesName || matchesCat;
+src/components/portals/CustomerPortal.tsx:1722:                      return mainMatches && midMatches && subMatches;
+src/components/portals/CustomerPortal.tsx:1733:                      if (sortMode === 'newest') return bDate - aDate;
+src/components/portals/CustomerPortal.tsx:1734:                      if (sortMode === 'oldest') return aDate - bDate;
+src/components/portals/CustomerPortal.tsx:1735:                      if (sortMode === 'cheapest') return aPrice - bPrice;
+src/components/portals/CustomerPortal.tsx:1736:                      if (sortMode === 'expensive') return bPrice - aPrice;
+src/components/portals/CustomerPortal.tsx:1737:                      return 0;
+src/components/portals/CustomerPortal.tsx:1742:                  return (
+src/components/portals/CustomerPortal.tsx:1749:                return shopProducts.length > 0 ? (
+src/components/portals/CustomerPortal.tsx:1837:              return (
+src/components/portals/CustomerPortal.tsx:1865:            return (
+src/components/portals/AdminPortal.tsx:199:      if (!tableName) return;
+src/components/portals/AdminPortal.tsx:204:        return;
+src/components/portals/AdminPortal.tsx:231:        return {
+src/components/portals/AdminPortal.tsx:429:      return;
+src/components/portals/AdminPortal.tsx:478:      return localStorage.getItem('rider_multiple_qty_half_rate') === 'true';
+src/components/portals/AdminPortal.tsx:480:    return false;
+src/components/portals/AdminPortal.tsx:484:      return localStorage.getItem('rider_progress_based_rate') === 'true';
+src/components/portals/AdminPortal.tsx:486:    return false;
+src/components/portals/AdminPortal.tsx:491:  const [defaultRates, setDefaultRates] = useState<Record<string, { pickup: string, delivery: string, return: string }>>({
+src/components/portals/AdminPortal.tsx:492:    'Regular': { pickup: '0', delivery: '0', return: '0' },
+src/components/portals/AdminPortal.tsx:493:    'Premium': { pickup: '0', delivery: '0', return: '0' },
+src/components/portals/AdminPortal.tsx:494:    'Ultra': { pickup: '0', delivery: '0', return: '0' },
+src/components/portals/AdminPortal.tsx:498:  const [specificRiderRates, setSpecificRiderRates] = useState<{ pickup: string, delivery: string, return: string }>({ pickup: '0', delivery: '0', return: '0' });
+src/components/portals/AdminPortal.tsx:538:              return: activeRate.return_delivery_rate || '0'
+src/components/portals/AdminPortal.tsx:555:            return: data.return_delivery_rate || '0'
+src/components/portals/AdminPortal.tsx:561:          setSpecificRiderRates({ pickup: '0', delivery: '0', return: '0' });
+src/components/portals/AdminPortal.tsx:586:          if (!val) return { value: '0', isPercentage: false };
+src/components/portals/AdminPortal.tsx:587:          if (val.endsWith('%')) return { value: val.slice(0, -1), isPercentage: true };
+src/components/portals/AdminPortal.tsx:588:          return { value: val, isPercentage: false };
+src/components/portals/AdminPortal.tsx:649:    if (!visualSelectedSeller) return;
+src/components/portals/AdminPortal.tsx:805:    if (!matchesType) return false;
+src/components/portals/AdminPortal.tsx:806:    if (!searchQuery.trim()) return true;
+src/components/portals/AdminPortal.tsx:808:    return (
+src/components/portals/AdminPortal.tsx:819:      if (typeStr === 'Seller ID') return 'Seller';
+src/components/portals/AdminPortal.tsx:820:      if (typeStr === 'Hub Manager ID') return 'Hub Manager';
+src/components/portals/AdminPortal.tsx:821:      if (typeStr === 'Rider ID') return 'Rider';
+src/components/portals/AdminPortal.tsx:822:      return 'Customer';
+src/components/portals/AdminPortal.tsx:825:    return (
+src/components/portals/AdminPortal.tsx:840:    return (
+src/components/portals/AdminPortal.tsx:977:        case 'Customer ID': return { bg: 'bg-blue-100', text: 'text-blue-700', border: 'border-blue-200', btn: 'bg-blue-600 hover:bg-blue-700', focusRing: 'focus:border-blue-500', iconColor: 'text-blue-500', iconBadge: 'bg-blue-50 text-blue-700 border-blue-200/60' };
+src/components/portals/AdminPortal.tsx:978:        case 'Seller ID': return { bg: 'bg-amber-100', text: 'text-amber-700', border: 'border-amber-200', btn: 'bg-amber-600 hover:bg-amber-700', focusRing: 'focus:border-amber-500', iconColor: 'text-amber-500', iconBadge: 'bg-amber-50 text-amber-700 border-amber-200/60' };
+src/components/portals/AdminPortal.tsx:979:        case 'Hub Manager ID': return { bg: 'bg-purple-100', text: 'text-purple-700', border: 'border-purple-200', btn: 'bg-purple-600 hover:bg-purple-700', focusRing: 'focus:border-purple-500', iconColor: 'text-purple-500', iconBadge: 'bg-purple-50 text-purple-700 border-purple-200/60' };
+src/components/portals/AdminPortal.tsx:980:        case 'Rider ID': return { bg: 'bg-emerald-100', text: 'text-emerald-700', border: 'border-emerald-200', btn: 'bg-emerald-600 hover:bg-emerald-700', focusRing: 'focus:border-emerald-500', iconColor: 'text-emerald-500', iconBadge: 'bg-emerald-50 text-emerald-700 border-emerald-200/60' };
+src/components/portals/AdminPortal.tsx:981:        default: return { bg: 'bg-indigo-100', text: 'text-indigo-700', border: 'border-indigo-200', btn: 'bg-indigo-600 hover:bg-indigo-700', focusRing: 'focus:border-indigo-500', iconColor: 'text-indigo-500', iconBadge: 'bg-indigo-50 text-indigo-700 border-indigo-200/60' };
+src/components/portals/AdminPortal.tsx:986:    return (
+src/components/portals/AdminPortal.tsx:1068:                  return (
+src/components/portals/AdminPortal.tsx:1111:  return (
+src/components/portals/AdminPortal.tsx:1177:                  return (
+src/components/portals/AdminPortal.tsx:1223:                  return (
+src/components/portals/AdminPortal.tsx:1386:                          <span className="text-[11px] text-emerald-700">Configure pickup, delivery & return rates</span>
+src/components/portals/AdminPortal.tsx:1565:                      return (
+src/components/portals/AdminPortal.tsx:1723:                    <p className="text-[11px] text-slate-500">Configure pickup, delivery and return delivery rates</p>
+src/components/portals/AdminPortal.tsx:1815:                        value={activeRateRank === 'Regular' ? defaultRates[activeRateRank].return : specificRiderRates.return}
+src/components/portals/AdminPortal.tsx:1818:                            setDefaultRates({...defaultRates, [activeRateRank]: {...defaultRates[activeRateRank], return: e.target.value}});
+src/components/portals/AdminPortal.tsx:1820:                            setSpecificRiderRates({...specificRiderRates, return: e.target.value});
+src/components/portals/AdminPortal.tsx:1868:                               return_delivery_rate: defaultRates['Regular'].return,
+src/components/portals/AdminPortal.tsx:1876:                               return_delivery_rate: defaultRates['Regular'].return,
+src/components/portals/AdminPortal.tsx:1897:                               return_delivery_rate: specificRiderRates.return,
+src/components/portals/AdminPortal.tsx:1907:                               return_delivery_rate: specificRiderRates.return,
+src/components/portals/AdminPortal.tsx:2247:            return (
+src/components/portals/RiderTasksView.tsx:31:      if (!riderId) return;
+src/components/portals/RiderTasksView.tsx:70:              if (type === 'faild pickup') return 1;
+src/components/portals/RiderTasksView.tsx:71:              if (['rescheduled pickup', 'not attanded pickup', 'no responsed pickup'].includes(type)) return 2;
+src/components/portals/RiderTasksView.tsx:72:              if (type === 'picked up') return 3;
+src/components/portals/RiderTasksView.tsx:73:              return 4;
+src/components/portals/RiderTasksView.tsx:75:            return getRank(typeA) - getRank(typeB);
+src/components/portals/RiderTasksView.tsx:119:  return (
+src/components/portals/RiderTasksView.tsx:146:            return (
+src/components/portals/RiderTasksView.tsx:294:    if (!canvas) return;
+src/components/portals/RiderTasksView.tsx:296:    if (!ctx) return;
+src/components/portals/RiderTasksView.tsx:322:    if (!isDrawing.current) return;
+src/components/portals/RiderTasksView.tsx:325:    if (!canvas || !ctx) return;
+src/components/portals/RiderTasksView.tsx:401:    return awb;
+src/components/portals/RiderTasksView.tsx:405:     if (!canvasRef.current) return null;
+src/components/portals/RiderTasksView.tsx:410:     if(!ctx) return null;
+src/components/portals/RiderTasksView.tsx:417:     return finalCanvas.toDataURL('image/jpeg', 0.8);
+src/components/portals/RiderTasksView.tsx:425:      return;
+src/components/portals/RiderTasksView.tsx:429:      return;
+src/components/portals/RiderTasksView.tsx:544:    if (!unableReason) return;
+src/components/portals/RiderTasksView.tsx:674:      if (!str) return 'N/A';
+src/components/portals/RiderTasksView.tsx:676:      if (s.length <= 6) return s;
+src/components/portals/RiderTasksView.tsx:677:      return 'X'.repeat(s.length - 6) + s.slice(-6);
+src/components/portals/RiderTasksView.tsx:744:    return doc;
+src/components/portals/RiderTasksView.tsx:772:         if (data) return `${data.id} || ${data.hub_name || ''} || ${data.registered_pincode || ''}`;
+src/components/portals/RiderTasksView.tsx:774:      return 'Unknown Hub';
+src/components/portals/RiderTasksView.tsx:962:    return (
+src/components/portals/RiderTasksView.tsx:1152:  return (
+src/components/portals/ProductCard.tsx:63:  return (
+src/components/portals/ProductCard.tsx:73:  if (!value) return '0';
+src/components/portals/ProductCard.tsx:75:  if (isNaN(num)) return '0';
+src/components/portals/ProductCard.tsx:76:  if (num >= 1000000) return (num / 1000000).toFixed(2) + 'm';
+src/components/portals/ProductCard.tsx:77:  if (num >= 1000) return (num / 1000).toFixed(2) + 'k';
+src/components/portals/ProductCard.tsx:78:  return num.toString();
+src/components/portals/ProductCard.tsx:146:    if (!onUpdateStock) return;
+src/components/portals/ProductCard.tsx:169:  return (
+src/components/portals/ProductCard.tsx:220:                return (
+src/components/portals/ProductCard.tsx:228:                return (
+src/components/portals/CreateUserIdPage.tsx:43:        return {
+src/components/portals/CreateUserIdPage.tsx:55:        return {
+src/components/portals/CreateUserIdPage.tsx:67:        return {
+src/components/portals/CreateUserIdPage.tsx:79:        return {
+src/components/portals/CreateUserIdPage.tsx:91:        return {
+src/components/portals/CreateUserIdPage.tsx:192:    return pwd;
+src/components/portals/CreateUserIdPage.tsx:197:    if (!initialData) return;
+src/components/portals/CreateUserIdPage.tsx:444:        return;
+src/components/portals/CreateUserIdPage.tsx:473:  return (
+src/components/portals/SellerDashboardView.tsx:29:        if (!userId) return;
+src/components/portals/SellerDashboardView.tsx:109:  return (
+src/components/portals/SellerOrdersView.tsx:55:    if (!sellerId) return;
+src/components/portals/SellerOrdersView.tsx:146:    if (!selectedOrderForEarning) return null;
+src/components/portals/SellerOrdersView.tsx:190:      return { ...charge, val, isTax, amount };
+src/components/portals/SellerOrdersView.tsx:204:      return { ...charge, amount: finalAmount };
+src/components/portals/SellerOrdersView.tsx:210:    return {
+src/components/portals/SellerOrdersView.tsx:231:    return true; // We are already filtering via supabase query based on activeChip
+src/components/portals/SellerOrdersView.tsx:355:  return (
+src/components/portals/SellerOrdersView.tsx:499:                    if (!earnings) return null;
+src/components/portals/SellerOrdersView.tsx:500:                    return (
+src/components/portals/RiderDashboardView.tsx:88:    if (acceptingMap[pickupId]) return;
+src/components/portals/RiderDashboardView.tsx:125:            return newPin;
+src/components/portals/RiderDashboardView.tsx:141:            return newId;
+src/components/portals/RiderDashboardView.tsx:184:  return (
+src/components/portals/ProductDetailModal.tsx:36:  if (!value) return '0';
+src/components/portals/ProductDetailModal.tsx:38:  if (isNaN(num)) return '0';
+src/components/portals/ProductDetailModal.tsx:39:  if (num >= 1000000) return (num / 1000000).toFixed(2) + 'm';
+src/components/portals/ProductDetailModal.tsx:40:  if (num >= 1000) return (num / 1000).toFixed(2) + 'k';
+src/components/portals/ProductDetailModal.tsx:41:  return num.toString();
+src/components/portals/ProductDetailModal.tsx:106:    if (!product || !product.id) return;
+src/components/portals/ProductDetailModal.tsx:137:    if (!isCustomerView) return;
+src/components/portals/ProductDetailModal.tsx:191:        return;
+src/components/portals/ProductDetailModal.tsx:295:      return { ...charge, val, isTax, amount };
+src/components/portals/ProductDetailModal.tsx:314:      return { ...charge, amount: finalAmount };
+src/components/portals/ProductDetailModal.tsx:320:    return {
+src/components/portals/ProductDetailModal.tsx:375:      return;
+src/components/portals/ProductDetailModal.tsx:380:      return;
+src/components/portals/ProductDetailModal.tsx:400:        return timeOffset.toString() + randomSuffix.toString() + index.toString();
+src/components/portals/ProductDetailModal.tsx:531:    return (
+src/components/portals/ProductDetailModal.tsx:590:  return (
+src/components/portals/ProductDetailModal.tsx:667:                return (
+src/components/portals/ProductDetailModal.tsx:675:                return (
+src/components/portals/ProductDetailModal.tsx:1044:                    return;
+src/components/portals/ProductDetailModal.tsx:1080:                    return;
+src/components/portals/ProductDetailModal.tsx:1111:                  return (
+src/components/portals/ProductDetailModal.tsx:1224:                      if (!isFormValid) return;
+src/components/portals/ProductDetailModal.tsx:1312:          return (
+src/components/portals/ProductDetailModal.tsx:1807:                return (
+src/components/portals/HubDispatchView.tsx:50:                if (!data) return [];
+src/components/portals/HubDispatchView.tsx:188:      if (!awbInput.trim()) return;
+src/components/portals/HubDispatchView.tsx:196:         return;
+src/components/portals/HubDispatchView.tsx:208:         return;
+src/components/portals/HubDispatchView.tsx:214:      if (statusType.includes('delivered') || statusType.includes('returned') || statusType.includes('shipped')) {
+src/components/portals/HubDispatchView.tsx:223:         const printType = statusType.includes('delivered') ? 'delivered' : statusType.includes('returned') ? 'returned' : 'shipped';
+src/components/portals/HubDispatchView.tsx:225:         return;
+src/components/portals/HubDispatchView.tsx:231:         return;
+src/components/portals/HubDispatchView.tsx:238:            return;
+src/components/portals/HubDispatchView.tsx:267:     if (!awbValue.trim()) return;
+src/components/portals/HubDispatchView.tsx:275:        return;
+src/components/portals/HubDispatchView.tsx:287:        return;
+src/components/portals/HubDispatchView.tsx:307:     if (hasError) return;
+src/components/portals/HubDispatchView.tsx:401:          return;
+src/components/portals/HubDispatchView.tsx:415:          return;
+src/components/portals/HubDispatchView.tsx:419:          return;
+src/components/portals/HubDispatchView.tsx:423:          return;
+src/components/portals/HubDispatchView.tsx:427:          return;
+src/components/portals/HubDispatchView.tsx:451:              return supabase
+src/components/portals/HubDispatchView.tsx:474:                      return supabase
+src/components/portals/HubDispatchView.tsx:506:    return (
+src/components/portals/HubDispatchView.tsx:673:       return <div className="text-center py-8 text-gray-400 text-xs">Loading...</div>;
+src/components/portals/HubDispatchView.tsx:676:       return <div className="text-center py-8 text-gray-400 text-xs">No records found</div>;
+src/components/portals/HubDispatchView.tsx:678:    return (
+src/components/portals/HubDispatchView.tsx:700:    return (
+src/components/portals/HubDispatchView.tsx:796:    return (
+src/components/portals/HubDispatchView.tsx:858:  return (
+src/components/portals/HubShipmentsView.tsx:152:    if (!runsheetAwbInput.trim()) return;
+src/components/portals/HubShipmentsView.tsx:161:      return;
+src/components/portals/HubShipmentsView.tsx:174:        return;
+src/components/portals/HubShipmentsView.tsx:180:        return;
+src/components/portals/HubShipmentsView.tsx:197:       return;
+src/components/portals/HubShipmentsView.tsx:201:       return;
+src/components/portals/HubShipmentsView.tsx:282:    return (
+src/components/portals/HubShipmentsView.tsx:376:    if (!selectedRider || selectedShipmentIds.length === 0) return;
+src/components/portals/HubShipmentsView.tsx:533:    if (!riderInput.trim()) return;
+src/components/portals/HubShipmentsView.tsx:544:        return;
+src/components/portals/HubShipmentsView.tsx:559:            return;
+src/components/portals/HubShipmentsView.tsx:573:               return;
+src/components/portals/HubShipmentsView.tsx:577:          return;
+src/components/portals/HubShipmentsView.tsx:588:            return;
+src/components/portals/HubShipmentsView.tsx:593:        if (exists) return prev;
+src/components/portals/HubShipmentsView.tsx:594:        return [...prev, data];
+src/components/portals/HubShipmentsView.tsx:646:    return Array.from(locked);
+src/components/portals/HubShipmentsView.tsx:650:    if (selectedPincodes.length === 0) return []; // Only show selected pincodes
+src/components/portals/HubShipmentsView.tsx:653:      if (!seller) return false;
+src/components/portals/HubShipmentsView.tsx:654:      return selectedPincodes.includes(seller.registered_pincode?.toString());
+src/components/portals/HubShipmentsView.tsx:692:    return (
+src/components/portals/HubShipmentsView.tsx:776:    return (
+src/components/portals/HubShipmentsView.tsx:904:                return (
+src/components/portals/HubShipmentsView.tsx:970:    return (
+src/components/portals/HubShipmentsView.tsx:1034:        return type === 'out for pickup';
+src/components/portals/HubShipmentsView.tsx:1036:        return ['faild pickup', 'picked up', 'rescheduled pickup', 'not attanded pickup', 'no responsed pickup'].includes(type);
+src/components/portals/HubShipmentsView.tsx:1042:      return null;
+src/components/portals/HubShipmentsView.tsx:1045:    return (
+src/components/portals/HubShipmentsView.tsx:1061:                  if (type === 'picked up') return 1;
+src/components/portals/HubShipmentsView.tsx:1062:                  if (type === 'faild pickup') return 2;
+src/components/portals/HubShipmentsView.tsx:1063:                  if (['rescheduled pickup', 'not attanded pickup', 'no responsed pickup'].includes(type)) return 3;
+src/components/portals/HubShipmentsView.tsx:1064:                  return 4;
+src/components/portals/HubShipmentsView.tsx:1066:                return getRank(typeA) - getRank(typeB);
+src/components/portals/HubShipmentsView.tsx:1068:              return 0;
+src/components/portals/HubShipmentsView.tsx:1072:            return (
+src/components/portals/HubShipmentsView.tsx:1120:  return (
+src/components/portals/RiderPortal.tsx:90:    return name ? name.substring(0, 2).toUpperCase() : 'RI';
+src/components/portals/RiderPortal.tsx:94:    return (
+src/components/portals/RiderPortal.tsx:137:    return (
+src/components/portals/RiderPortal.tsx:173:    const returnRate = isSpecific ? (specificRates.return_delivery_rate || 0) : (globalRates?.return_delivery_rate || 0);
+src/components/portals/RiderPortal.tsx:178:          return 'bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 text-yellow-900 border border-yellow-400 shadow-[0_2px_15px_rgba(250,204,21,0.5)] relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/70 before:to-transparent';
+src/components/portals/RiderPortal.tsx:180:          return 'bg-white/10 text-cyan-800 border border-cyan-200/50 backdrop-blur-xl shadow-[0_2px_20px_rgba(34,211,238,0.5)] relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/90 before:to-transparent';
+src/components/portals/RiderPortal.tsx:183:          return 'bg-gradient-to-r from-slate-200 via-slate-100 to-slate-300 text-slate-800 border border-slate-300 shadow-[0_2px_10px_rgba(148,163,184,0.4)] relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/60 before:to-transparent';
+src/components/portals/RiderPortal.tsx:187:    return (
+src/components/portals/RiderPortal.tsx:218:              <span className="text-base font-bold text-gray-900">₹ {returnRate}</span>
+src/components/portals/RiderPortal.tsx:233:    return (
+src/components/portals/RiderPortal.tsx:263:  return (
+src/components/portals/RiderPortal.tsx:403:  return (
+src/components/portals/AdminLiveShipmentCard.tsx:29:        if (!userId) return;
+src/components/portals/AdminLiveShipmentCard.tsx:84:  return (
+src/components/portals/HubDashboardView.tsx:59:        if (!userId) return;
+src/components/portals/HubDashboardView.tsx:113:        if (!userId) return;
+src/components/portals/HubDashboardView.tsx:146:     if (!awbValue.trim()) return;
+src/components/portals/HubDashboardView.tsx:160:        return;
+src/components/portals/HubDashboardView.tsx:167:        return;
+src/components/portals/HubDashboardView.tsx:174:        return;
+src/components/portals/HubDashboardView.tsx:220:    return (
+src/components/portals/HubDashboardView.tsx:305:  return (
+src/components/portals/HubLogisticPortal.tsx:99:    return name ? name.substring(0, 2).toUpperCase() : 'HM';
+src/components/portals/HubLogisticPortal.tsx:103:    return (
+src/components/portals/HubLogisticPortal.tsx:154:    return (
+src/components/portals/HubLogisticPortal.tsx:181:    return (
+src/components/portals/HubLogisticPortal.tsx:211:  return (
+src/components/portals/HubLogisticPortal.tsx:306:      return Boolean(localStorage.getItem('portal_auth_hub'));
+src/components/portals/HubLogisticPortal.tsx:308:    return false;
+src/components/portals/HubLogisticPortal.tsx:332:  return (
+src/components/Footer.tsx:20:  return (
+src/components/PortalCard.tsx:32:        return <ShoppingCart className="w-7 h-7 sm:w-8 sm:h-8" />;
+src/components/PortalCard.tsx:34:        return <Store className="w-7 h-7 sm:w-8 sm:h-8" />;
+src/components/PortalCard.tsx:36:        return <Building2 className="w-7 h-7 sm:w-8 sm:h-8" />;
+src/components/PortalCard.tsx:38:        return <Truck className="w-7 h-7 sm:w-8 sm:h-8" />;
+src/components/PortalCard.tsx:40:        return <Crown className="w-7 h-7 sm:w-8 sm:h-8" />;
+src/components/PortalCard.tsx:42:        return <Sparkles className="w-7 h-7 sm:w-8 sm:h-8" />;
+src/components/PortalCard.tsx:49:  return (
+src/components/Header.tsx:29:  return (
+src/hooks/useScrollDirection.ts:16:        return;
+src/hooks/useScrollDirection.ts:21:        return;
+src/hooks/useScrollDirection.ts:40:  return scrollDir;
+src/utils/tagColors.ts:27:  if (!tagName) return 'bg-slate-600 text-white border-transparent';
+src/utils/tagColors.ts:29:  if (lower.includes('live')) return 'bg-green-600 text-white border-transparent';
+src/utils/tagColors.ts:30:  if (lower.includes('flash') || lower.includes('hot') || lower.includes('rush') || lower.includes('killer') || lower.includes('urgent')) return 'bg-red-600 text-white border-transparent';
+src/utils/tagColors.ts:31:  if (lower.includes('new') || lower.includes('latest') || lower.includes('fresh')) return 'bg-blue-600 text-white border-transparent';
+src/utils/tagColors.ts:32:  if (lower.includes('best') || lower.includes('top') || lower.includes('winner') || lower.includes('champion') || lower.includes('star')) return 'bg-yellow-600 text-white border-transparent';
+src/utils/tagColors.ts:33:  if (lower.includes('sale') || lower.includes('deal') || lower.includes('offer') || lower.includes('steal') || lower.includes('budget') || lower.includes('cheap')) return 'bg-orange-600 text-white border-transparent';
+src/utils/tagColors.ts:34:  if (lower.includes('premium') || lower.includes('luxury') || lower.includes('elite') || lower.includes('royal') || lower.includes('pro')) return 'bg-purple-600 text-white border-transparent';
+src/utils/tagColors.ts:35:  if (lower.includes('green') || lower.includes('eco') || lower.includes('organic') || lower.includes('natural') || lower.includes('healthy')) return 'bg-emerald-600 text-white border-transparent';
+src/utils/tagColors.ts:36:  if (lower.includes('trust') || lower.includes('safe') || lower.includes('verified') || lower.includes('genuine')) return 'bg-teal-600 text-white border-transparent';
+src/utils/tagColors.ts:37:  if (lower.includes('rare') || lower.includes('unique') || lower.includes('exclusive') || lower.includes('limited')) return 'bg-indigo-600 text-white border-transparent';
+src/utils/tagColors.ts:38:  if (lower.includes('love') || lower.includes('favourite') || lower.includes('cute')) return 'bg-pink-600 text-white border-transparent';
+src/utils/tagColors.ts:42:  return colorClasses[hash % colorClasses.length];
+src/App.tsx:92:      return window.history.state.portal;
+src/App.tsx:94:    return null;
+src/App.tsx:147:        return;
+src/App.tsx:181:  if (selectedPortal === 'customer') return <CustomerPortal onBack={handleBackToPortals} />;
+src/App.tsx:182:  if (selectedPortal === 'seller') return <SellerPortal onBack={handleBackToPortals} />;
+src/App.tsx:183:  if (selectedPortal === 'hub') return <HubLogisticPortal onBack={handleBackToPortals} />;
+src/App.tsx:184:  if (selectedPortal === 'rider') return <RiderPortal onBack={handleBackToPortals} />;
+src/App.tsx:185:  if (selectedPortal === 'admin') return <AdminPortal onBack={handleBackToPortals} />;
+src/App.tsx:187:  return (
+src/App.tsx:222:              return (
+src/categories.ts:9128:            "id": "wooden-returning-boomerang-toy",

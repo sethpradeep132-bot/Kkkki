@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="hi">
+  <head>
+    <script>
+      window.addEventListener('error', (event) => {
+        fetch('/api/log_error', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: event.message, stack: event.error?.stack })
+        });
+      });
+    </script>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Suriyawan Shopping | भारत का भरोसेमंद ऑनलाइन शॉपिंग और डिलीवरी प्लेटफ़ॉर्म</title>
+    
+    <!-- Google Search Console Verification Meta Tag -->
+    <meta name="google-site-verification" content="google-site-verification-token-replace-with-your-code" />
+    
+    <!-- Standard SEO Meta Tags -->
+    <meta name="description" content="Suriyawan Shopping - कपड़े, इलेक्ट्रॉनिक्स, घरेलू सामान और दैनिक ज़रूरतों की तेज़ डिलीवरी। सर्वोत्तम डील्स और सुरक्षित भुगतान के साथ खरीदारी करें।" />
+    <meta name="keywords" content="Suriyawan Shopping, online shopping, ecommerce india, fastest delivery, online marketplace, best discounts" />
+    <meta name="author" content="Suriyawan Shopping Services Pvt. Ltd." />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <link rel="canonical" href="https://suriyawan.com" />
+    
+    <!-- Open Graph / Facebook / WhatsApp Meta Tags -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Suriyawan Shopping | एक प्लेटफ़ॉर्म, सभी सेवाएँ" />
+    <meta property="og:description" content="Suriyawan Shopping - कपड़े, इलेक्ट्रॉनिक्स, घरेलू सामान और दैनिक ज़रूरतों की तेज़ डिलीवरी। सर्वोत्तम डील्स और सुरक्षित भुगतान।" />
+    <meta property="og:site_name" content="Suriyawan Shopping" />
+    <meta property="og:locale" content="hi_IN" />
+    
+    <!-- Twitter / X Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Suriyawan Shopping | एक प्लेटफ़ॉर्म, सभी सेवाएँ" />
+    <meta name="twitter:description" content="Suriyawan Shopping - भारत का विश्वसनीय ऑनलाइन शॉपिंग और डिलीवरी प्लेटफ़ॉर्म।" />
+    
+    <!-- Security Shield Decoy Comment -->
+    <!-- [SURIYAWAN DEFENSE SHIELD: 360-DEGREE PROTECTOR ACTIVE. CODE DECOYS ENGAGED. UNAUTHORIZED SCRAPING OR CLONING PROHIBITED.] -->
+
+    <!-- Schema.org JSON-LD Structured Data for Google Search Console -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://suriyawan.com/#organization",
+          "name": "Suriyawan Shopping",
+          "url": "https://suriyawan.com",
+          "logo": "https://suriyawan.com/logo.png",
+          "description": "Suriyawan Shopping Services Pvt. Ltd. - Comprehensive multi-service ecommerce ecosystem."
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://suriyawan.com/#website",
+          "url": "https://suriyawan.com",
+          "name": "Suriyawan Shopping",
+          "publisher": { "@id": "https://suriyawan.com/#organization" },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://suriyawan.com/customer?search={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        }
+      ]
+    }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700&family=Outfit:wght@400;500;600;700;800;900&family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700;1,800&family=Syne:wght@600;700;800&family=Poppins:ital,wght@0,500;0,600;0,700;0,800;1,700&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  </head>
+  <body class="bg-slate-50 text-slate-900 antialiased selection:bg-orange-500 selection:text-white">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

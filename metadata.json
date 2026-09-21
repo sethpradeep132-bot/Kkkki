@@ -1,0 +1,6 @@
+{
+  "name": "Suriyawan Shopping | भारत का भरोसेमंद ऑनलाइन शॉपिंग और डिलीवरी प्लेटफ़ॉर्म",
+  "description": "Suriyawan Shopping - कपड़े, इलेक्ट्रॉनिक्स, घरेलू सामान और दैनिक ज़रूरतों की तेज़ डिलीवरी। सर्वोत्तम डील्स और सुरक्षित भुगतान के साथ खरीदारी करें।",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

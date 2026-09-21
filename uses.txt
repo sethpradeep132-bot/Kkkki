@@ -1,0 +1,770 @@
+src/components/portals/UploadProductForm.tsx:1:import React, { useState, useRef, useEffect, useCallback } from 'react';
+src/components/portals/UploadProductForm.tsx:187:    'jeans', 'pants', 'trousers', 'shorts', 'scissors', 'sunglasses', 'goggles', 
+src/components/portals/UploadProductForm.tsx:252:  const [uploadServiceVisible, setUploadServiceVisible] = useState(initialUploadServiceVisible);
+src/components/portals/UploadProductForm.tsx:253:  useEffect(() => {
+src/components/portals/UploadProductForm.tsx:257:        const { data: { user } } = await supabase.auth.getUser();
+src/components/portals/UploadProductForm.tsx:258:        if (user) {
+src/components/portals/UploadProductForm.tsx:259:          const { data } = await supabase.from('sellers').select('upload_service_visible').eq('id', user.id).single();
+src/components/portals/UploadProductForm.tsx:269:  const [quote, setQuote] = useState('');
+src/components/portals/UploadProductForm.tsx:270:  useEffect(() => {
+src/components/portals/UploadProductForm.tsx:274:  const [productName, setProductName] = useState(initialProduct?.['product name'] || '');
+src/components/portals/UploadProductForm.tsx:275:  const [productCategory, setProductCategory] = useState('');
+src/components/portals/UploadProductForm.tsx:276:  const [productSku, setProductSku] = useState(initialProduct?.['product_sku_code'] || '');
+src/components/portals/UploadProductForm.tsx:277:  const [availableStock, setAvailableStock] = useState(initialProduct?.['available_stock'] !== undefined ? initialProduct['available_stock'] : '');
+src/components/portals/UploadProductForm.tsx:278:  const [hsnCode, setHsnCode] = useState(initialProduct?.['hsn code'] || '');
+src/components/portals/UploadProductForm.tsx:279:  const [gstPercent, setGstPercent] = useState(initialProduct?.['gst %'] || '');
+src/components/portals/UploadProductForm.tsx:280:  const [marketValue, setMarketValue] = useState(initialProduct?.['price info'] || '');
+src/components/portals/UploadProductForm.tsx:281:  const [sellingPrice, setSellingPrice] = useState(initialProduct?.['selling price'] || '');
+src/components/portals/UploadProductForm.tsx:282:  const [grossRate, setGrossRate] = useState(initialProduct?.['gross rate'] || '');
+src/components/portals/UploadProductForm.tsx:283:  const [discount, setDiscount] = useState(initialProduct?.['discount %'] || '');
+src/components/portals/UploadProductForm.tsx:284:  const [priceGst, setPriceGst] = useState(initialProduct?.['gst rate %'] || initialProduct?.['gst %'] || '');
+src/components/portals/UploadProductForm.tsx:285:  const [giftDonation, setGiftDonation] = useState(initialProduct?.['gift cash donation'] || '');
+src/components/portals/UploadProductForm.tsx:286:  const [formErrors, setFormErrors] = useState<string[]>([]);
+src/components/portals/UploadProductForm.tsx:287:  const [isPublishing, setIsPublishing] = useState(false);
+src/components/portals/UploadProductForm.tsx:288:  const [isSavingDraft, setIsSavingDraft] = useState(false);
+src/components/portals/UploadProductForm.tsx:289:  const [adminCharges, setAdminCharges] = useState<{ id: string; name: string; value: string; isPercentage: boolean }[]>([]);
+src/components/portals/UploadProductForm.tsx:292:  useEffect(() => {
+src/components/portals/UploadProductForm.tsx:315:  useEffect(() => {
+src/components/portals/UploadProductForm.tsx:329:  useEffect(() => {
+src/components/portals/UploadProductForm.tsx:427:  const [showSuggestions, setShowSuggestions] = useState(false);
+src/components/portals/UploadProductForm.tsx:428:  const [categoryTags, setCategoryTags] = useState<string[]>(initialProduct?.['category tags'] || []);
+src/components/portals/UploadProductForm.tsx:430:  const [titleName, setTitleName] = useState(initialProduct?.['product title name'] || '');
+src/components/portals/UploadProductForm.tsx:431:  const [description, setDescription] = useState(initialProduct?.['product description'] || '');
+src/components/portals/UploadProductForm.tsx:433:  const [images, setImages] = useState<string[]>(initialProduct?.['product images'] || []);
+src/components/portals/UploadProductForm.tsx:434:  const fileInputRef = useRef<HTMLInputElement>(null);
+src/components/portals/UploadProductForm.tsx:436:  const [selectedColors, setSelectedColors] = useState<{name: string, hex: string}[]>(initialProduct?.['color'] || []);
+src/components/portals/UploadProductForm.tsx:437:  const [selectedSizes, setSelectedSizes] = useState<string[]>(initialProduct?.['size'] || []);
+src/components/portals/UploadProductForm.tsx:438:  const [selectedWeights, setSelectedWeights] = useState<string[]>(initialProduct?.['weight'] || []);
+src/components/portals/UploadProductForm.tsx:440:  const [featureLang, setFeatureLang] = useState<'Hindi' | 'English'>('English');
+src/components/portals/UploadProductForm.tsx:441:  const [featureCount, setFeatureCount] = useState<number>(5);
+src/components/portals/UploadProductForm.tsx:442:  const [features, setFeatures] = useState<string[]>(() => {
+src/components/portals/UploadProductForm.tsx:453:  const [selectedServiceCategory, setSelectedServiceCategory] = useState(initialProduct?.['upload services'] || '');
+src/components/portals/UploadProductForm.tsx:454:  const [mobileNumber, setMobileNumber] = useState(initialProduct?.['mobile number'] || '');
+src/components/portals/UploadProductForm.tsx:455:  const [selectedTags, setSelectedTags] = useState<string[]>(initialProduct?.['tags'] || []);
+src/components/portals/UploadProductForm.tsx:457:  const [mainCat, setMainCat] = useState(initialProduct?.['main category'] || '');
+src/components/portals/UploadProductForm.tsx:458:  const [midCat, setMidCat] = useState(initialProduct?.['middle category'] || '');
+src/components/portals/UploadProductForm.tsx:459:  const [subCat, setSubCat] = useState(initialProduct?.['sub category'] || '');
+src/components/portals/UploadProductForm.tsx:460:  const [isCategoryAutoSelected, setIsCategoryAutoSelected] = useState(false);
+src/components/portals/UploadProductForm.tsx:462:  const [homeFeedProductType, setHomeFeedProductType] = useState(initialProduct?.['product type chips'] || '');
+src/components/portals/UploadProductForm.tsx:463:  const [flashSaleDuration, setFlashSaleDuration] = useState(initialProduct?.['Time Duration'] || '');
+src/components/portals/UploadProductForm.tsx:464:  const [homeFeedTitleCategory, setHomeFeedTitleCategory] = useState(initialProduct?.['choose title category'] || '');
+src/components/portals/UploadProductForm.tsx:466:  useEffect(() => {
+src/components/portals/UploadProductForm.tsx:479:  const [activeModal, setActiveModal] = useState<'none' | 'size' | 'size' | 'weight' | 'tag' | 'categoryTag' | 'crop'>('none');
+src/components/portals/UploadProductForm.tsx:481:  const [minQuantity, setMinQuantity] = useState<number>(initialProduct?.['minimum order quantity'] || 1);
+src/components/portals/UploadProductForm.tsx:482:  const [isCustomQty, setIsCustomQty] = useState<boolean>(false);
+src/components/portals/UploadProductForm.tsx:483:  const [deliveryCharge, setDeliveryCharge] = useState<string>(initialProduct?.['delivery charge'] || '');
+src/components/portals/UploadProductForm.tsx:484:  const [deliveryChargeType, setDeliveryChargeType] = useState<string>(initialProduct?.['delivery charge type'] || '');
+src/components/portals/UploadProductForm.tsx:485:  const [isDeliveryChargeDropdownOpen, setIsDeliveryChargeDropdownOpen] = useState<boolean>(false);
+src/components/portals/UploadProductForm.tsx:488:  const [tempImage, setTempImage] = useState<string | null>(null);
+src/components/portals/UploadProductForm.tsx:489:  const [crop, setCrop] = useState<ReactCropType>({ unit: '%', width: 40, height: 50, x: 30, y: 25 });
+src/components/portals/UploadProductForm.tsx:490:  const [completedCrop, setCompletedCrop] = useState<ReactCropType | null>(null);
+src/components/portals/UploadProductForm.tsx:491:  const imgRef = useRef<HTMLImageElement>(null);
+src/components/portals/UploadProductForm.tsx:492:  const [cropAspect, setCropAspect] = useState(4/5); // Default 4:5
+src/components/portals/UploadProductForm.tsx:507:  const [customColorName, setCustomColorName] = useState('');
+src/components/portals/UploadProductForm.tsx:508:  const [customColorHex, setCustomColorHex] = useState('#000000');
+src/components/portals/UploadProductForm.tsx:510:  useEffect(() => {
+src/components/portals/UploadProductForm.tsx:528:  const deferredProductName = React.useDeferredValue(productName);
+src/components/portals/UploadProductForm.tsx:529:  const suggestedCategories = React.useMemo(() => {
+src/components/portals/UploadProductForm.tsx:539:      `Elevate your day with this premium ${pName}. Built to impress, featuring top-grade materials and an outstanding finish. Whether for personal use or a gift, it delivers exceptional value.`
+src/components/portals/UploadProductForm.tsx:545:  useEffect(() => {
+src/components/portals/UploadProductForm.tsx:563:        `A highly reliable ${n} crafted specifically for premium users.`,
+src/components/portals/UploadProductForm.tsx:605:  useEffect(() => {
+src/components/portals/UploadProductForm.tsx:616:  useEffect(() => {
+src/components/portals/UploadProductForm.tsx:635:  const onImageLoad = useCallback((e: React.SyntheticEvent<HTMLImageElement>) => {
+src/components/portals/UploadProductForm.tsx:682:  const onCropComplete = useCallback((crop: ReactCropType) => {
+src/components/portals/UploadProductForm.tsx:683:    // not strictly needed since we use completedCrop state
+src/components/portals/UploadProductForm.tsx:766:    const userObj = savedAuth ? JSON.parse(savedAuth) : null;
+src/components/portals/UploadProductForm.tsx:767:    if (userObj?.id) {
+src/components/portals/UploadProductForm.tsx:768:      const { data } = await supabase.from('sellers').select('id').eq('id', userObj.id).maybeSingle();
+src/components/portals/UploadProductForm.tsx:771:    if (!finalSellerId && userObj?.email) {
+src/components/portals/UploadProductForm.tsx:772:      const { data } = await supabase.from('sellers').select('id').eq('registered_email', userObj.email).maybeSingle();
+src/components/portals/UploadProductForm.tsx:776:      const { data: { user } } = await supabase.auth.getUser();
+src/components/portals/UploadProductForm.tsx:777:      if (user) {
+src/components/portals/UploadProductForm.tsx:778:        const { data } = await supabase.from('sellers').select('id').eq('id', user.id).maybeSingle();
+src/components/portals/UploadProductForm.tsx:1085:                          onMouseDown={(e) => {
+src/components/portals/LogoutModal.tsx:1:import React, { useState } from 'react';
+src/components/portals/LogoutModal.tsx:23:  const [selectedOption, setSelectedOption] = useState<'local' | 'global'>('local');
+src/components/portals/LogoutModal.tsx:24:  const [isLoggingOut, setIsLoggingOut] = useState(false);
+src/components/portals/SellerProductsView.tsx:1:import React, { useState, useEffect, useCallback } from 'react';
+src/components/portals/SellerProductsView.tsx:17:  const [viewMode, setViewMode] = useState<'standard' | 'inventory'>('standard');
+src/components/portals/SellerProductsView.tsx:20:  const [activeStatus, setActiveStatus] = useState<'Active' | 'Inactive' | 'Draft'>('Active');
+src/components/portals/SellerProductsView.tsx:23:  const [inventoryChip, setInventoryChip] = useState<'active_inactive' | 'draft'>('active_inactive');
+src/components/portals/SellerProductsView.tsx:25:  const [products, setProducts] = useState<SupabaseProduct[]>([]);
+src/components/portals/SellerProductsView.tsx:26:  const [loading, setLoading] = useState(true);
+src/components/portals/SellerProductsView.tsx:27:  const [searchQuery, setSearchQuery] = useState('');
+src/components/portals/SellerProductsView.tsx:28:  const [selectedProduct, setSelectedProduct] = useState<SupabaseProduct | null>(null);
+src/components/portals/SellerProductsView.tsx:29:  const [toastMessage, setToastMessage] = useState<string | null>(null);
+src/components/portals/SellerProductsView.tsx:30:  const [counts, setCounts] = useState<{ active: number; inactive: number; draft: number }>({
+src/components/portals/SellerProductsView.tsx:49:      const userObj = savedAuth ? JSON.parse(savedAuth) : null;
+src/components/portals/SellerProductsView.tsx:51:      if (userObj?.id) {
+src/components/portals/SellerProductsView.tsx:52:        const { data } = await supabase.from('sellers').select('id').eq('id', userObj.id).maybeSingle();
+src/components/portals/SellerProductsView.tsx:55:      if (!finalSellerId && userObj?.email) {
+src/components/portals/SellerProductsView.tsx:56:        const { data } = await supabase.from('sellers').select('id').eq('registered_email', userObj.email).maybeSingle();
+src/components/portals/SellerProductsView.tsx:60:        const { data: { user } } = await supabase.auth.getUser();
+src/components/portals/SellerProductsView.tsx:61:        if (user) {
+src/components/portals/SellerProductsView.tsx:62:          const { data } = await supabase.from('sellers').select('id').eq('id', user.id).maybeSingle();
+src/components/portals/SellerProductsView.tsx:93:  const fetchProducts = useCallback(async () => {
+src/components/portals/SellerProductsView.tsx:100:      const userObj = savedAuth ? JSON.parse(savedAuth) : null;
+src/components/portals/SellerProductsView.tsx:102:      if (userObj?.id) {
+src/components/portals/SellerProductsView.tsx:103:        const { data } = await supabase.from('sellers').select('id').eq('id', userObj.id).maybeSingle();
+src/components/portals/SellerProductsView.tsx:106:      if (!finalSellerId && userObj?.email) {
+src/components/portals/SellerProductsView.tsx:107:        const { data } = await supabase.from('sellers').select('id').eq('registered_email', userObj.email).maybeSingle();
+src/components/portals/SellerProductsView.tsx:111:        const { data: { user } } = await supabase.auth.getUser();
+src/components/portals/SellerProductsView.tsx:112:        if (user) {
+src/components/portals/SellerProductsView.tsx:113:          const { data } = await supabase.from('sellers').select('id').eq('id', user.id).maybeSingle();
+src/components/portals/SellerProductsView.tsx:172:  useEffect(() => {
+src/components/portals/AuthLogin.tsx:1:import React, { useState } from 'react';
+src/components/portals/AuthLogin.tsx:16:    default: return 'portal_auth_user';
+src/components/portals/AuthLogin.tsx:21:  const [email, setEmail] = useState('');
+src/components/portals/AuthLogin.tsx:22:  const [password, setPassword] = useState('');
+src/components/portals/AuthLogin.tsx:23:  const [showPassword, setShowPassword] = useState(false);
+src/components/portals/AuthLogin.tsx:24:  const [isLoading, setIsLoading] = useState(false);
+src/components/portals/AuthLogin.tsx:25:  const [error, setError] = useState('');
+src/components/portals/AuthLogin.tsx:28:  const [isSignup, setIsSignup] = useState(false);
+src/components/portals/AuthLogin.tsx:29:  const [isSuccess, setIsSuccess] = useState(false);
+src/components/portals/AuthLogin.tsx:30:  const [generatedId, setGeneratedId] = useState<string | null>(null);
+src/components/portals/AuthLogin.tsx:31:  const [generatedPassword, setGeneratedPassword] = useState<string | null>(null);
+src/components/portals/AuthLogin.tsx:32:  const [customerData, setCustomerData] = useState({
+src/components/portals/AuthLogin.tsx:70:        if (!authErr && data?.user) {
+src/components/portals/AuthLogin.tsx:72:            id: data.user.id,
+src/components/portals/AuthLogin.tsx:73:            email: data.user.email,
+src/components/portals/AuthLogin.tsx:74:            user_metadata: data.user.user_metadata
+src/components/portals/AuthLogin.tsx:137:      // Sign up user using the server-side API to bypass rate limits
+src/components/portals/AuthLogin.tsx:138:      const res = await fetch('/api/admin/create-user', {
+src/components/portals/AuthLogin.tsx:144:          user_metadata: {
+src/components/portals/AuthLogin.tsx:153:        throw new Error(data.error || 'Failed to create user');
+src/components/portals/AuthLogin.tsx:156:      const authData = { user: data.user };
+src/components/portals/AuthLogin.tsx:158:      if (authData.user) {
+src/components/portals/AuthLogin.tsx:163:            id: authData.user.id,
+src/components/portals/AuthLogin.tsx:289:                  onInvalid={(e) => e.target.setCustomValidity("Please enter a valid email address (e.g. user@example.com). Do not use multiple @ symbols.")}
+src/components/portals/SellerPortal.tsx:2:import React, { useState, useEffect } from 'react';
+src/components/portals/SellerPortal.tsx:3:import { useScrollDirection } from '../../hooks/useScrollDirection';
+src/components/portals/SellerPortal.tsx:42:  const [sellerData, setSellerData] = useState<any>(null);
+src/components/portals/SellerPortal.tsx:43:  const [activePage, setActivePage] = useState<'main' | 'business' | 'documents' | 'bank'>('main');
+src/components/portals/SellerPortal.tsx:44:  useEffect(() => {
+src/components/portals/SellerPortal.tsx:48:  useEffect(() => {
+src/components/portals/SellerPortal.tsx:53:        const userObj = savedAuth ? JSON.parse(savedAuth) : null;
+src/components/portals/SellerPortal.tsx:56:        if (userObj?.id) {
+src/components/portals/SellerPortal.tsx:60:            .eq('id', userObj.id)
+src/components/portals/SellerPortal.tsx:64:        if (!sellerRecord && userObj?.email) {
+src/components/portals/SellerPortal.tsx:68:            .eq('registered_email', userObj.email)
+src/components/portals/SellerPortal.tsx:73:          const { data: { user } } = await supabase.auth.getUser();
+src/components/portals/SellerPortal.tsx:74:          if (user) {
+src/components/portals/SellerPortal.tsx:78:              .eq('id', user.id)
+src/components/portals/SellerPortal.tsx:359:  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
+src/components/portals/SellerPortal.tsx:371:  const [activeTab, setActiveTab] = useState('Products');
+src/components/portals/SellerPortal.tsx:373:  useEffect(() => {
+src/components/portals/SellerPortal.tsx:381:  const scrollDir = useScrollDirection(); 
+src/components/portals/SellerPortal.tsx:382:  const [showLogoutModal, setShowLogoutModal] = useState(false);
+src/components/portals/SellerPortal.tsx:383:  const [hideNav, setHideNav] = useState(false);
+src/components/portals/SellerPortal.tsx:384:  const [quote, setQuote] = useState('');
+src/components/portals/SellerPortal.tsx:385:  const [isUploadingProduct, setIsUploadingProduct] = useState(false);
+src/components/portals/SellerPortal.tsx:386:  const [isGstVerified, setIsGstVerified] = useState(false);
+src/components/portals/SellerPortal.tsx:387:  const [uploadServiceVisible, setUploadServiceVisible] = useState(false);
+src/components/portals/SellerPortal.tsx:388:  const [notificationCount, setNotificationCount] = useState(0);
+src/components/portals/SellerPortal.tsx:389:  const [notifications, setNotifications] = useState<any[]>([]);
+src/components/portals/SellerPortal.tsx:390:  const [showNotifications, setShowNotifications] = useState(false);
+src/components/portals/SellerPortal.tsx:391:  const [sellerId, setSellerId] = useState<string | null>(null);
+src/components/portals/SellerPortal.tsx:392:  const [ordersKey, setOrdersKey] = useState(0);
+src/components/portals/SellerPortal.tsx:394:  useEffect(() => {
+src/components/portals/SellerPortal.tsx:400:          const userObj = savedAuth ? JSON.parse(savedAuth) : null;
+src/components/portals/SellerPortal.tsx:403:          if (userObj?.id) {
+src/components/portals/SellerPortal.tsx:404:            const { data } = await supabase.from('sellers').select('id, gstin, upload_service_visible').eq('id', userObj.id).maybeSingle();
+src/components/portals/SellerPortal.tsx:407:          if (!sellerRecord && userObj?.email) {
+src/components/portals/SellerPortal.tsx:408:            const { data } = await supabase.from('sellers').select('id, gstin, upload_service_visible').eq('registered_email', userObj.email).maybeSingle();
+src/components/portals/SellerPortal.tsx:412:            const { data: { user } } = await supabase.auth.getUser();
+src/components/portals/SellerPortal.tsx:413:            if (user) {
+src/components/portals/SellerPortal.tsx:414:              const { data } = await supabase.from('sellers').select('id, gstin, upload_service_visible').eq('id', user.id).maybeSingle();
+src/components/portals/SellerPortal.tsx:437:  const [editingProduct, setEditingProduct] = useState<SupabaseProduct | null>(null);
+src/components/portals/SellerPortal.tsx:438:  const [editingMode, setEditingMode] = useState<'upload' | 'edit_active' | 'edit_draft' | 'edit_inactive'>('upload');
+src/components/portals/SellerPortal.tsx:440:  useEffect(() => {
+src/components/portals/SellerPortal.tsx:445:  useEffect(() => {
+src/components/portals/CustomerPortal.tsx:2:import React, { useState, useEffect } from 'react';
+src/components/portals/CustomerPortal.tsx:3:import { useScrollDirection } from '../../hooks/useScrollDirection';
+src/components/portals/CustomerPortal.tsx:68:  const [customerData, setCustomerData] = useState<any>(null);
+src/components/portals/CustomerPortal.tsx:69:  const [activePage, setActivePage] = useState<'main' | 'personal' | 'bank' | 'addresses' | 'orders' | 'order_details'>('main');
+src/components/portals/CustomerPortal.tsx:70:  const [customerAddresses, setCustomerAddresses] = useState<any[]>([]);
+src/components/portals/CustomerPortal.tsx:71:  const [customerOrders, setCustomerOrders] = useState<any[]>([]);
+src/components/portals/CustomerPortal.tsx:72:  const [selectedOrder, setSelectedOrder] = useState<any>(null);
+src/components/portals/CustomerPortal.tsx:73:  const [isCanceling, setIsCanceling] = useState(false);
+src/components/portals/CustomerPortal.tsx:75:  useEffect(() => {
+src/components/portals/CustomerPortal.tsx:79:  useEffect(() => {
+src/components/portals/CustomerPortal.tsx:106:  useEffect(() => {
+src/components/portals/CustomerPortal.tsx:111:        const userObj = savedAuth ? JSON.parse(savedAuth) : null;
+src/components/portals/CustomerPortal.tsx:114:        if (userObj?.id) {
+src/components/portals/CustomerPortal.tsx:118:            .eq('id', userObj.id)
+src/components/portals/CustomerPortal.tsx:122:        if (!customerRecord && userObj?.email) {
+src/components/portals/CustomerPortal.tsx:126:            .eq('email_account', userObj.email)
+src/components/portals/CustomerPortal.tsx:131:          const { data: { user } } = await supabase.auth.getUser();
+src/components/portals/CustomerPortal.tsx:132:          if (user) {
+src/components/portals/CustomerPortal.tsx:136:              .eq('id', user.id)
+src/components/portals/CustomerPortal.tsx:184:  useEffect(() => {
+src/components/portals/CustomerPortal.tsx:649:  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
+src/components/portals/CustomerPortal.tsx:661:  const [activeTab, setActiveTab] = useState('Home');
+src/components/portals/CustomerPortal.tsx:662:  const scrollDir = useScrollDirection(); 
+src/components/portals/CustomerPortal.tsx:663:  const [showLogoutModal, setShowLogoutModal] = useState(false);
+src/components/portals/CustomerPortal.tsx:664:  const [hideNav, setHideNav] = useState(false);
+src/components/portals/CustomerPortal.tsx:665:  const [expandedSection, setExpandedSection] = useState<string | null>(null);
+src/components/portals/CustomerPortal.tsx:666:  const [loadingSection, setLoadingSection] = useState<string | null>(null);
+src/components/portals/CustomerPortal.tsx:667:  const [viewAllTitle, setViewAllTitle] = useState<string | null>(null);
+src/components/portals/CustomerPortal.tsx:669:  const [allProducts, setAllProducts] = useState<SupabaseProduct[]>([]);
+src/components/portals/CustomerPortal.tsx:670:  const [isProductsLoading, setIsProductsLoading] = useState(true);
+src/components/portals/CustomerPortal.tsx:671:  const [selectedProduct, setSelectedProduct] = useState<SupabaseProduct | null>(null);
+src/components/portals/CustomerPortal.tsx:708:    const [cartItems, setCartItems] = useState<SupabaseProduct[]>([]);
+src/components/portals/CustomerPortal.tsx:709:  const [deletingCartItemId, setDeletingCartItemId] = useState<string | null>(null);
+src/components/portals/CustomerPortal.tsx:710:  const [userId, setUserId] = useState<string | null>(null);
+src/components/portals/CustomerPortal.tsx:711:  const [customerData, setCustomerData] = useState<any>(null);
+src/components/portals/CustomerPortal.tsx:713:  useEffect(() => {
+src/components/portals/CustomerPortal.tsx:719:        const userObj = savedAuth ? JSON.parse(savedAuth) : null;
+src/components/portals/CustomerPortal.tsx:720:        if (userObj?.id) {
+src/components/portals/CustomerPortal.tsx:721:           currentUserId = userObj.id;
+src/components/portals/CustomerPortal.tsx:723:           const { data: { user } } = await supabase.auth.getUser();
+src/components/portals/CustomerPortal.tsx:724:           if (user) currentUserId = user.id;
+src/components/portals/CustomerPortal.tsx:750:  const handleRemoveFromCart = async (e: React.MouseEvent, itemId: string) => {
+src/components/portals/CustomerPortal.tsx:752:    if (!userId) return;
+src/components/portals/CustomerPortal.tsx:756:      const { error } = await supabase.from('carts').delete().eq('id', itemId).eq('customer_id', userId);
+src/components/portals/CustomerPortal.tsx:770:    if (!userId) {
+src/components/portals/CustomerPortal.tsx:779:      const cartData = { ...productFields, product_id: product.id, customer_id: userId };
+src/components/portals/CustomerPortal.tsx:808:  // useEffect(() => {
+src/components/portals/CustomerPortal.tsx:814:  useEffect(() => {
+src/components/portals/CustomerPortal.tsx:838:  const [activeCategory, setActiveCategory] = useState('All');
+src/components/portals/CustomerPortal.tsx:839:  const [activeFilterOption, setActiveFilterOption] = useState('');
+src/components/portals/CustomerPortal.tsx:840:  const [activeServiceCat, setActiveServiceCat] = useState('Top Services');
+src/components/portals/CustomerPortal.tsx:842:  const [isCategoryBubbleOpen, setIsCategoryBubbleOpen] = useState(false);
+src/components/portals/CustomerPortal.tsx:843:  const [isShopSearchOpen, setIsShopSearchOpen] = useState(false);
+src/components/portals/CustomerPortal.tsx:844:  const [shopSearchQuery, setShopSearchQuery] = useState('');
+src/components/portals/CustomerPortal.tsx:847:  const deferredShopSearch = React.useDeferredValue(shopSearchQuery);
+src/components/portals/CustomerPortal.tsx:848:  const searchResults = React.useMemo(() => {
+src/components/portals/CustomerPortal.tsx:872:  useEffect(() => {
+src/components/portals/CustomerPortal.tsx:933:    const [activeMainCat, setActiveMainCat] = useState(categoryData[0].id);
+src/components/portals/CustomerPortal.tsx:936:  const [activeMidCat, setActiveMidCat] = useState(activeMainData.middle[0]?.id || '');
+src/components/portals/CustomerPortal.tsx:939:  const [activeSubCat, setActiveSubCat] = useState<string>(activeMidData?.sub[0]?.id || '');
+src/components/portals/CustomerPortal.tsx:942:  useEffect(() => {
+src/components/portals/CustomerPortal.tsx:990:  useEffect(() => {
+src/components/portals/CustomerPortal.tsx:993:        // Do not scroll if search input is focused to prevent keyboard from hiding on mobile devices
+src/components/portals/CustomerPortal.tsx:1011:  useEffect(() => {
+src/components/portals/CustomerPortal.tsx:1115:      if (id === 'Cart' && isLoggedIn && userId) {
+src/components/portals/CustomerPortal.tsx:1116:        supabase.from('carts').select('*').eq('customer_id', userId)
+src/components/portals/AdminPortal.tsx:4:import React, { useState, useEffect } from 'react';
+src/components/portals/AdminPortal.tsx:5:import { useScrollDirection } from '../../hooks/useScrollDirection';
+src/components/portals/AdminPortal.tsx:65:  const [activeTab, setActiveTab] = useState('Dashboard');
+src/components/portals/AdminPortal.tsx:66:  const scrollDir = useScrollDirection();
+src/components/portals/AdminPortal.tsx:67:  const [showProfile, setShowProfile] = useState(false);
+src/components/portals/AdminPortal.tsx:68:  const [showLogoutModal, setShowLogoutModal] = useState(false);
+src/components/portals/AdminPortal.tsx:69:  const [profileSavedToast, setProfileSavedToast] = useState(false);
+src/components/portals/AdminPortal.tsx:70:  const [adminProfileId, setAdminProfileId] = useState<string | null>(null);
+src/components/portals/AdminPortal.tsx:71:  const [originalEmail, setOriginalEmail] = useState('');
+src/components/portals/AdminPortal.tsx:72:  const [isLoadingProfile, setIsLoadingProfile] = useState(false);
+src/components/portals/AdminPortal.tsx:75:  const [adminProfile, setAdminProfile] = useState<AdminProfileData>({
+src/components/portals/AdminPortal.tsx:83:  useEffect(() => {
+src/components/portals/AdminPortal.tsx:105:  const [isSavingProfile, setIsSavingProfile] = useState(false);
+src/components/portals/AdminPortal.tsx:132:      if (authData?.user) {
+src/components/portals/AdminPortal.tsx:133:        // Update user metadata in auth
+src/components/portals/AdminPortal.tsx:143:          id: authData.user.id,
+src/components/portals/AdminPortal.tsx:145:          email: adminProfile.email || authData.user.email,
+src/components/portals/AdminPortal.tsx:156:            body: JSON.stringify({ userId: authData?.user?.id, adminTableId: adminProfileId, email: adminProfile.email, name: adminProfile.name, oldEmail: originalEmail })
+src/components/portals/AdminPortal.tsx:180:  const [selectedUserIdSetup, setSelectedUserIdSetup] = useState<string | null>(null);
+src/components/portals/AdminPortal.tsx:181:  const [isCreatingUserId, setIsCreatingUserId] = useState(false);
+src/components/portals/AdminPortal.tsx:182:  const [editingUser, setEditingUser] = useState<any>(null);
+src/components/portals/AdminPortal.tsx:183:  const [searchQuery, setSearchQuery] = useState('');
+src/components/portals/AdminPortal.tsx:184:  const [refreshTrigger, setRefreshTrigger] = useState(0);
+src/components/portals/AdminPortal.tsx:185:  const [activeUserType, setActiveUserType] = useState<'Customer ID' | 'Seller ID' | 'Hub Manager ID' | 'Rider ID'>('Customer ID');
+src/components/portals/AdminPortal.tsx:186:  const [usersList, setUsersList] = useState<UserItem[]>([]);
+src/components/portals/AdminPortal.tsx:187:  const [isUsersLoading, setIsUsersLoading] = useState(false);
+src/components/portals/AdminPortal.tsx:190:  useEffect(() => {
+src/components/portals/AdminPortal.tsx:249:  useEffect(() => {
+src/components/portals/AdminPortal.tsx:259:      } else if (v === 'userSetup') {
+src/components/portals/AdminPortal.tsx:260:        const typeStr = e.state?.userType || 'Customer ID';
+src/components/portals/AdminPortal.tsx:302:  const openViewUserId = (user: any) => {
+src/components/portals/AdminPortal.tsx:303:    setEditingUser(user);
+src/components/portals/AdminPortal.tsx:315:  const openUserIdSetup = (userType: string) => {
+src/components/portals/AdminPortal.tsx:322:    if (validTypes.includes(userType as any)) {
+src/components/portals/AdminPortal.tsx:323:      setActiveUserType(userType as any);
+src/components/portals/AdminPortal.tsx:325:    setSelectedUserIdSetup(userType);
+src/components/portals/AdminPortal.tsx:326:    window.history.pushState({ portal: 'admin', adminView: 'userSetup', userType }, '');
+src/components/portals/AdminPortal.tsx:331:    if (window.history.state?.adminView === 'userSetup') {
+src/components/portals/AdminPortal.tsx:340:      localStorage.setItem('ss_admin_user_ids', JSON.stringify(updated));
+src/components/portals/AdminPortal.tsx:353:  const [selectedPortalSetup, setSelectedPortalSetup] = useState<string | null>(null);
+src/components/portals/AdminPortal.tsx:354:  const [portalSettings, setPortalSettings] = useState<Record<string, { enabled: boolean; autoSync: boolean; pushAlerts: boolean }>>({
+src/components/portals/AdminPortal.tsx:362:  const [showEarningChart, setShowEarningChart] = useState(false);
+src/components/portals/AdminPortal.tsx:363:  const [isSavingEarningChart, setIsSavingEarningChart] = useState(false);
+src/components/portals/AdminPortal.tsx:364:  const [earningChartId, setEarningChartId] = useState<string | null>(null);
+src/components/portals/AdminPortal.tsx:369:  const [showHubManagersPincodeService, setShowHubManagersPincodeService] = useState(false);
+src/components/portals/AdminPortal.tsx:370:  const [hubManagersList, setHubManagersList] = useState<any[]>([]);
+src/components/portals/AdminPortal.tsx:371:  const [selectedHubManagerForPincode, setSelectedHubManagerForPincode] = useState('');
+src/components/portals/AdminPortal.tsx:372:  const [newPincodeValue, setNewPincodeValue] = useState('');
+src/components/portals/AdminPortal.tsx:373:  const [addedPincodesList, setAddedPincodesList] = useState<any[]>([]);
+src/components/portals/AdminPortal.tsx:374:  const [isSavingPincode, setIsSavingPincode] = useState(false);
+src/components/portals/AdminPortal.tsx:375:  const [currentManagerPincodes, setCurrentManagerPincodes] = useState<string[]>([]);
+src/components/portals/AdminPortal.tsx:391:  useEffect(() => {
+src/components/portals/AdminPortal.tsx:398:  useEffect(() => {
+src/components/portals/AdminPortal.tsx:463:  const [allSellers, setAllSellers] = useState<any[]>([]);
+src/components/portals/AdminPortal.tsx:464:  const [visualSelectedSeller, setVisualSelectedSeller] = useState<string>('');
+src/components/portals/AdminPortal.tsx:465:  const [visualModelValue, setVisualModelValue] = useState<'show' | 'hide'>('hide');
+src/components/portals/AdminPortal.tsx:466:  const [isSavingVisual, setIsSavingVisual] = useState(false);
+src/components/portals/AdminPortal.tsx:468:  const [showVisualList, setShowVisualList] = useState(false);
+src/components/portals/AdminPortal.tsx:469:  const [showRiderRateList, setShowRiderRateList] = useState(false);
+src/components/portals/AdminPortal.tsx:470:  const [riderRateListData, setRiderRateListData] = useState<{regular: any[], premium: any[], ultra: any[]}>({regular: [], premium: [], ultra: []});
+src/components/portals/AdminPortal.tsx:474:  const [showRiderServiceRate, setShowRiderServiceRate] = useState(false);
+src/components/portals/AdminPortal.tsx:475:  const [showRiderRateSettings, setShowRiderRateSettings] = useState(false);
+src/components/portals/AdminPortal.tsx:476:  const [riderSettingMultipleQtyHalfRate, setRiderSettingMultipleQtyHalfRate] = useState(() => {
+src/components/portals/AdminPortal.tsx:482:  const [riderSettingProgressBasedRate, setRiderSettingProgressBasedRate] = useState(() => {
+src/components/portals/AdminPortal.tsx:489:  const [riderServiceTab, setRiderServiceTab] = useState<'default' | 'specific'>('default');
+src/components/portals/AdminPortal.tsx:490:  const [activeRateRank, setActiveRateRank] = useState<'Regular' | 'Premium' | 'Ultra'>('Regular');
+src/components/portals/AdminPortal.tsx:491:  const [defaultRates, setDefaultRates] = useState<Record<string, { pickup: string, delivery: string, return: string }>>({
+src/components/portals/AdminPortal.tsx:496:  const [allRiders, setAllRiders] = useState<any[]>([]);
+src/components/portals/AdminPortal.tsx:497:  const [specificSelectedRider, setSpecificSelectedRider] = useState<string>('');
+src/components/portals/AdminPortal.tsx:498:  const [specificRiderRates, setSpecificRiderRates] = useState<{ pickup: string, delivery: string, return: string }>({ pickup: '0', delivery: '0', return: '0' });
+src/components/portals/AdminPortal.tsx:499:  const [isSavingRiderRate, setIsSavingRiderRate] = useState(false);
+src/components/portals/AdminPortal.tsx:501:  useEffect(() => {
+src/components/portals/AdminPortal.tsx:547:  useEffect(() => {
+src/components/portals/AdminPortal.tsx:568:  const [earningCharges, setEarningCharges] = useState<{ id: string; name: string; value: string; isPercentage: boolean }[]>([
+src/components/portals/AdminPortal.tsx:579:  useEffect(() => {
+src/components/portals/AdminPortal.tsx:623:  useEffect(() => {
+src/components/portals/AdminPortal.tsx:747:  const userIdSetupOptions = [
+src/components/portals/AdminPortal.tsx:782:  const userTypeTabs: Array<'Customer ID' | 'Seller ID' | 'Hub Manager ID' | 'Rider ID'> = [
+src/components/portals/AdminPortal.tsx:803:  const filteredUsers = usersList.filter(user => {
+src/components/portals/AdminPortal.tsx:804:    const matchesType = user.type === activeUserType;
+src/components/portals/AdminPortal.tsx:809:      user.name.toLowerCase().includes(query) ||
+src/components/portals/AdminPortal.tsx:810:      user.id.toLowerCase().includes(query) ||
+src/components/portals/AdminPortal.tsx:811:      user.phone.toLowerCase().includes(query) ||
+src/components/portals/AdminPortal.tsx:812:      (user.secondaryInfo && user.secondaryInfo.toLowerCase().includes(query))
+src/components/portals/AdminPortal.tsx:1066:                {filteredUsers.map((user) => {
+src/components/portals/AdminPortal.tsx:1067:                  const roleTheme = getRoleColor(user.type);
+src/components/portals/AdminPortal.tsx:1069:                    <div key={user.id} className="py-2.5 px-2.5 hover:bg-slate-50/90 rounded-lg transition-colors flex items-start justify-between gap-3 group">
+src/components/portals/AdminPortal.tsx:1071:                        <span className="font-mono text-[11px] font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-200 self-start">{user.id}</span>
+src/components/portals/AdminPortal.tsx:1073:                          <span className="text-[13px] font-semibold text-slate-900 truncate">{user.name}</span>
+src/components/portals/AdminPortal.tsx:1076:                            {user.phone}
+src/components/portals/AdminPortal.tsx:1078:                          {user.secondaryInfo && (
+src/components/portals/AdminPortal.tsx:1080:                              • {user.secondaryInfo}
+src/components/portals/AdminPortal.tsx:1087:                          onClick={() => openViewUserId(user.dbRow)}
+src/components/portals/AdminPortal.tsx:1094:                          title={user.type === 'Customer ID' ? "Freeze" : "Block"}
+src/components/portals/AdminPortal.tsx:1097:                          {user.type === 'Customer ID' ? "Freeze" : "Block"}
+src/components/portals/AdminPortal.tsx:1221:                {userIdSetupOptions.map((option) => {
+src/components/portals/AdminPortal.tsx:1978:                <span className="text-sm font-bold text-blue-900">{usersList.filter(u => u.type === 'Customer ID').length}</span>
+src/components/portals/AdminPortal.tsx:1982:                <span className="text-sm font-bold text-amber-900">{usersList.filter(u => u.type === 'Seller ID').length}</span>
+src/components/portals/AdminPortal.tsx:1986:                <span className="text-sm font-bold text-purple-900">{usersList.filter(u => u.type === 'Hub Manager ID').length}</span>
+src/components/portals/AdminPortal.tsx:1990:                <span className="text-sm font-bold text-emerald-900">{usersList.filter(u => u.type === 'Rider ID').length}</span>
+src/components/portals/AdminPortal.tsx:1995:              {usersList.slice(0, 4).map(u => (
+src/components/portals/RiderTasksView.tsx:1:import React, { useEffect, useState, useRef } from 'react';
+src/components/portals/RiderTasksView.tsx:8:  const [activeChip, setActiveChip] = useState('Pending');
+src/components/portals/RiderTasksView.tsx:9:  const [tasks, setTasks] = useState<any[]>([]);
+src/components/portals/RiderTasksView.tsx:10:  const [sellersInfo, setSellersInfo] = useState<Record<string, any>>({});
+src/components/portals/RiderTasksView.tsx:11:  const [loading, setLoading] = useState(false);
+src/components/portals/RiderTasksView.tsx:12:  const [selectedTask, setSelectedTask] = useState<any>(null);
+src/components/portals/RiderTasksView.tsx:13:  const [showCallID, setShowCallID] = useState(false);
+src/components/portals/RiderTasksView.tsx:15:  useEffect(() => {
+src/components/portals/RiderTasksView.tsx:29:        if (authData?.user) riderId = authData.user.id;
+src/components/portals/RiderTasksView.tsx:102:  useEffect(() => {
+src/components/portals/RiderTasksView.tsx:250:  const [liveProductImages, setLiveProductImages] = useState<string[]>([]);
+src/components/portals/RiderTasksView.tsx:254:  useEffect(() => {
+src/components/portals/RiderTasksView.tsx:273:  const [qcBrand, setQcBrand] = useState<'pass' | 'fail' | null>(null);
+src/components/portals/RiderTasksView.tsx:274:  const [qcCondition, setQcCondition] = useState<'pass' | 'fail' | null>(null);
+src/components/portals/RiderTasksView.tsx:275:  const [qcSame, setQcSame] = useState<'pass' | 'fail' | null>(null);
+src/components/portals/RiderTasksView.tsx:277:  const [pinInput, setPinInput] = useState('');
+src/components/portals/RiderTasksView.tsx:278:  const [pinError, setPinError] = useState(false);
+src/components/portals/RiderTasksView.tsx:279:  const [showCallID, setShowCallID] = useState(false);
+src/components/portals/RiderTasksView.tsx:280:  const [showUnableOptions, setShowUnableOptions] = useState(false);
+src/components/portals/RiderTasksView.tsx:281:  const [unableReason, setUnableReason] = useState<string | null>(null);
+src/components/portals/RiderTasksView.tsx:283:  const [showFullImage, setShowFullImage] = useState(false);
+src/components/portals/RiderTasksView.tsx:284:  const [capturedImages, setCapturedImages] = useState<string[]>([]);
+src/components/portals/RiderTasksView.tsx:285:  const [signatureData, setSignatureData] = useState<string | null>(null);
+src/components/portals/RiderTasksView.tsx:286:  const [loading, setLoading] = useState(false);
+src/components/portals/RiderTasksView.tsx:287:  const [signatory, setSignatory] = useState<string>('');
+src/components/portals/RiderTasksView.tsx:289:  const canvasRef = useRef<HTMLCanvasElement>(null);
+src/components/portals/RiderTasksView.tsx:290:  const isDrawing = useRef(false);
+src/components/portals/RiderTasksView.tsx:292:  useEffect(() => {
+src/components/portals/RiderTasksView.tsx:608:  const [scannedAwb, setScannedAwb] = useState('');
+src/components/portals/RiderTasksView.tsx:609:  const [isAwbVerified, setIsAwbVerified] = useState(false);
+src/components/portals/RiderTasksView.tsx:610:  const [awbError, setAwbError] = useState('');
+src/components/portals/RiderTasksView.tsx:611:  const [isPrinting, setIsPrinting] = useState(false);
+src/components/portals/RiderTasksView.tsx:612:  const [isDownloading, setIsDownloading] = useState(false);
+src/components/portals/RiderTasksView.tsx:613:  const [dots, setDots] = useState('');
+src/components/portals/RiderTasksView.tsx:615:  useEffect(() => {
+src/components/portals/RiderTasksView.tsx:721:      "This product is under open box delivery policy. If there is any torn, damaged, or different product, please refuse to accept it.\n\nThank you for choosing Suriyawan Saffari.", 
+src/components/portals/RiderTasksView.tsx:768:         if (authData?.user) hId = authData.user.id;
+src/components/portals/RiderTasksView.tsx:1291:             onMouseDown={startDrawing}
+src/components/portals/RiderTasksView.tsx:1292:             onMouseUp={stopDrawing}
+src/components/portals/RiderTasksView.tsx:1293:             onMouseOut={stopDrawing}
+src/components/portals/RiderTasksView.tsx:1294:             onMouseMove={draw}
+src/components/portals/ProductCard.tsx:1:import React, { useState } from 'react';
+src/components/portals/ProductCard.tsx:27:  const [timeLeft, setTimeLeft] = React.useState({ h: 0, m: 0, s: 0 });
+src/components/portals/ProductCard.tsx:29:  React.useEffect(() => {
+src/components/portals/ProductCard.tsx:94:  const [isDeleting, setIsDeleting] = useState(false);
+src/components/portals/ProductCard.tsx:95:  const [showConfirm, setShowConfirm] = useState(false);
+src/components/portals/ProductCard.tsx:96:  const [isEditingStock, setIsEditingStock] = useState(false);
+src/components/portals/ProductCard.tsx:97:  const [stockInput, setStockInput] = useState(product.available_stock || '0');
+src/components/portals/ProductCard.tsx:98:  const [isSavingStock, setIsSavingStock] = useState(false);
+src/components/portals/ProductCard.tsx:123:  const handleDeleteClick = (e: React.MouseEvent) => {
+src/components/portals/ProductCard.tsx:128:  const handleConfirmYes = async (e: React.MouseEvent) => {
+src/components/portals/ProductCard.tsx:139:  const handleConfirmNo = (e: React.MouseEvent) => {
+src/components/portals/ProductCard.tsx:144:  const handleSaveStock = async (e: React.MouseEvent) => {
+src/components/portals/ProductCard.tsx:158:  const [isAddingToCart, setIsAddingToCart] = useState(false);
+src/components/portals/ProductCard.tsx:160:  const handleAddToCartClick = async (e: React.MouseEvent) => {
+src/components/portals/CreateUserIdPage.tsx:1:import React, { useState } from 'react';
+src/components/portals/CreateUserIdPage.tsx:23:  onUserCreated?: (userData: any) => void;
+src/components/portals/CreateUserIdPage.tsx:32:  const [selectedType] = useState<UserTypeCategory>(initialType);
+src/components/portals/CreateUserIdPage.tsx:33:  const [showPassword, setShowPassword] = useState(false);
+src/components/portals/CreateUserIdPage.tsx:34:  const [isSuccess, setIsSuccess] = useState(false);
+src/components/portals/CreateUserIdPage.tsx:35:  const [isSubmitting, setIsSubmitting] = useState(false);
+src/components/portals/CreateUserIdPage.tsx:36:  const [generatedId, setGeneratedId] = useState<string | null>(null);
+src/components/portals/CreateUserIdPage.tsx:37:  const [generatedPassword, setGeneratedPassword] = useState<string | null>(null);
+src/components/portals/CreateUserIdPage.tsx:112:  const [isEditing] = useState(!!initialData);
+src/components/portals/CreateUserIdPage.tsx:113:  const [isFormEditable, setIsFormEditable] = useState(!initialData);
+src/components/portals/CreateUserIdPage.tsx:114:  const [customerData, setCustomerData] = useState({
+src/components/portals/CreateUserIdPage.tsx:128:  const [sellerData, setSellerData] = useState({
+src/components/portals/CreateUserIdPage.tsx:148:  const [hubManagerData, setHubManagerData] = useState({
+src/components/portals/CreateUserIdPage.tsx:167:  const [riderData, setRiderData] = useState({
+src/components/portals/CreateUserIdPage.tsx:196:  React.useEffect(() => {
+src/components/portals/CreateUserIdPage.tsx:298:        password: customerData.password, // Only storing because requested in schema, avoid in real prod
+src/components/portals/CreateUserIdPage.tsx:392:        const res = await fetch('/api/admin/create-user', {
+src/components/portals/CreateUserIdPage.tsx:398:            user_metadata: {
+src/components/portals/CreateUserIdPage.tsx:406:          throw new Error(data.error || 'Failed to create user');
+src/components/portals/CreateUserIdPage.tsx:408:        authUserId = data.user.id;
+src/components/portals/CreateUserIdPage.tsx:600:        <form onSubmit={handleSubmit} className="space-y-4" id="create-user-id-form">
+src/components/portals/CreateUserIdPage.tsx:781:                      placeholder="e.g. username@okhdfcbank"
+src/components/portals/CreateUserIdPage.tsx:1622:                id="btn-submit-create-user-id"
+src/components/portals/SellerDashboardView.tsx:1:import React, { useEffect, useState } from 'react';
+src/components/portals/SellerDashboardView.tsx:6:  const [readyToPickupCount, setReadyToPickupCount] = useState(0);
+src/components/portals/SellerDashboardView.tsx:7:  const [outForPickupCount, setOutForPickupCount] = useState(0);
+src/components/portals/SellerDashboardView.tsx:8:  const [failedPickupCount, setFailedPickupCount] = useState(0);
+src/components/portals/SellerDashboardView.tsx:9:  const [pickedUpCount, setPickedUpCount] = useState(0);
+src/components/portals/SellerDashboardView.tsx:10:  const [unableToCompleteCount, setUnableToCompleteCount] = useState(0);
+src/components/portals/SellerDashboardView.tsx:11:  const [receivedAtHubCount, setReceivedAtHubCount] = useState(0);
+src/components/portals/SellerDashboardView.tsx:12:  const [dispatchedCount, setDispatchedCount] = useState(0);
+src/components/portals/SellerDashboardView.tsx:13:  const [shippedCount, setShippedCount] = useState(0);
+src/components/portals/SellerDashboardView.tsx:15:  useEffect(() => {
+src/components/portals/SellerDashboardView.tsx:19:        let userId = null;
+src/components/portals/SellerDashboardView.tsx:22:          if (savedAuth) userId = JSON.parse(savedAuth).id;
+src/components/portals/SellerDashboardView.tsx:25:        if (!userId) {
+src/components/portals/SellerDashboardView.tsx:26:          const { data: { user } } = await supabase.auth.getUser();
+src/components/portals/SellerDashboardView.tsx:27:          if (user) userId = user.id;
+src/components/portals/SellerDashboardView.tsx:29:        if (!userId) return;
+src/components/portals/SellerDashboardView.tsx:34:          .eq('selller id', userId)
+src/components/portals/SellerDashboardView.tsx:42:          .eq('selller id', userId)
+src/components/portals/SellerDashboardView.tsx:50:          .eq('selller id', userId)
+src/components/portals/SellerDashboardView.tsx:58:          .eq('selller id', userId)
+src/components/portals/SellerDashboardView.tsx:66:          .eq('selller id', userId)
+src/components/portals/SellerDashboardView.tsx:74:          .eq('selller id', userId)
+src/components/portals/SellerDashboardView.tsx:82:          .eq('selller id', userId)
+src/components/portals/SellerDashboardView.tsx:89:          .eq('selller id', userId)
+src/components/portals/SellerDashboardView.tsx:100:    const userObj = savedAuth ? JSON.parse(savedAuth) : null;
+src/components/portals/SellerDashboardView.tsx:101:    if (userObj?.id) {
+src/components/portals/SellerDashboardView.tsx:103:         .on('postgres_changes', { event: '*', schema: 'public', table: 'accepted_shipments', filter: `selller id=eq.${userObj.id}` }, fetchCounts)
+src/components/portals/SellerOrdersView.tsx:1:import React, { useState, useEffect } from 'react';
+src/components/portals/SellerOrdersView.tsx:6:  const [activeChip, setActiveChip] = useState<'New Order' | 'Accepted' | 'Out for Pickup' | 'Failed Pickup' | 'Picked Up' | 'Received at Hub' | 'Unable to Complete Pickup' | 'Dispatched' | 'Shipped'>('New Order');
+src/components/portals/SellerOrdersView.tsx:7:  const [orders, setOrders] = useState<any[]>([]);
+src/components/portals/SellerOrdersView.tsx:8:  const [loading, setLoading] = useState(false);
+src/components/portals/SellerOrdersView.tsx:9:  const [sellerId, setSellerId] = useState<string | null>(null);
+src/components/portals/SellerOrdersView.tsx:10:  const [isUpdatingId, setIsUpdatingId] = useState<string | null>(null);
+src/components/portals/SellerOrdersView.tsx:11:  const [adminCharges, setAdminCharges] = useState<any[]>([]);
+src/components/portals/SellerOrdersView.tsx:12:  const [selectedOrderForEarning, setSelectedOrderForEarning] = useState<any>(null);
+src/components/portals/SellerOrdersView.tsx:13:  const [orderProductGst, setOrderProductGst] = useState<number>(0);
+src/components/portals/SellerOrdersView.tsx:14:  const [earningLoading, setEarningLoading] = useState<boolean>(false);
+src/components/portals/SellerOrdersView.tsx:16:  useEffect(() => {
+src/components/portals/SellerOrdersView.tsx:21:        const userObj = savedAuth ? JSON.parse(savedAuth) : null;
+src/components/portals/SellerOrdersView.tsx:23:        if (userObj?.id) {
+src/components/portals/SellerOrdersView.tsx:24:          const { data } = await supabase.from('sellers').select('id').eq('id', userObj.id).maybeSingle();
+src/components/portals/SellerOrdersView.tsx:27:        if (!finalSellerId && userObj?.email) {
+src/components/portals/SellerOrdersView.tsx:28:          const { data } = await supabase.from('sellers').select('id').eq('registered_email', userObj.email).maybeSingle();
+src/components/portals/SellerOrdersView.tsx:32:          const { data: { user } } = await supabase.auth.getUser();
+src/components/portals/SellerOrdersView.tsx:33:          if (user) {
+src/components/portals/SellerOrdersView.tsx:34:            const { data } = await supabase.from('sellers').select('id').eq('id', user.id).maybeSingle();
+src/components/portals/SellerOrdersView.tsx:49:  useEffect(() => {
+src/components/portals/SellerOrdersView.tsx:54:  useEffect(() => {
+src/components/portals/SellerOrdersView.tsx:85:        // Here we use accepted_shipments
+src/components/portals/RiderDashboardView.tsx:1:import React, { useEffect, useState } from 'react';
+src/components/portals/RiderDashboardView.tsx:6:  const [pickupsheets, setPickupsheets] = useState<any[]>([]);
+src/components/portals/RiderDashboardView.tsx:7:  const [allPicDlvCount, setAllPicDlvCount] = useState(0);
+src/components/portals/RiderDashboardView.tsx:8:  const [pickupCount, setPickupCount] = useState(0);
+src/components/portals/RiderDashboardView.tsx:10:  useEffect(() => {
+src/components/portals/RiderDashboardView.tsx:22:        if (authData?.user) riderId = authData.user.id;
+src/components/portals/RiderDashboardView.tsx:85:  const [acceptingMap, setAcceptingMap] = useState<Record<string, boolean>>({});
+src/components/portals/RiderDashboardView.tsx:100:        if (authData?.user) riderId = authData.user.id;
+src/components/portals/ProductDetailModal.tsx:1:import React, { useState, useEffect } from 'react';
+src/components/portals/ProductDetailModal.tsx:51:  const [selectedImgIndex, setSelectedImgIndex] = useState(0);
+src/components/portals/ProductDetailModal.tsx:52:  const [activeDetailTab, setActiveDetailTab] = useState<'overview' | 'pricing' | 'specs' | 'features' | 'earning'>('overview');
+src/components/portals/ProductDetailModal.tsx:53:  const [selectedSize, setSelectedSize] = useState<string>('');
+src/components/portals/ProductDetailModal.tsx:54:  const [selectedColor, setSelectedColor] = useState<string>('');
+src/components/portals/ProductDetailModal.tsx:55:  const [selectedWeight, setSelectedWeight] = useState<string>('');
+src/components/portals/ProductDetailModal.tsx:56:  const [missingSelections, setMissingSelections] = useState<string[]>([]);
+src/components/portals/ProductDetailModal.tsx:57:  const [adminCharges, setAdminCharges] = useState<{ id: string; name: string; value: string; isPercentage: boolean }[]>([]);
+src/components/portals/ProductDetailModal.tsx:58:  const [sellerInfo, setSellerInfo] = useState<{ shop_name?: string; trust_years_in_business?: string; seller_name?: string } | null>(null);
+src/components/portals/ProductDetailModal.tsx:59:  const [showSellerProfile, setShowSellerProfile] = useState(false);
+src/components/portals/ProductDetailModal.tsx:60:  const [quantity, setQuantity] = useState<number>(parseInt(product['minimum order quantity']?.toString() || '1') || 1);
+src/components/portals/ProductDetailModal.tsx:61:  const [checkoutStep, setCheckoutStep] = useState<'details' | 'address_selection' | 'add_address' | 'order_summary' | 'success'>('details');
+src/components/portals/ProductDetailModal.tsx:62:  const [successOrderInfo, setSuccessOrderInfo] = useState<{ id: string; date: string } | null>(null);
+src/components/portals/ProductDetailModal.tsx:63:  const [isAddingToCart, setIsAddingToCart] = useState(false);
+src/components/portals/ProductDetailModal.tsx:66:  const [savedAddresses, setSavedAddresses] = useState<Address[]>([]);
+src/components/portals/ProductDetailModal.tsx:67:  const [newAddress, setNewAddress] = useState<Partial<Address>>({ addressType: 'Home' });
+src/components/portals/ProductDetailModal.tsx:68:  const [isSavingAddress, setIsSavingAddress] = useState(false);
+src/components/portals/ProductDetailModal.tsx:69:  const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
+src/components/portals/ProductDetailModal.tsx:70:  const [editingAddressId, setEditingAddressId] = useState<string | null>(null);
+src/components/portals/ProductDetailModal.tsx:71:  const [relatedProducts, setRelatedProducts] = useState<SupabaseProduct[]>([]);
+src/components/portals/ProductDetailModal.tsx:73:  useEffect(() => {
+src/components/portals/ProductDetailModal.tsx:81:  useEffect(() => {
+src/components/portals/ProductDetailModal.tsx:104:  useEffect(() => {
+src/components/portals/ProductDetailModal.tsx:136:  useEffect(() => {
+src/components/portals/ProductDetailModal.tsx:174:  useEffect(() => {
+src/components/portals/ProductDetailModal.tsx:186:  useEffect(() => {
+src/components/portals/ProductDetailModal.tsx:226:  useEffect(() => {
+src/components/portals/ProductDetailModal.tsx:238:  useEffect(() => {
+src/components/portals/ProductDetailModal.tsx:335:  const [fullScreenImage, setFullScreenImage] = useState<string | null>(null);
+src/components/portals/ProductDetailModal.tsx:361:  const [localViews, setLocalViews] = useState<number>(parseInt(String(product.wives || 0), 10));
+src/components/portals/ProductDetailModal.tsx:363:  const mainScrollRef = React.useRef<HTMLElement>(null);
+src/components/portals/ProductDetailModal.tsx:364:  useEffect(() => {
+src/components/portals/ProductDetailModal.tsx:370:  const [isConfirmingOrder, setIsConfirmingOrder] = useState(false);
+src/components/portals/ProductDetailModal.tsx:1192:                  <textarea value={newAddress.fullAddress || ''} onChange={(e) => setNewAddress({...newAddress, fullAddress: e.target.value})} rows={3} className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-shadow resize-none" placeholder="House/Flat No., Area, City, State" />
+src/components/portals/ProductDetailModal.tsx:1448:                Please inspect your package at the time of delivery. If the product is damaged, cut, dirty, or different from what you ordered, you can refuse the delivery right there. This ensures a safe and secure shopping experience!
+src/components/portals/HubDispatchView.tsx:1:import React, { useState, useEffect, useRef } from 'react';
+src/components/portals/HubDispatchView.tsx:6:  const [showCreateBag, setShowCreateBag] = useState(false);
+src/components/portals/HubDispatchView.tsx:7:  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+src/components/portals/HubDispatchView.tsx:8:  const [inTransitBags, setInTransitBags] = useState<any[]>([]);
+src/components/portals/HubDispatchView.tsx:9:  const [dispatchedBags, setDispatchedBags] = useState<any[]>([]);
+src/components/portals/HubDispatchView.tsx:10:  const [selectedBag, setSelectedBag] = useState<{ type: string, bagId: string, shipments: any[], count: number } | null>(null);
+src/components/portals/HubDispatchView.tsx:11:  const [isLoadingLists, setIsLoadingLists] = useState(false);
+src/components/portals/HubDispatchView.tsx:14:  const [receiveAwbInput, setReceiveAwbInput] = useState('');
+src/components/portals/HubDispatchView.tsx:15:  const [receiveBagId, setReceiveBagId] = useState('');
+src/components/portals/HubDispatchView.tsx:16:  const [receiveSealTag, setReceiveSealTag] = useState('');
+src/components/portals/HubDispatchView.tsx:17:  const [receiveVehicleNumber, setReceiveVehicleNumber] = useState('');
+src/components/portals/HubDispatchView.tsx:19:  const [receiveAwbError, setReceiveAwbError] = useState('');
+src/components/portals/HubDispatchView.tsx:20:  const [receiveBagIdError, setReceiveBagIdError] = useState('');
+src/components/portals/HubDispatchView.tsx:21:  const [receiveSealTagError, setReceiveSealTagError] = useState('');
+src/components/portals/HubDispatchView.tsx:22:  const [receiveVehicleNumberError, setReceiveVehicleNumberError] = useState('');
+src/components/portals/HubDispatchView.tsx:25:  const [receiveAwbSuccess, setReceiveAwbSuccess] = useState('');
+src/components/portals/HubDispatchView.tsx:26:  const [totalShipmentsInBag, setTotalShipmentsInBag] = useState<number>(0);
+src/components/portals/HubDispatchView.tsx:28:  const [receivedShipmentsList, setReceivedShipmentsList] = useState<any[]>([]);
+src/components/portals/HubDispatchView.tsx:29:  const [showReceivedList, setShowReceivedList] = useState(false);
+src/components/portals/HubDispatchView.tsx:32:  useEffect(() => {
+src/components/portals/HubDispatchView.tsx:76:  const [currentHubData, setCurrentHubData] = useState<any>(null);
+src/components/portals/HubDispatchView.tsx:79:  const [hubManagersList, setHubManagersList] = useState<any[]>([]);
+src/components/portals/HubDispatchView.tsx:80:  const [selectedHubManagerId, setSelectedHubManagerId] = useState('');
+src/components/portals/HubDispatchView.tsx:82:  const [addedPincodes, setAddedPincodes] = useState<string[]>([]);
+src/components/portals/HubDispatchView.tsx:83:  const [selectedPincodes, setSelectedPincodes] = useState<string[]>([]);
+src/components/portals/HubDispatchView.tsx:84:  const [showPincodeDropdown, setShowPincodeDropdown] = useState(false);
+src/components/portals/HubDispatchView.tsx:86:  const [bagId, setBagId] = useState('');
+src/components/portals/HubDispatchView.tsx:87:  const [sealTag, setSealTag] = useState('');
+src/components/portals/HubDispatchView.tsx:88:  const [sealTagError, setSealTagError] = useState('');
+src/components/portals/HubDispatchView.tsx:89:  const [vehicleNumber, setVehicleNumber] = useState('');
+src/components/portals/HubDispatchView.tsx:91:  const [awbInput, setAwbInput] = useState('');
+src/components/portals/HubDispatchView.tsx:92:  const [awbScanMessage, setAwbScanMessage] = useState('');
+src/components/portals/HubDispatchView.tsx:93:  const [awbScanType, setAwbScanType] = useState<'success' | 'error' | ''>('');
+src/components/portals/HubDispatchView.tsx:95:  const [scannedShipments, setScannedShipments] = useState<any[]>([]);
+src/components/portals/HubDispatchView.tsx:96:  const [isSubmitting, setIsSubmitting] = useState(false);
+src/components/portals/HubDispatchView.tsx:98:  const awbInputRef = useRef<HTMLInputElement>(null);
+src/components/portals/HubDispatchView.tsx:99:  const pincodeDropdownRef = useRef<HTMLDivElement>(null);
+src/components/portals/HubDispatchView.tsx:101:  useEffect(() => {
+src/components/portals/HubDispatchView.tsx:102:     const handleClickOutside = (event: MouseEvent) => {
+src/components/portals/HubDispatchView.tsx:107:     document.addEventListener('mousedown', handleClickOutside);
+src/components/portals/HubDispatchView.tsx:108:     return () => document.removeEventListener('mousedown', handleClickOutside);
+src/components/portals/HubDispatchView.tsx:111:  useEffect(() => {
+src/components/portals/HubDispatchView.tsx:117:  useEffect(() => {
+src/components/portals/HubDispatchView.tsx:123:        const { data: { user } } = await supabase.auth.getUser();
+src/components/portals/HubDispatchView.tsx:124:        if (user) uid = user.id;
+src/components/portals/HubDispatchView.tsx:137:  useEffect(() => {
+src/components/portals/HubDispatchView.tsx:153:  useEffect(() => {
+src/components/portals/HubShipmentsView.tsx:1:import React, { useEffect, useState, useMemo } from 'react';
+src/components/portals/HubShipmentsView.tsx:7:  const [activePage, setActivePage] = useState<'main' | 'create_pickupsheet' | 'create_runsheet' | 'riders' | 'all_sheets' | 'view_sheet'>('main');
+src/components/portals/HubShipmentsView.tsx:8:  const [sheetFilterType, setSheetFilterType] = useState<'view' | 'close'>('view');
+src/components/portals/HubShipmentsView.tsx:9:  const [selectedTask, setSelectedTask] = useState<any>(null);
+src/components/portals/HubShipmentsView.tsx:12:  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+src/components/portals/HubShipmentsView.tsx:13:  useEffect(() => {
+src/components/portals/HubShipmentsView.tsx:33:  // existing useEffects...
+src/components/portals/HubShipmentsView.tsx:35:  useEffect(() => {
+src/components/portals/HubShipmentsView.tsx:41:        const { data: { user } } = await supabase.auth.getUser();
+src/components/portals/HubShipmentsView.tsx:42:        if (user) uid = user.id;
+src/components/portals/HubShipmentsView.tsx:49:  useEffect(() => {
+src/components/portals/HubShipmentsView.tsx:54:  const [shipments, setShipments] = useState<any[]>([]);
+src/components/portals/HubShipmentsView.tsx:55:  const [sellersInfo, setSellersInfo] = useState<Record<string, any>>({});
+src/components/portals/HubShipmentsView.tsx:56:  const [loading, setLoading] = useState(false);
+src/components/portals/HubShipmentsView.tsx:58:  const [isConfirming, setIsConfirming] = useState(false);
+src/components/portals/HubShipmentsView.tsx:59:  const [allPickupsheets, setAllPickupsheets] = useState<any[]>([]);
+src/components/portals/HubShipmentsView.tsx:60:  const [viewingSheetId, setViewingSheetId] = useState<string | null>(null);
+src/components/portals/HubShipmentsView.tsx:61:  const [loadingSheets, setLoadingSheets] = useState(false);
+src/components/portals/HubShipmentsView.tsx:65:  const [riderInput, setRiderInput] = useState('');
+src/components/portals/HubShipmentsView.tsx:66:  const [riderError, setRiderError] = useState('');
+src/components/portals/HubShipmentsView.tsx:67:  const [savedRiders, setSavedRiders] = useState<any[]>([]);
+src/components/portals/HubShipmentsView.tsx:70:  const [selectedRider, setSelectedRider] = useState<any>(null);
+src/components/portals/HubShipmentsView.tsx:71:  const [isRiderDropdownOpen, setIsRiderDropdownOpen] = useState(false);
+src/components/portals/HubShipmentsView.tsx:72:  const [riderSearch, setRiderSearch] = useState('');
+src/components/portals/HubShipmentsView.tsx:74:  const [selectedPincodes, setSelectedPincodes] = useState<string[]>([]);
+src/components/portals/HubShipmentsView.tsx:75:  const [isPincodeDropdownOpen, setIsPincodeDropdownOpen] = useState(false);
+src/components/portals/HubShipmentsView.tsx:76:  const [pincodeSearch, setPincodeSearch] = useState('');
+src/components/portals/HubShipmentsView.tsx:77:  const [pincodeError, setPincodeError] = useState('');
+src/components/portals/HubShipmentsView.tsx:80:  const [runsheetAwbInput, setRunsheetAwbInput] = useState('');
+src/components/portals/HubShipmentsView.tsx:81:  const [runsheetAwbError, setRunsheetAwbError] = useState('');
+src/components/portals/HubShipmentsView.tsx:82:  const [runsheetAwbSuccess, setRunsheetAwbSuccess] = useState('');
+src/components/portals/HubShipmentsView.tsx:83:  const [runsheetScannedShipments, setRunsheetScannedShipments] = useState<any[]>([]);
+src/components/portals/HubShipmentsView.tsx:84:  const [runsheetSelectedRider, setRunsheetSelectedRider] = useState<any>(null);
+src/components/portals/HubShipmentsView.tsx:85:  const [isRunsheetRiderDropdownOpen, setIsRunsheetRiderDropdownOpen] = useState(false);
+src/components/portals/HubShipmentsView.tsx:86:  const [isConfirmingRunsheet, setIsConfirmingRunsheet] = useState(false);
+src/components/portals/HubShipmentsView.tsx:89:  const [selectedShipmentIds, setSelectedShipmentIds] = useState<string[]>([]);
+src/components/portals/HubShipmentsView.tsx:90:  const [riderToRemove, setRiderToRemove] = useState<string | null>(null);
+src/components/portals/HubShipmentsView.tsx:143:  useEffect(() => {
+src/components/portals/HubShipmentsView.tsx:400:      hubManagerId = authData?.user?.id || null;
+src/components/portals/HubShipmentsView.tsx:525:  useEffect(() => {
+src/components/portals/HubShipmentsView.tsx:567:             if (authData?.user) hId = authData.user.id;
+src/components/portals/HubShipmentsView.tsx:617:  const [availablePincodes, setAvailablePincodes] = useState<string[]>([]);
+src/components/portals/HubShipmentsView.tsx:620:  useEffect(() => {
+src/components/portals/HubShipmentsView.tsx:636:  const lockedPincodes = useMemo(() => {
+src/components/portals/HubShipmentsView.tsx:649:  const filteredShipments = useMemo(() => {
+src/components/portals/HubShipmentsView.tsx:669:        if (authData?.user) hId = authData.user.id;
+src/components/portals/HubShipmentsView.tsx:685:  const removePincode = (pin: string, e: React.MouseEvent) => {
+src/components/portals/RiderPortal.tsx:5:import React, { useState, useEffect } from 'react';
+src/components/portals/RiderPortal.tsx:6:import { useScrollDirection } from '../../hooks/useScrollDirection';
+src/components/portals/RiderPortal.tsx:15:  const [riderData, setRiderData] = useState<any>(null);
+src/components/portals/RiderPortal.tsx:16:  const [activePage, setActivePage] = useState<'main' | 'personal' | 'identity' | 'bank' | 'service_rate'>('main');
+src/components/portals/RiderPortal.tsx:17:  const [globalRates, setGlobalRates] = useState<any>(null);
+src/components/portals/RiderPortal.tsx:18:  const [specificRates, setSpecificRates] = useState<any>(null);
+src/components/portals/RiderPortal.tsx:20:  useEffect(() => {
+src/components/portals/RiderPortal.tsx:24:        const { data: { user } } = await supabase.auth.getUser();
+src/components/portals/RiderPortal.tsx:27:        if (user) {
+src/components/portals/RiderPortal.tsx:31:            .eq('id', user.id)
+src/components/portals/RiderPortal.tsx:370:  const [isLoggedIn, setIsLoggedIn] = useState(false);
+src/components/portals/RiderPortal.tsx:372:  useEffect(() => {
+src/components/portals/RiderPortal.tsx:388:  const [activeTab, setActiveTab] = useState('Dashboard');
+src/components/portals/RiderPortal.tsx:389:  const scrollDir = useScrollDirection(); 
+src/components/portals/RiderPortal.tsx:390:  const [showLogoutModal, setShowLogoutModal] = useState(false);
+src/components/portals/RiderPortal.tsx:391:  const [hideNav, setHideNav] = useState(false);
+src/components/portals/AdminLiveShipmentCard.tsx:1:import React, { useEffect, useState } from 'react';
+src/components/portals/AdminLiveShipmentCard.tsx:6:  const [readyToPickupCount, setReadyToPickupCount] = useState(0);
+src/components/portals/AdminLiveShipmentCard.tsx:7:  const [outForPickupCount, setOutForPickupCount] = useState(0);
+src/components/portals/AdminLiveShipmentCard.tsx:8:  const [failedPickupCount, setFailedPickupCount] = useState(0);
+src/components/portals/AdminLiveShipmentCard.tsx:9:  const [pickedUpCount, setPickedUpCount] = useState(0);
+src/components/portals/AdminLiveShipmentCard.tsx:10:  const [unableToCompleteCount, setUnableToCompleteCount] = useState(0);
+src/components/portals/AdminLiveShipmentCard.tsx:11:  const [receivedAtHubCount, setReceivedAtHubCount] = useState(0);
+src/components/portals/AdminLiveShipmentCard.tsx:12:  const [dispatchedCount, setDispatchedCount] = useState(0);
+src/components/portals/AdminLiveShipmentCard.tsx:13:  const [readyToDeliveryCount, setReadyToDeliveryCount] = useState(0);
+src/components/portals/AdminLiveShipmentCard.tsx:15:  useEffect(() => {
+src/components/portals/AdminLiveShipmentCard.tsx:19:        let userId = null;
+src/components/portals/AdminLiveShipmentCard.tsx:22:          if (savedAuth) userId = JSON.parse(savedAuth).id;
+src/components/portals/AdminLiveShipmentCard.tsx:25:        if (!userId) {
+src/components/portals/AdminLiveShipmentCard.tsx:26:          const { data: { user } } = await supabase.auth.getUser();
+src/components/portals/AdminLiveShipmentCard.tsx:27:          if (user) userId = user.id;
+src/components/portals/AdminLiveShipmentCard.tsx:29:        if (!userId) return;
+src/components/portals/HubDashboardView.tsx:1:import React, { useEffect, useState, useRef } from 'react';
+src/components/portals/HubDashboardView.tsx:6:  const [readyToPickupCount, setReadyToPickupCount] = useState(0);
+src/components/portals/HubDashboardView.tsx:7:  const [outForPickupCount, setOutForPickupCount] = useState(0);
+src/components/portals/HubDashboardView.tsx:8:  const [failedPickupCount, setFailedPickupCount] = useState(0);
+src/components/portals/HubDashboardView.tsx:9:  const [pickedUpCount, setPickedUpCount] = useState(0);
+src/components/portals/HubDashboardView.tsx:10:  const [unableToCompleteCount, setUnableToCompleteCount] = useState(0);
+src/components/portals/HubDashboardView.tsx:11:  const [receivedAtHubCount, setReceivedAtHubCount] = useState(0);
+src/components/portals/HubDashboardView.tsx:12:  const [dispatchedCount, setDispatchedCount] = useState(0);
+src/components/portals/HubDashboardView.tsx:13:  const [inTransitCount, setInTransitCount] = useState(0);
+src/components/portals/HubDashboardView.tsx:14:  const [readyToDeliveryCount, setReadyToDeliveryCount] = useState(0);
+src/components/portals/HubDashboardView.tsx:16:  const [showReceivedList, setShowReceivedList] = useState(false);
+src/components/portals/HubDashboardView.tsx:17:  const [receivedShipments, setReceivedShipments] = useState<any[]>([]);
+src/components/portals/HubDashboardView.tsx:18:  const [scanInput, setScanInput] = useState('');
+src/components/portals/HubDashboardView.tsx:19:  const [scanMessage, setScanMessage] = useState('');
+src/components/portals/HubDashboardView.tsx:20:  const [scanType, setScanType] = useState<'success' | 'error' | ''>('');
+src/components/portals/HubDashboardView.tsx:21:  const [loadingReceived, setLoadingReceived] = useState(false);
+src/components/portals/HubDashboardView.tsx:22:  const [dashboardPincodes, setDashboardPincodes] = useState<string[]>([]);
+src/components/portals/HubDashboardView.tsx:23:  const [selectedDashboardPincodes, setSelectedDashboardPincodes] = useState<string[]>([]);
+src/components/portals/HubDashboardView.tsx:24:  const dashboardPincodeRef = useRef<HTMLDivElement>(null);
+src/components/portals/HubDashboardView.tsx:26:  useEffect(() => {
+src/components/portals/HubDashboardView.tsx:27:     const handleClickOutside = (event: MouseEvent) => {
+src/components/portals/HubDashboardView.tsx:32:     document.addEventListener('mousedown', handleClickOutside);
+src/components/portals/HubDashboardView.tsx:33:     return () => document.removeEventListener('mousedown', handleClickOutside);
+src/components/portals/HubDashboardView.tsx:44:  const [showDashboardPincodeDropdown, setShowDashboardPincodeDropdown] = useState(false);
+src/components/portals/HubDashboardView.tsx:47:  useEffect(() => {
+src/components/portals/HubDashboardView.tsx:50:        let userId = null;
+src/components/portals/HubDashboardView.tsx:52:        if (savedAuth) userId = JSON.parse(savedAuth).id;
+src/components/portals/HubDashboardView.tsx:54:        if (!userId) {
+src/components/portals/HubDashboardView.tsx:55:          const { data: { user } } = await supabase.auth.getUser();
+src/components/portals/HubDashboardView.tsx:56:          if (user) userId = user.id;
+src/components/portals/HubDashboardView.tsx:59:        if (!userId) return;
+src/components/portals/HubDashboardView.tsx:64:        const { count: c2 } = await supabase.from('accepted_shipments').select('*', { count: 'exact', head: true }).eq('hub manager id', userId).ilike('shipment type', '%out for pickup%');
+src/components/portals/HubDashboardView.tsx:67:        const { count: c3 } = await supabase.from('accepted_shipments').select('*', { count: 'exact', head: true }).eq('hub manager id', userId).ilike('shipment type', 'faild pickup');
+src/components/portals/HubDashboardView.tsx:70:        const { count: c4 } = await supabase.from('accepted_shipments').select('*', { count: 'exact', head: true }).eq('hub manager id', userId).ilike('shipment type', 'picked up');
+src/components/portals/HubDashboardView.tsx:73:        const { count: c5 } = await supabase.from('accepted_shipments').select('*', { count: 'exact', head: true }).eq('hub manager id', userId).or('shipment type.ilike.%reschduled pickup%,shipment type.ilike.%rescheduled pickup%,shipment type.ilike.%not attended pickup%,shipment type.ilike.%not attanded pickup%,shipment type.ilike.%no responsed picckup%,shipment type.ilike.%no responsed pickup%');
+src/components/portals/HubDashboardView.tsx:75:        const { count: c6 } = await supabase.from('accepted_shipments').select('*', { count: 'exact', head: true }).eq('hub manager id', userId).ilike('shipment type', '%received at hub%');
+src/components/portals/HubDashboardView.tsx:78:        const { count: c7 } = await supabase.from('accepted_shipments').select('*', { count: 'exact', head: true }).eq('hub manager id', userId).ilike('shipment type', '%dispatched%');
+src/components/portals/HubDashboardView.tsx:81:        const { count: c8 } = await supabase.from('accepted_shipments').select('*', { count: 'exact', head: true }).eq('assigned hub manager id', userId).ilike('shipment type', '%dispatched%');
+src/components/portals/HubDashboardView.tsx:83:        const { count: c9 } = await supabase.from('accepted_shipments').select('*', { count: 'exact', head: true }).eq('hub manager id', userId).ilike('shipment type', 'Shipped');
+src/components/portals/HubDashboardView.tsx:105:        let userId = null;
+src/components/portals/HubDashboardView.tsx:107:        if (savedAuth) userId = JSON.parse(savedAuth).id;
+src/components/portals/HubDashboardView.tsx:109:        if (!userId) {
+src/components/portals/HubDashboardView.tsx:110:          const { data: { user } } = await supabase.auth.getUser();
+src/components/portals/HubDashboardView.tsx:111:          if (user) userId = user.id;
+src/components/portals/HubDashboardView.tsx:113:        if (!userId) return;
+src/components/portals/HubDashboardView.tsx:116:        const { data: pincodeData } = await supabase.from('added_pincode').select('"added pincode"').eq('hub manager id', userId);
+src/components/portals/HubDashboardView.tsx:131:          .eq('hub manager id', userId)
+src/components/portals/HubDashboardView.tsx:150:     let userId = null;
+src/components/portals/HubDashboardView.tsx:152:     if (savedAuth) userId = JSON.parse(savedAuth).id;
+src/components/portals/HubDashboardView.tsx:178:        const { data: hubData } = await supabase.from('hub_managers').select('hub_name').eq('id', userId).maybeSingle();
+src/components/portals/HubDashboardView.tsx:189:        const shipmentStatusMsg = `Order Shipped on ${dateStr} | Hub: ${hubName} | Hub ID: ${userId} | Pincode: ${shipment.pincode}`;
+src/components/portals/HubDashboardView.tsx:194:                'hub manager id': userId,
+src/components/portals/HubLogisticPortal.tsx:6:import React, { useState, useEffect } from 'react';
+src/components/portals/HubLogisticPortal.tsx:7:import { useScrollDirection } from '../../hooks/useScrollDirection';
+src/components/portals/HubLogisticPortal.tsx:22:  const [hubData, setHubData] = useState<any>(null);
+src/components/portals/HubLogisticPortal.tsx:23:  const [activePage, setActivePage] = useState<'main' | 'hub' | 'identity' | 'bank'>('main');
+src/components/portals/HubLogisticPortal.tsx:25:  useEffect(() => {
+src/components/portals/HubLogisticPortal.tsx:30:        const userObj = savedAuth ? JSON.parse(savedAuth) : null;
+src/components/portals/HubLogisticPortal.tsx:33:        if (userObj?.id) {
+src/components/portals/HubLogisticPortal.tsx:37:            .eq('id', userObj.id)
+src/components/portals/HubLogisticPortal.tsx:41:        if (!record && userObj?.email) {
+src/components/portals/HubLogisticPortal.tsx:45:            .eq('registered_email', userObj.email)
+src/components/portals/HubLogisticPortal.tsx:50:          const { data: { user } } = await supabase.auth.getUser();
+src/components/portals/HubLogisticPortal.tsx:51:          if (user) {
+src/components/portals/HubLogisticPortal.tsx:55:              .eq('id', user.id)
+src/components/portals/HubLogisticPortal.tsx:304:  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
+src/components/portals/HubLogisticPortal.tsx:316:  const [activeTab, setActiveTab] = useState('Dashboard');
+src/components/portals/HubLogisticPortal.tsx:317:  const scrollDir = useScrollDirection(); 
+src/components/portals/HubLogisticPortal.tsx:318:  const [showLogoutModal, setShowLogoutModal] = useState(false);
+src/components/portals/HubLogisticPortal.tsx:319:  const [hideNav, setHideNav] = useState(false);
+src/lib/supabase.ts:10:// This client uses the Anon key. It should be used for client-side operations
+src/hooks/useScrollDirection.ts:1:import { useState, useEffect } from 'react';
+src/hooks/useScrollDirection.ts:3:export function useScrollDirection(threshold = 10) {
+src/hooks/useScrollDirection.ts:4:  const [scrollDir, setScrollDir] = useState<'up' | 'down'>('up');
+src/hooks/useScrollDirection.ts:6:  useEffect(() => {
+src/App.tsx:1:import React, { useState } from 'react';
+src/App.tsx:90:  const [selectedPortal, setSelectedPortal] = useState<string | null>(() => {
+src/App.tsx:98:  React.useEffect(() => {
+src/App.tsx:113:  React.useEffect(() => {
+src/App.tsx:131:    const handleTouchStart = (e: TouchEvent | MouseEvent) => {
+src/App.tsx:157:    window.addEventListener('mousedown', handleTouchStart, { passive: true });
+src/App.tsx:165:      window.removeEventListener('mousedown', handleTouchStart);
+src/data/portalData.ts:217:    dropAddress: 'House 42, Ward 5, Near Durga Mandir, Suriyawan',
+src/categories.ts:44:            "id": "trousers",
+src/categories.ts:45:            "name": "Trousers"
+src/categories.ts:553:            "id": "trousers",
+src/categories.ts:554:            "name": "Trousers"
+src/categories.ts:761:            "id": "women-trousers",
+src/categories.ts:762:            "name": "Women Trousers"
+src/categories.ts:1182:            "id": "trousers",
+src/categories.ts:1183:            "name": "Trousers"
+src/categories.ts:1278:            "id": "boys-trousers",
+src/categories.ts:1279:            "name": "Boys Trousers"
+src/categories.ts:2402:            "id": "mouse",
+src/categories.ts:2403:            "name": "Mouse"
+src/categories.ts:2406:            "id": "mouse-pad",
+src/categories.ts:2407:            "name": "Mouse Pad"
+src/categories.ts:2502:            "id": "wireless-optical-mouse",
+src/categories.ts:2503:            "name": "Wireless Optical Mouse"
+src/categories.ts:2506:            "id": "wired-usb-mouse",
+src/categories.ts:2507:            "name": "Wired USB Mouse"
+src/categories.ts:2510:            "id": "gaming-rgb-mouse",
+src/categories.ts:2511:            "name": "Gaming RGB Mouse"
+src/categories.ts:2518:            "id": "wireless-keyboard-mouse-combo",
+src/categories.ts:2519:            "name": "Wireless Keyboard & Mouse Combo"
+src/categories.ts:2522:            "id": "ergonomic-mouse-pad-large-desk-mat",
+src/categories.ts:2523:            "name": "Ergonomic Mouse Pad & Large Desk Mat"
+src/categories.ts:3221:            "id": "diffuser",
+src/categories.ts:3222:            "name": "Diffuser"
+src/categories.ts:3349:            "id": "scented-wax-candles-reed-diffuser",
+src/categories.ts:3350:            "name": "Scented Wax Candles & Reed Diffuser"
+src/categories.ts:3736:            "id": "rotating-spice-rack-organizer-carousel",
+src/categories.ts:3737:            "name": "Rotating Spice Rack Organizer Carousel"
+src/categories.ts:3884:            "id": "rotating-spice-rack-carousel",
+src/categories.ts:3885:            "name": "Rotating Spice Rack Carousel"
+src/categories.ts:9382:            "id": "dollhouse",
+src/categories.ts:9383:            "name": "Dollhouse"
+src/categories.ts:9422:            "id": "dollhouse-wooden-plastic-3-story-miniature-villa-playset",
+src/categories.ts:9423:            "name": "Dollhouse Wooden / Plastic 3-Story Miniature Villa Playset"
+src/categories.ts:10235:            "id": "premium-car-dashboard-air-freshener-gel-aroma-diffuser",
+src/categories.ts:10236:            "name": "Premium Car Dashboard Air Freshener Gel & Aroma Diffuser"
+src/categories.ts:10532:            "id": "fuse",
+src/categories.ts:10533:            "name": "Fuse"
+src/categories.ts:10584:            "id": "automotive-blade-fuse-set-standard-mini-100-pcs",
+src/categories.ts:10585:            "name": "Automotive Blade Fuse Set (Standard & Mini 100 Pcs)"
+src/categories.ts:11242:            "id": "enriched-organic-potting-soil-mix-ready-to-use-5kg-10kg",

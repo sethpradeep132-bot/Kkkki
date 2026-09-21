@@ -1,0 +1,497 @@
+src/components/portals/AuthLogin.tsx:70:        if (!authErr && data?.user) {
+src/components/portals/AuthLogin.tsx:82:      if (!loggedUser) {
+src/components/portals/AuthLogin.tsx:85:        if (portalName === 'Customer') {
+src/components/portals/AuthLogin.tsx:99:        if (tableName) {
+src/components/portals/AuthLogin.tsx:107:          if (dbUser) {
+src/components/portals/AuthLogin.tsx:117:      if (loggedUser) {
+src/components/portals/AuthLogin.tsx:152:      if (!res.ok) {
+src/components/portals/AuthLogin.tsx:158:      if (authData.user) {
+src/components/portals/AuthLogin.tsx:191:  if (isSuccess && isSignup) {
+src/components/portals/AuthLogin.tsx:219:  if (isSignup) {
+src/components/portals/RiderDashboardView.tsx:15:        if (stored) {
+src/components/portals/RiderDashboardView.tsx:20:      if (!riderId) {
+src/components/portals/RiderDashboardView.tsx:25:      if (riderId) {
+src/components/portals/RiderDashboardView.tsx:52:        if (data) {
+src/components/portals/RiderDashboardView.tsx:55:            if (s['pickupsheet id']) {
+src/components/portals/RiderDashboardView.tsx:56:              if (!sheetsMap[s['pickupsheet id']]) {
+src/components/portals/RiderDashboardView.tsx:98:      if (!riderId) {
+src/components/portals/RiderDashboardView.tsx:103:      if (riderId) {
+src/components/portals/RiderDashboardView.tsx:111:        if (data && data.length > 0) {
+src/components/portals/RiderDashboardView.tsx:171:             if (ship['order ID']) {
+src/components/portals/RiderTasksView.tsx:16:    if (onSubPageChange) {
+src/components/portals/RiderTasksView.tsx:27:      if (!riderId) {
+src/components/portals/RiderTasksView.tsx:33:      if (activeChip === 'Pending') {
+src/components/portals/RiderTasksView.tsx:41:        if (!error && data) {
+src/components/portals/RiderTasksView.tsx:44:          if (sellerIds.length > 0) {
+src/components/portals/RiderTasksView.tsx:50:            if (sellersData) {
+src/components/portals/RiderTasksView.tsx:65:        if (!error && data) {
+src/components/portals/RiderTasksView.tsx:79:          if (sellerIds.length > 0) {
+src/components/portals/RiderTasksView.tsx:85:            if (sellersData) {
+src/components/portals/RiderTasksView.tsx:115:  if (selectedTask) {
+src/components/portals/RiderTasksView.tsx:155:                    if (!isCompletedTab) {
+src/components/portals/RiderTasksView.tsx:256:      if (isHubView && task?.id) {
+src/components/portals/RiderTasksView.tsx:262:        if (data && data['product image']) {
+src/components/portals/RiderTasksView.tsx:314:    if (canvas) {
+src/components/portals/RiderTasksView.tsx:329:    if (e.touches && e.touches.length > 0) {
+src/components/portals/RiderTasksView.tsx:362:        if (Math.max(width, height) > MAX_DIMENSION) {
+src/components/portals/RiderTasksView.tsx:370:        if (ctx) {
+src/components/portals/RiderTasksView.tsx:391:      if (!d1 && !d2) {
+src/components/portals/RiderTasksView.tsx:395:        if (attempts > 5) {
+src/components/portals/RiderTasksView.tsx:423:    if (isQcPass && pinInput !== task['pickup pin']) {
+src/components/portals/RiderTasksView.tsx:427:    if (!signatory) {
+src/components/portals/RiderTasksView.tsx:445:      if (capturedImage) {
+src/components/portals/RiderTasksView.tsx:455:      if (task['order ID']) {
+src/components/portals/RiderTasksView.tsx:465:      if (riderId) {
+src/components/portals/RiderTasksView.tsx:470:      if (isQcPass) {
+src/components/portals/RiderTasksView.tsx:486:         if (capturedImage) {
+src/components/portals/RiderTasksView.tsx:494:         if (coRows && coRows.length > 0) {
+src/components/portals/RiderTasksView.tsx:515:         if (capturedImage) {
+src/components/portals/RiderTasksView.tsx:523:         if (coRows && coRows.length > 0) {
+src/components/portals/RiderTasksView.tsx:550:      if (unableReason === 'No response') {
+src/components/portals/RiderTasksView.tsx:563:      if (riderId) {
+src/components/portals/RiderTasksView.tsx:589:      if (coRows && coRows.length > 0) {
+src/components/portals/RiderTasksView.tsx:617:    if (isPrinting || isDownloading) {
+src/components/portals/RiderTasksView.tsx:766:      if (!hId) {
+src/components/portals/RiderTasksView.tsx:770:      if (hId) {
+src/components/portals/RiderTasksView.tsx:791:      if (coRows && coRows.length > 0) {
+src/components/portals/RiderTasksView.tsx:832:      if (coRows && coRows.length > 0) {
+src/components/portals/RiderTasksView.tsx:896:      if (currentAttempt >= 3) {
+src/components/portals/RiderTasksView.tsx:901:          if (coRows && coRows.length > 0) {
+src/components/portals/RiderTasksView.tsx:961:  if (isHubView) {
+src/components/portals/RiderTasksView.tsx:1088:                         if (e.target.value.trim() === task['awb number']) {
+src/components/portals/RiderTasksView.tsx:1099:                          if (scannedAwb.trim() === task['awb number']) {
+src/components/portals/RiderTasksView.tsx:1250:               if (e.target.files) { 
+src/components/portals/RiderTasksView.tsx:1255:                     if (ev.target?.result) {
+src/components/portals/CustomerPortal.tsx:31:  if (color === 'red') return {
+src/components/portals/CustomerPortal.tsx:36:  if (color === 'blue') return {
+src/components/portals/CustomerPortal.tsx:86:        if (localAddrs) {
+src/components/portals/CustomerPortal.tsx:91:        if (ids.length > 0) {
+src/components/portals/CustomerPortal.tsx:96:        if (data) {
+src/components/portals/CustomerPortal.tsx:114:        if (userObj?.id) {
+src/components/portals/CustomerPortal.tsx:122:        if (!customerRecord && userObj?.email) {
+src/components/portals/CustomerPortal.tsx:130:        if (!customerRecord) {
+src/components/portals/CustomerPortal.tsx:132:          if (user) {
+src/components/portals/CustomerPortal.tsx:141:        if (!customerRecord) {
+src/components/portals/CustomerPortal.tsx:150:        if (customerRecord) {
+src/components/portals/CustomerPortal.tsx:186:      if (customerData?.id && customerData.id !== 'No Data Found') {
+src/components/portals/CustomerPortal.tsx:193:        if (data) {
+src/components/portals/CustomerPortal.tsx:201:  if (activePage === 'personal') {
+src/components/portals/CustomerPortal.tsx:240:  if (activePage === 'bank') {
+src/components/portals/CustomerPortal.tsx:272:  if (activePage === 'orders') {
+src/components/portals/CustomerPortal.tsx:332:  if (activePage === 'order_details' && selectedOrder) {
+src/components/portals/CustomerPortal.tsx:361:        if (selectedOrder['order ID']) {
+src/components/portals/CustomerPortal.tsx:368:        if (!customerError) {
+src/components/portals/CustomerPortal.tsx:453:                if (timelineSteps.length === 0) {
+src/components/portals/CustomerPortal.tsx:496:  if (activePage === 'addresses') {
+src/components/portals/CustomerPortal.tsx:650:    if (typeof window !== 'undefined') {
+src/components/portals/CustomerPortal.tsx:674:    if (categoryId !== 'All') {
+src/components/portals/CustomerPortal.tsx:678:    if (categoryId !== 'All') {
+src/components/portals/CustomerPortal.tsx:702:    if (firstSubId !== undefined) {
+src/components/portals/CustomerPortal.tsx:720:        if (userObj?.id) {
+src/components/portals/CustomerPortal.tsx:727:                if (currentUserId) {
+src/components/portals/CustomerPortal.tsx:731:            if (!error && data) {
+src/components/portals/CustomerPortal.tsx:745:    if (isLoggedIn) {
+src/components/portals/CustomerPortal.tsx:757:      if (!error) {
+src/components/portals/CustomerPortal.tsx:770:    if (!userId) {
+src/components/portals/CustomerPortal.tsx:783:      if (error) {
+src/components/portals/CustomerPortal.tsx:829:      if (subscription) {
+src/components/portals/CustomerPortal.tsx:890:    if (matchedProduct) {
+src/components/portals/CustomerPortal.tsx:896:         if (main.name.toLowerCase() === pMain.toLowerCase() || main.id === pMain) {
+src/components/portals/CustomerPortal.tsx:898:             if (mid.name.toLowerCase() === pMid.toLowerCase() || mid.id === pMid) {
+src/components/portals/CustomerPortal.tsx:900:                 if (sub.name.toLowerCase() === pSub.toLowerCase() || sub.id === pSub) {
+src/components/portals/CustomerPortal.tsx:919:          if (subName.includes(q) || subNorm.includes(qNorm)) {
+src/components/portals/CustomerPortal.tsx:943:    if (activeTab === 'Shop' && allProducts.length > 0) {
+src/components/portals/CustomerPortal.tsx:952:        if (count > maxCount && path !== '||||||') {
+src/components/portals/CustomerPortal.tsx:958:      if (bestPath) {
+src/components/portals/CustomerPortal.tsx:960:        if (main) {
+src/components/portals/CustomerPortal.tsx:962:           if (foundMain) {
+src/components/portals/CustomerPortal.tsx:964:              if (mid) {
+src/components/portals/CustomerPortal.tsx:966:                if (foundMid) {
+src/components/portals/CustomerPortal.tsx:968:                   if (sub) {
+src/components/portals/CustomerPortal.tsx:970:                      if (foundSub) {
+src/components/portals/CustomerPortal.tsx:991:    if (activeSubCat && activeTab === 'Shop') {
+src/components/portals/CustomerPortal.tsx:994:        if (document.activeElement?.id === 'shop-page-search-input' || document.activeElement?.id === 'header-search-input') {
+src/components/portals/CustomerPortal.tsx:998:        if (el) {
+src/components/portals/CustomerPortal.tsx:1014:      if (v === 'shopSearch') {
+src/components/portals/CustomerPortal.tsx:1054:    if (window.history.state?.customerView === 'categoryBubble') {
+src/components/portals/CustomerPortal.tsx:1064:    if (main && main.middle.length > 0) {
+src/components/portals/CustomerPortal.tsx:1073:    if (window.history.state?.customerView !== 'productDetail') {
+src/components/portals/CustomerPortal.tsx:1080:    if (window.history.state?.customerView === 'productDetail') {
+src/components/portals/CustomerPortal.tsx:1103:    if (id === 'Category') {
+src/components/portals/CustomerPortal.tsx:1104:      if (isCategoryBubbleOpen) {
+src/components/portals/CustomerPortal.tsx:1115:      if (id === 'Cart' && isLoggedIn && userId) {
+src/components/portals/CustomerPortal.tsx:1118:            if (!error && data) {
+src/components/portals/CustomerPortal.tsx:1151:    if (activeCategory !== 'All') {
+src/components/portals/CustomerPortal.tsx:1159:    if (activeFilterOption) {
+src/components/portals/CustomerPortal.tsx:1184:  if (!isLoggedIn) {
+src/components/portals/CustomerPortal.tsx:1202:                      if (e.key === 'Enter') {
+src/components/portals/CustomerPortal.tsx:1305:                    if (isSelected) {
+src/components/portals/CustomerPortal.tsx:1591:                          if (e.key === 'Enter') {
+src/components/portals/CustomerPortal.tsx:1688:                  if (qRaw) {
+src/components/portals/CustomerPortal.tsx:1701:                    if (q) {
+src/components/portals/CustomerPortal.tsx:1726:                  if (sortMode) {
+src/components/portals/CustomerPortal.tsx:1741:                if (isProductsLoading) {
+src/components/portals/CustomerPortal.tsx:1836:            if (isCenterTab) {
+src/components/portals/SellerProductsView.tsx:51:      if (userObj?.id) {
+src/components/portals/SellerProductsView.tsx:55:      if (!finalSellerId && userObj?.email) {
+src/components/portals/SellerProductsView.tsx:59:      if (!finalSellerId) {
+src/components/portals/SellerProductsView.tsx:61:        if (user) {
+src/components/portals/SellerProductsView.tsx:71:      if (finalSellerId) {
+src/components/portals/SellerProductsView.tsx:102:      if (userObj?.id) {
+src/components/portals/SellerProductsView.tsx:106:      if (!finalSellerId && userObj?.email) {
+src/components/portals/SellerProductsView.tsx:110:      if (!finalSellerId) {
+src/components/portals/SellerProductsView.tsx:112:        if (user) {
+src/components/portals/SellerProductsView.tsx:118:      if (viewMode === 'inventory') {
+src/components/portals/SellerProductsView.tsx:119:        if (inventoryChip === 'active_inactive') {
+src/components/portals/SellerProductsView.tsx:124:          if (finalSellerId) {
+src/components/portals/SellerProductsView.tsx:137:          if (finalSellerId) {
+src/components/portals/SellerProductsView.tsx:152:        if (finalSellerId) {
+src/components/portals/SellerProductsView.tsx:157:        if (error) {
+src/components/portals/SellerProductsView.tsx:187:      if (currentStatus === 'Active') {
+src/components/portals/SellerProductsView.tsx:188:        if (cleanStock === '0') {
+src/components/portals/SellerProductsView.tsx:196:          if (!insertErr) {
+src/components/portals/SellerProductsView.tsx:214:        if (cleanStock !== '0') {
+src/components/portals/SellerProductsView.tsx:222:          if (!insertErr) {
+src/components/portals/SellerProductsView.tsx:279:      if (!data || data.length === 0) {
+src/components/portals/SellerProductsView.tsx:284:      if (selectedProduct?.id === productId) {
+src/components/portals/SellerProductsView.tsx:309:  if (viewMode === 'inventory') {
+src/components/portals/UploadProductForm.tsx:33:  if (Math.max(targetWidth, targetHeight) > MAX_DIMENSION) {
+src/components/portals/UploadProductForm.tsx:43:  if (!ctx) {
+src/components/portals/UploadProductForm.tsx:130:    if (n === q) {
+src/components/portals/UploadProductForm.tsx:141:        if (!item.searchStr.includes(tokens[t])) {
+src/components/portals/UploadProductForm.tsx:146:      if (allFound) {
+src/components/portals/UploadProductForm.tsx:151:    if (exactMatches.length + startMatches.length + wordMatches.length >= maxResults) {
+src/components/portals/UploadProductForm.tsx:258:        if (user) {
+src/components/portals/UploadProductForm.tsx:260:          if (data) {
+src/components/portals/UploadProductForm.tsx:298:    if (!hasHsn || !hasGst || isNaN(sp) || sp < 0) {
+src/components/portals/UploadProductForm.tsx:307:    if (mv > 0 && !isNaN(sp) && sp >= 0) {
+src/components/portals/UploadProductForm.tsx:321:    if (!isNaN(num) && num > 5) {
+src/components/portals/UploadProductForm.tsx:332:      if (saved) {
+src/components/portals/UploadProductForm.tsx:358:    if (sp > 0) {
+src/components/portals/UploadProductForm.tsx:377:      if (!isTax) {
+src/components/portals/UploadProductForm.tsx:378:        if (charge.isPercentage) {
+src/components/portals/UploadProductForm.tsx:392:      if (charge.isTax) {
+src/components/portals/UploadProductForm.tsx:393:        if (charge.isPercentage) {
+src/components/portals/UploadProductForm.tsx:400:      if (sp <= 0) {
+src/components/portals/UploadProductForm.tsx:443:    if (initialProduct?.['key features'] && initialProduct['key features'].length > 0) {
+src/components/portals/UploadProductForm.tsx:516:        if (data.name && data.name.value) {
+src/components/portals/UploadProductForm.tsx:546:    if (productName && titleName && !description) {
+src/components/portals/UploadProductForm.tsx:598:    if (Math.random() > 0.3) {
+src/components/portals/UploadProductForm.tsx:621:      if (!newFeatures[i] || newFeatures[i].trim() === '') {
+src/components/portals/UploadProductForm.tsx:654:    if (crop.unit === '%') {
+src/components/portals/UploadProductForm.tsx:670:    if (file && images.length < 4) {
+src/components/portals/UploadProductForm.tsx:687:    if (tempImage && completedCrop && imgRef.current) {
+src/components/portals/UploadProductForm.tsx:767:    if (userObj?.id) {
+src/components/portals/UploadProductForm.tsx:771:    if (!finalSellerId && userObj?.email) {
+src/components/portals/UploadProductForm.tsx:775:    if (!finalSellerId) {
+src/components/portals/UploadProductForm.tsx:777:      if (user) {
+src/components/portals/UploadProductForm.tsx:840:      if (initialMode === 'edit_draft' && initialProduct?.id) {
+src/components/portals/UploadProductForm.tsx:862:    if (!isEditMode) {
+src/components/portals/UploadProductForm.tsx:868:      if (!isTopServices) {
+src/components/portals/UploadProductForm.tsx:874:    if (variantOptionsCount < 2) {
+src/components/portals/UploadProductForm.tsx:878:    if (isGstVerified) {
+src/components/portals/UploadProductForm.tsx:883:    if (!isTopServices) {
+src/components/portals/UploadProductForm.tsx:890:    if (errors.length > 0) {
+src/components/portals/UploadProductForm.tsx:952:        if (initialMode === 'edit_active' && initialProduct?.id) {
+src/components/portals/UploadProductForm.tsx:1473:                if (val !== 'Flash Sale') {
+src/components/portals/UploadProductForm.tsx:1475:                  if (categoryTags.includes('Flash')) {
+src/components/portals/UploadProductForm.tsx:1479:                  if (!categoryTags.includes('Flash')) {
+src/components/portals/UploadProductForm.tsx:1560:                        if (homeFeedProductType === 'Flash Sale' && tagData.name === 'Flash') {
+src/components/portals/UploadProductForm.tsx:1611:                        if (e.target.value === 'custom') {
+src/components/portals/UploadProductForm.tsx:1646:                    if (e.target.value && !deliveryChargeType) {
+src/components/portals/UploadProductForm.tsx:1887:                          if (activeModal === 'tag') {
+src/components/portals/UploadProductForm.tsx:1890:                            if (homeFeedProductType === 'Flash Sale') {
+src/components/portals/UploadProductForm.tsx:1891:                              if (tag.name === 'Flash') {
+src/components/portals/UploadProductForm.tsx:2007:                          if (val.trim()) {
+src/components/portals/UploadProductForm.tsx:2050:                          if (val.trim()) {
+src/components/portals/SellerDashboardView.tsx:25:        if (!userId) {
+src/components/portals/SellerDashboardView.tsx:101:    if (userObj?.id) {
+src/components/portals/HubShipmentsView.tsx:14:    if ((activePage === 'riders' || activePage === 'create_pickupsheet' || activePage === 'main') && currentUserId) {
+src/components/portals/HubShipmentsView.tsx:17:         if (addedRiders && addedRiders.length > 0) {
+src/components/portals/HubShipmentsView.tsx:20:            if (data) {
+src/components/portals/HubShipmentsView.tsx:40:      if (!uid) {
+src/components/portals/HubShipmentsView.tsx:50:    if (onSubPageChange) {
+src/components/portals/HubShipmentsView.tsx:99:      if (currentUserId) {
+src/components/portals/HubShipmentsView.tsx:101:         if (hubData?.registered_pincode) {
+src/components/portals/HubShipmentsView.tsx:111:      if (!error && data) {
+src/components/portals/HubShipmentsView.tsx:116:        if (sellerIds.length > 0) {
+src/components/portals/HubShipmentsView.tsx:122:          if (!sellerErr && sellersData) {
+src/components/portals/HubShipmentsView.tsx:130:            if (hubPincode) {
+src/components/portals/HubShipmentsView.tsx:144:    if (activePage === 'create_pickupsheet') {
+src/components/portals/HubShipmentsView.tsx:171:      if (error || !data) {
+src/components/portals/HubShipmentsView.tsx:177:      if ((data['shipment type'] || '').toLowerCase() !== 'ready to delivery') {
+src/components/portals/HubShipmentsView.tsx:195:    if (!runsheetSelectedRider) {
+src/components/portals/HubShipmentsView.tsx:199:    if (runsheetScannedShipments.length === 0) {
+src/components/portals/HubShipmentsView.tsx:211:      if (currentUserId) {
+src/components/portals/HubShipmentsView.tsx:213:        if (hubData) {
+src/components/portals/HubShipmentsView.tsx:218:        if (pData && pData['added pincode']) {
+src/components/portals/HubShipmentsView.tsx:233:          if (!data && !error) {
+src/components/portals/HubShipmentsView.tsx:257:        if (s['order ID']) {
+src/components/portals/HubShipmentsView.tsx:259:           if (cData) {
+src/components/portals/HubShipmentsView.tsx:281:  if (activePage === 'create_runsheet') {
+src/components/portals/HubShipmentsView.tsx:419:      if (!data || data.length === 0) {
+src/components/portals/HubShipmentsView.tsx:428:    if (!hubManagerId) {
+src/components/portals/HubShipmentsView.tsx:435:    if (hubManagerId) {
+src/components/portals/HubShipmentsView.tsx:437:      if (hubData) {
+src/components/portals/HubShipmentsView.tsx:450:    if (existingShipments) {
+src/components/portals/HubShipmentsView.tsx:475:        if (ship['order ID']) {
+src/components/portals/HubShipmentsView.tsx:488:    if (!error) {
+src/components/portals/HubShipmentsView.tsx:505:    if (!error && data) {
+src/components/portals/HubShipmentsView.tsx:510:        if (s['pickupsheet id']) {
+src/components/portals/HubShipmentsView.tsx:511:          if (!sheetsMap[s['pickupsheet id']]) {
+src/components/portals/HubShipmentsView.tsx:526:      if (riderIds.size > 0) {
+src/components/portals/HubShipmentsView.tsx:528:        if (ridersData) {
+src/components/portals/HubShipmentsView.tsx:537:      if (sellerIds.length > 0) {
+src/components/portals/HubShipmentsView.tsx:543:        if (sellersData) {
+src/components/portals/HubShipmentsView.tsx:556:    if (activePage === 'all_sheets') {
+src/components/portals/HubShipmentsView.tsx:572:      if (error || !data) {
+src/components/portals/HubShipmentsView.tsx:585:      if (shipmentData && shipmentData['hub manager id']) {
+src/components/portals/HubShipmentsView.tsx:587:         if (hubData) {
+src/components/portals/HubShipmentsView.tsx:595:          if (!hId) {
+src/components/portals/HubShipmentsView.tsx:599:          if (hId) {
+src/components/portals/HubShipmentsView.tsx:601:            if (hubData) {
+src/components/portals/HubShipmentsView.tsx:611:      if (currentUserId) {
+src/components/portals/HubShipmentsView.tsx:616:         if (insertErr) {
+src/components/portals/HubShipmentsView.tsx:638:    if (riderToRemove && currentUserId) {
+src/components/portals/HubShipmentsView.tsx:651:    if ((activePage === 'create_pickupsheet' || activePage === 'main') && currentUserId) {
+src/components/portals/HubShipmentsView.tsx:654:        if (data) {
+src/components/portals/HubShipmentsView.tsx:669:      if (s['hub manager id'] && s['hub manager id'] !== currentUserId) {
+src/components/portals/HubShipmentsView.tsx:671:        if (seller?.registered_pincode) {
+src/components/portals/HubShipmentsView.tsx:695:    if (selectedPincodes.includes(pin)) {
+src/components/portals/HubShipmentsView.tsx:697:      if (!hId) {
+src/components/portals/HubShipmentsView.tsx:701:      if (hId) {
+src/components/portals/HubShipmentsView.tsx:703:        if (hubData) {
+src/components/portals/HubShipmentsView.tsx:721:  if (activePage === 'riders') {
+src/components/portals/HubShipmentsView.tsx:805:  if (activePage === 'create_pickupsheet') {
+src/components/portals/HubShipmentsView.tsx:999:  if (activePage === 'all_sheets') {
+src/components/portals/HubShipmentsView.tsx:1051:  if (selectedTask) {
+src/components/portals/HubShipmentsView.tsx:1058:  if (activePage === 'view_sheet') {
+src/components/portals/HubShipmentsView.tsx:1063:      if (sheetFilterType === 'view') {
+src/components/portals/HubShipmentsView.tsx:1070:    if (sheetFilterType === 'close' && filteredShipments.length === 0) {
+src/components/portals/HubShipmentsView.tsx:1087:              if (sheetFilterType === 'close') {
+src/components/portals/HubShipmentsView.tsx:1106:                  if (sheetFilterType === 'close') {
+src/components/portals/ProductCard.tsx:32:    if (durationStr) {
+src/components/portals/ProductCard.tsx:33:      if (durationStr.includes(':')) {
+src/components/portals/ProductCard.tsx:162:    if (!isInCart && onAddToCart) {
+src/components/portals/SellerOrdersView.tsx:23:        if (userObj?.id) {
+src/components/portals/SellerOrdersView.tsx:27:        if (!finalSellerId && userObj?.email) {
+src/components/portals/SellerOrdersView.tsx:31:        if (!finalSellerId) {
+src/components/portals/SellerOrdersView.tsx:33:          if (user) {
+src/components/portals/SellerOrdersView.tsx:39:        if (finalSellerId) {
+src/components/portals/SellerOrdersView.tsx:61:        if (adminData) {
+src/components/portals/SellerOrdersView.tsx:92:        if (activeChip === 'New Order') {
+src/components/portals/SellerOrdersView.tsx:114:        if (!error && data) {
+src/components/portals/SellerOrdersView.tsx:133:      if (data) {
+src/components/portals/SellerOrdersView.tsx:161:    if (sp > 0) {
+src/components/portals/SellerOrdersView.tsx:181:      if (!isTax) {
+src/components/portals/SellerOrdersView.tsx:182:        if (charge.isPercentage) {
+src/components/portals/SellerOrdersView.tsx:196:      if (charge.isTax) {
+src/components/portals/SellerOrdersView.tsx:197:        if (charge.isPercentage) {
+src/components/portals/SellerOrdersView.tsx:246:      if (newStatus === 'Rejected') {
+src/components/portals/SellerOrdersView.tsx:258:        if (orderId) {
+src/components/portals/SellerOrdersView.tsx:269:        if (!shipmentError) {
+src/components/portals/SellerOrdersView.tsx:271:          if (activeChip === 'New Order') {
+src/components/portals/SellerOrdersView.tsx:310:        if (orderId) {
+src/components/portals/SellerOrdersView.tsx:328:        if (!error) {
+src/components/portals/SellerOrdersView.tsx:330:            if (activeChip === 'New Order') {
+src/components/portals/HubLogisticPortal.tsx:33:        if (userObj?.id) {
+src/components/portals/HubLogisticPortal.tsx:41:        if (!record && userObj?.email) {
+src/components/portals/HubLogisticPortal.tsx:49:        if (!record) {
+src/components/portals/HubLogisticPortal.tsx:51:          if (user) {
+src/components/portals/HubLogisticPortal.tsx:60:        if (!record) {
+src/components/portals/HubLogisticPortal.tsx:69:        if (record) {
+src/components/portals/HubLogisticPortal.tsx:102:  if (activePage === 'hub') {
+src/components/portals/HubLogisticPortal.tsx:153:  if (activePage === 'identity') {
+src/components/portals/HubLogisticPortal.tsx:180:  if (activePage === 'bank') {
+src/components/portals/HubLogisticPortal.tsx:305:    if (typeof window !== 'undefined') {
+src/components/portals/HubLogisticPortal.tsx:328:  if (!isLoggedIn) {
+src/components/portals/ProductDetailModal.tsx:82:    if (missingSelections.length > 0) {
+src/components/portals/ProductDetailModal.tsx:93:      if (available.length >= 3 && (available.length - missing.length) >= 2) {
+src/components/portals/ProductDetailModal.tsx:118:        if (currentData && currentData.wives !== null && currentData.wives !== undefined) {
+src/components/portals/ProductDetailModal.tsx:141:        if (data) {
+src/components/portals/ProductDetailModal.tsx:147:          if (serviceCategories.includes(pUploadService)) {
+src/components/portals/ProductDetailModal.tsx:175:    if (checkoutStep === 'add_address' && !editingAddressId && customerData) {
+src/components/portals/ProductDetailModal.tsx:189:      if (!customerData?.mobile_number || customerData.mobile_number === 'N/A') {
+src/components/portals/ProductDetailModal.tsx:199:        if (data && data.length > 0) {
+src/components/portals/ProductDetailModal.tsx:211:          if (!selectedAddressId && mapped.length > 0) {
+src/components/portals/ProductDetailModal.tsx:221:    if (checkoutStep === 'address_selection') {
+src/components/portals/ProductDetailModal.tsx:228:      if (product.seller_id) {
+src/components/portals/ProductDetailModal.tsx:230:        if (data) {
+src/components/portals/ProductDetailModal.tsx:241:      if (saved) {
+src/components/portals/ProductDetailModal.tsx:267:    if (sp > 0) {
+src/components/portals/ProductDetailModal.tsx:286:      if (!isTax) {
+src/components/portals/ProductDetailModal.tsx:287:        if (charge.isPercentage) {
+src/components/portals/ProductDetailModal.tsx:301:      if (charge.isTax) {
+src/components/portals/ProductDetailModal.tsx:302:        if (charge.isPercentage) {
+src/components/portals/ProductDetailModal.tsx:309:      if (sp <= 0) {
+src/components/portals/ProductDetailModal.tsx:365:    if (mainScrollRef.current) {
+src/components/portals/ProductDetailModal.tsx:373:    if (!customerData?.id) {
+src/components/portals/ProductDetailModal.tsx:378:    if (!selectedAddress) {
+src/components/portals/ProductDetailModal.tsx:414:      if (sp > 0) {
+src/components/portals/ProductDetailModal.tsx:428:        if (adminData) {
+src/components/portals/ProductDetailModal.tsx:497:      if (error1) {
+src/components/portals/ProductDetailModal.tsx:498:        if (error1.code === 'PGRST204') {
+src/components/portals/ProductDetailModal.tsx:501:          if (retryError) {
+src/components/portals/ProductDetailModal.tsx:512:      if (error2) {
+src/components/portals/ProductDetailModal.tsx:527:  if (showSellerProfile) {
+src/components/portals/ProductDetailModal.tsx:1038:                  if (available.length >= 3 && (available.length - missing.length) >= 2) {
+src/components/portals/ProductDetailModal.tsx:1042:                  if (missing.length > 0) {
+src/components/portals/ProductDetailModal.tsx:1048:                  if (!isInCart && onAddToCart) {
+src/components/portals/ProductDetailModal.tsx:1074:                  if (available.length >= 3 && (available.length - missing.length) >= 2) {
+src/components/portals/ProductDetailModal.tsx:1078:                  if (missing.length > 0) {
+src/components/portals/ProductDetailModal.tsx:1238:                        if (editingAddressId) {
+src/components/portals/ProductDetailModal.tsx:1248:                        if (error) {
+src/components/portals/ProductDetailModal.tsx:1258:                          if (editingAddressId) {
+src/components/portals/HubDashboardView.tsx:28:        if (dashboardPincodeRef.current && !dashboardPincodeRef.current.contains(event.target as Node)) {
+src/components/portals/HubDashboardView.tsx:37:     if (selectedDashboardPincodes.includes(pin)) {
+src/components/portals/HubDashboardView.tsx:54:        if (!userId) {
+src/components/portals/HubDashboardView.tsx:109:        if (!userId) {
+src/components/portals/HubDashboardView.tsx:117:        if (pincodeData) {
+src/components/portals/HubDashboardView.tsx:134:        if (data) {
+src/components/portals/HubDashboardView.tsx:156:     if (!shipment) {
+src/components/portals/HubDashboardView.tsx:163:     if (selectedDashboardPincodes.length === 0) {
+src/components/portals/HubDashboardView.tsx:170:     if (!shipment.pincode || !selectedDashboardPincodes.includes(shipment.pincode.toString())) {
+src/components/portals/HubDashboardView.tsx:219:  if (showReceivedList) {
+src/components/portals/HubDispatchView.tsx:33:    if (!showCreateBag && currentUserId && !selectedBag) {
+src/components/portals/HubDispatchView.tsx:103:        if (pincodeDropdownRef.current && !pincodeDropdownRef.current.contains(event.target as Node)) {
+src/components/portals/HubDispatchView.tsx:112:    if (onSubPageChange) {
+src/components/portals/HubDispatchView.tsx:122:      if (!uid) {
+src/components/portals/HubDispatchView.tsx:128:      if (uid) {
+src/components/portals/HubDispatchView.tsx:138:    if (showCreateBag) {
+src/components/portals/HubDispatchView.tsx:146:       if (!bagId) {
+src/components/portals/HubDispatchView.tsx:154:     if (selectedHubManagerId) {
+src/components/portals/HubDispatchView.tsx:157:           if (data) {
+src/components/portals/HubDispatchView.tsx:206:      if (error || !data) {
+src/components/portals/HubDispatchView.tsx:214:      if (statusType.includes('delivered') || statusType.includes('returned') || statusType.includes('shipped')) {
+src/components/portals/HubDispatchView.tsx:217:         if (data['assigned hub manager id'] || data['hub manager id']) {
+src/components/portals/HubDispatchView.tsx:229:      if (!statusType.includes('received at hub')) {
+src/components/portals/HubDispatchView.tsx:235:      if (selectedPincodes.length > 0) {
+src/components/portals/HubDispatchView.tsx:236:         if (!data.pincode || !selectedPincodes.includes(data.pincode.toString())) {
+src/components/portals/HubDispatchView.tsx:251:     if (field === 'awb') {
+src/components/portals/HubDispatchView.tsx:285:     if (error || !data || !data['shipment type'] || data['shipment type'].toLowerCase() !== 'dispatched') {
+src/components/portals/HubDispatchView.tsx:292:     if ((data['bag id'] || '') !== receiveBagId.trim()) {
+src/components/portals/HubDispatchView.tsx:297:     if ((data['seal tag'] || '') !== receiveSealTag.trim()) {
+src/components/portals/HubDispatchView.tsx:302:     if ((data['vehicle number'] || '') !== receiveVehicleNumber.trim()) {
+src/components/portals/HubDispatchView.tsx:314:     if (totalShipmentsInBag === 0) {
+src/components/portals/HubDispatchView.tsx:321:        if (count !== null) {
+src/components/portals/HubDispatchView.tsx:337:          if (pData) {
+src/components/portals/HubDispatchView.tsx:390:     if (selectedPincodes.includes(pin)) {
+src/components/portals/HubDispatchView.tsx:399:      if (!tag.trim()) {
+src/components/portals/HubDispatchView.tsx:405:      if (data && data.length > 0) {
+src/components/portals/HubDispatchView.tsx:413:      if (scannedShipments.length === 0) {
+src/components/portals/HubDispatchView.tsx:417:      if (!selectedHubManagerId) {
+src/components/portals/HubDispatchView.tsx:421:      if (!vehicleNumber.trim()) {
+src/components/portals/HubDispatchView.tsx:425:      if (sealTagError) {
+src/components/portals/HubDispatchView.tsx:468:          if (orderIds.length > 0) {
+src/components/portals/HubDispatchView.tsx:470:              if (coData && coData.length > 0) {
+src/components/portals/HubDispatchView.tsx:505:  if (showCreateBag) {
+src/components/portals/HubDispatchView.tsx:672:    if (isLoadingLists) {
+src/components/portals/HubDispatchView.tsx:675:    if (bags.length === 0) {
+src/components/portals/HubDispatchView.tsx:699:  if (showReceivedList) {
+src/components/portals/HubDispatchView.tsx:799:  if (selectedBag) {
+src/components/portals/LogoutModal.tsx:34:    if (onLogoutSuccess) {
+src/components/portals/LogoutModal.tsx:38:      if (key) {
+src/components/portals/AdminPortal.tsx:87:      if (!error && data) {
+src/components/portals/AdminPortal.tsx:100:    if (showProfile) {
+src/components/portals/AdminPortal.tsx:119:      if (adminProfileId) {
+src/components/portals/AdminPortal.tsx:125:        if (data) {
+src/components/portals/AdminPortal.tsx:132:      if (authData?.user) {
+src/components/portals/AdminPortal.tsx:151:      if (adminProfile.email) {
+src/components/portals/AdminPortal.tsx:158:          if (!res.ok) {
+src/components/portals/AdminPortal.tsx:202:      if (error) {
+src/components/portals/AdminPortal.tsx:213:        if (activeUserType === 'Customer ID') {
+src/components/portals/AdminPortal.tsx:252:      if (v === 'createId') {
+src/components/portals/AdminPortal.tsx:267:        if (validTypes.includes(typeStr as any)) {
+src/components/portals/AdminPortal.tsx:291:    if (window.history.state?.adminView === 'profile') {
+src/components/portals/AdminPortal.tsx:310:    if (window.history.state?.adminView === 'createId') {
+src/components/portals/AdminPortal.tsx:322:    if (validTypes.includes(userType as any)) {
+src/components/portals/AdminPortal.tsx:331:    if (window.history.state?.adminView === 'userSetup') {
+src/components/portals/AdminPortal.tsx:392:    if (showHubManagersPincodeService) {
+src/components/portals/AdminPortal.tsx:399:    if (selectedHubManagerForPincode) {
+src/components/portals/AdminPortal.tsx:412:    if (pin.length === 6 && /^[0-9]+$/.test(pin)) {
+src/components/portals/AdminPortal.tsx:413:      if (!currentManagerPincodes.includes(pin)) {
+src/components/portals/AdminPortal.tsx:427:    if (!selectedHubManagerForPincode) {
+src/components/portals/AdminPortal.tsx:441:      if (currentManagerPincodes.length > 0) {
+src/components/portals/AdminPortal.tsx:477:    if (typeof window !== 'undefined') {
+src/components/portals/AdminPortal.tsx:483:    if (typeof window !== 'undefined') {
+src/components/portals/AdminPortal.tsx:503:      if (showRiderServiceRate) {
+src/components/portals/AdminPortal.tsx:506:        if (ridersData) {
+src/components/portals/AdminPortal.tsx:508:          if (ridersData.length > 0 && !specificSelectedRider) {
+src/components/portals/AdminPortal.tsx:532:        if (activeRate) {
+src/components/portals/AdminPortal.tsx:549:      if (showRiderServiceRate && specificSelectedRider) {
+src/components/portals/AdminPortal.tsx:551:        if (data) {
+src/components/portals/AdminPortal.tsx:557:          if (data.rank) {
+src/components/portals/AdminPortal.tsx:582:      if (!error && data) {
+src/components/portals/AdminPortal.tsx:602:        if (data.other_charges) {
+src/components/portals/AdminPortal.tsx:618:    if (showEarningChart) {
+src/components/portals/AdminPortal.tsx:625:      if (selectedPortalSetup === 'Services Visual Setup') {
+src/components/portals/AdminPortal.tsx:627:        if (data) {
+src/components/portals/AdminPortal.tsx:629:          if (data.length > 0) {
+src/components/portals/AdminPortal.tsx:643:    if (seller) {
+src/components/portals/AdminPortal.tsx:656:      if (error) {
+src/components/portals/AdminPortal.tsx:657:        if (error.message?.includes('column "upload_service_visible" of relation "sellers" does not exist')) {
+src/components/portals/AdminPortal.tsx:684:        if (standardKeys.includes(charge.name)) {
+src/components/portals/AdminPortal.tsx:691:      if (earningChartId) {
+src/components/portals/AdminPortal.tsx:695:        if (!error && data) {
+src/components/portals/AdminPortal.tsx:796:    if (validTypes.includes(typeLabel as any)) {
+src/components/portals/AdminPortal.tsx:817:  if (isCreatingUserId) {
+src/components/portals/AdminPortal.tsx:839:  if (showProfile) {
+src/components/portals/AdminPortal.tsx:974:  if (selectedUserIdSetup) {
+src/components/portals/AdminPortal.tsx:1494:                            if (e.key === 'Enter') {
+src/components/portals/AdminPortal.tsx:1787:                          if (activeRateRank === 'Regular') {
+src/components/portals/AdminPortal.tsx:1802:                          if (activeRateRank === 'Regular') {
+src/components/portals/AdminPortal.tsx:1817:                          if (activeRateRank === 'Regular') {
+src/components/portals/AdminPortal.tsx:1851:                         if (activeRateRank === 'Regular') {
+src/components/portals/AdminPortal.tsx:1852:                           if (specificSelectedRider) {
+src/components/portals/AdminPortal.tsx:1864:                           if (existingActive) {
+src/components/portals/AdminPortal.tsx:1881:                           if (error) {
+src/components/portals/AdminPortal.tsx:1882:                             if (error.code === '42P01') {
+src/components/portals/AdminPortal.tsx:1892:                           if (existingRider) {
+src/components/portals/AdminPortal.tsx:1912:                           if (error) {
+src/components/portals/AdminPortal.tsx:1913:                             if (error.code === '42P01') {
+src/components/portals/AdminPortal.tsx:1925:                         if (ratesData) {
+src/components/portals/CreateUserIdPage.tsx:199:    if (initialType === 'Customer') {
+src/components/portals/CreateUserIdPage.tsx:283:    if (selectedType === 'Customer') {
+src/components/portals/CreateUserIdPage.tsx:391:      if (!isEditing) {
+src/components/portals/CreateUserIdPage.tsx:405:        if (!res.ok) {
+src/components/portals/CreateUserIdPage.tsx:416:      if (isEditing) {
+src/components/portals/CreateUserIdPage.tsx:425:      if (insertError) {
+src/components/portals/CreateUserIdPage.tsx:429:      if (isEditing) {
+src/components/portals/CreateUserIdPage.tsx:432:        if (onUserCreated) {
+src/components/portals/CreateUserIdPage.tsx:453:      if (onUserCreated) {
+src/components/portals/RiderPortal.tsx:27:        if (user) {
+src/components/portals/RiderPortal.tsx:36:        if (!record) {
+src/components/portals/RiderPortal.tsx:42:          if (data) {
+src/components/portals/RiderPortal.tsx:50:        if (record) {
+src/components/portals/RiderPortal.tsx:93:  if (activePage === 'personal') {
+src/components/portals/RiderPortal.tsx:136:  if (activePage === 'identity') {
+src/components/portals/RiderPortal.tsx:168:  if (activePage === 'service_rate') {
+src/components/portals/RiderPortal.tsx:232:  if (activePage === 'bank') {
+src/components/portals/RiderPortal.tsx:343:            if (onLogout) {
+src/components/portals/RiderPortal.tsx:377:        if (session) {
+src/components/portals/RiderPortal.tsx:399:  if (!isLoggedIn) {
+src/components/portals/AdminLiveShipmentCard.tsx:25:        if (!userId) {
+src/components/portals/SellerPortal.tsx:56:        if (userObj?.id) {
+src/components/portals/SellerPortal.tsx:64:        if (!sellerRecord && userObj?.email) {
+src/components/portals/SellerPortal.tsx:72:        if (!sellerRecord) {
+src/components/portals/SellerPortal.tsx:74:          if (user) {
+src/components/portals/SellerPortal.tsx:83:        if (!sellerRecord) {
+src/components/portals/SellerPortal.tsx:92:        if (sellerRecord) {
+src/components/portals/SellerPortal.tsx:122:  if (activePage === 'business') {
+src/components/portals/SellerPortal.tsx:176:  if (activePage === 'documents') {
+src/components/portals/SellerPortal.tsx:235:  if (activePage === 'bank') {
+src/components/portals/SellerPortal.tsx:360:    if (typeof window !== 'undefined') {
+src/components/portals/SellerPortal.tsx:376:    if (mainContent) {
+src/components/portals/SellerPortal.tsx:396:      if (isLoggedIn) {
+src/components/portals/SellerPortal.tsx:403:          if (userObj?.id) {
+src/components/portals/SellerPortal.tsx:407:          if (!sellerRecord && userObj?.email) {
+src/components/portals/SellerPortal.tsx:411:          if (!sellerRecord) {
+src/components/portals/SellerPortal.tsx:413:            if (user) {
+src/components/portals/SellerPortal.tsx:419:          if (sellerRecord) {
+src/components/portals/SellerPortal.tsx:420:            if (sellerRecord.id) {
+src/components/portals/SellerPortal.tsx:423:            if (sellerRecord.gstin && sellerRecord.gstin !== 'N/A') {
+src/components/portals/SellerPortal.tsx:426:            if (sellerRecord.upload_service_visible === true) {
+src/components/portals/SellerPortal.tsx:447:      if (e.state?.sellerView !== 'upload') {
+src/components/portals/SellerPortal.tsx:473:    if (window.history.state?.sellerView === 'upload') {
+src/components/portals/SellerPortal.tsx:478:  if (isUploadingProduct) {
+src/components/portals/SellerPortal.tsx:498:  if (!isLoggedIn) {

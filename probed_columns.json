@@ -1,0 +1,138 @@
+{
+  "profiles": [
+    "id"
+  ],
+  "customers": [
+    "id"
+  ],
+  "sellers": [
+    "id"
+  ],
+  "riders": [
+    "id"
+  ],
+  "hub_managers": [
+    "id"
+  ],
+  "clusters": [
+    "id"
+  ],
+  "admins": [
+    "id"
+  ],
+  "customer_orders": [
+    "id",
+    "awb number",
+    "mobile number"
+  ],
+  "accepted_shipments": [
+    "id",
+    "awb number",
+    "mobile number"
+  ],
+  "finished_shipments": [
+    "id",
+    "awb number",
+    "mobile number"
+  ],
+  "added_riders": [
+    "id"
+  ],
+  "carts": [
+    "id",
+    "mobile number"
+  ],
+  "cash_with_admin": [
+    "id"
+  ],
+  "cash_with_clusters": [
+    "id"
+  ],
+  "cash_with_hub_managers": [
+    "id"
+  ],
+  "cash_with_riders": [
+    "id"
+  ],
+  "contact_link": [
+    "id"
+  ],
+  "customer_address": [
+    "id",
+    "mobile number"
+  ],
+  "finished_clusters_payable_amount": [
+    "id"
+  ],
+  "finished_customers_payable_amount": [
+    "id"
+  ],
+  "finished_hub_managers_payable_amount": [
+    "id"
+  ],
+  "finished_riders_payable_amount": [
+    "id"
+  ],
+  "finished_sellers_payable_amount": [
+    "id"
+  ],
+  "fixed_hub_manager_salary": [
+    "id"
+  ],
+  "gift_cash": [
+    "id"
+  ],
+  "hub_manager_salary": [
+    "id"
+  ],
+  "hub_managers_penalty": [
+    "id"
+  ],
+  "inactive_products": [
+    "id",
+    "mobile number"
+  ],
+  "rider_live_work_flow": [
+    "id"
+  ],
+  "rider_rate_setting": [
+    "id"
+  ],
+  "rider_rate_setting_with_cluster": [
+    "id"
+  ],
+  "rider_service_rates": [
+    "id"
+  ],
+  "rider_shipment_work_flow": [
+    "id"
+  ],
+  "riders_penalty": [
+    "id"
+  ],
+  "save_in_draft": [
+    "id",
+    "mobile number"
+  ],
+  "sellers_for_approval": [
+    "id"
+  ],
+  "selller_income_estimate": [
+    "id",
+    "awb number"
+  ],
+  "settled_hub_manager_salary": [
+    "id"
+  ],
+  "settled_rider_shipments": [
+    "id"
+  ],
+  "settled_selller_income_estimate": [
+    "id",
+    "awb number"
+  ],
+  "upload_products": [
+    "id",
+    "mobile number"
+  ]
+}

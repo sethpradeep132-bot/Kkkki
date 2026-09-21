@@ -1,0 +1,112 @@
+    const handleMarkAsDone = async () => {
+    if (!isCustomerDelivery && isQcPass && pinInput !== task['pickup pin']) {
+      setPinError(true);
+      return;
+    }
+    if (!signatory) {
+      alert("Please select Self, Customer, or Other for signature.");
+      return;
+    }
+    setPinError(false);
+    setLoading(true);
+
+    try {
+      const dateStr = new Date().toLocaleString('en-IN');
+      let qty = parseInt(task['total quantity'] || task['quantity'] || '1', 10);
+      if (isNaN(qty) || qty < 1) qty = 1;
+
+      const sigBase64 = getSignatureWithText();
+      let finalCapturedImages = '';
+      if (capturedImages.length > 0) {
+         const compressed = await Promise.all(capturedImages.map(img => compressImage(img)));
+         finalCapturedImages = compressed.join('|||');
+      }
+
+      if (onLocalUpdate) {
+          onLocalUpdate({ type: isQcPass ? 'pass' : 'fail', capturedImage: finalCapturedImages, sigBase64, signatory, dateStr });
+          return;
+      }
+
+      // Just generate one AWB since each quantity unit is now its own separate task/row
+      const awb = await generateUniqueAwb();
+
+
+      const currentOrderStatus = task['order status'] || '';
+      const currentShipmentStatus = task['shipment status'] || '';
+      const currentCallDetails = task['call details'] || '';
+
+      // Fetch latest order status from customer_orders to ensure we append perfectly without losing history
+      let latestCoStatus = currentOrderStatus;
+      if (task['order ID']) {
+        const { data: coData } = await supabase.from('customer_orders').select('"order status"').eq('order ID', task['order ID']).maybeSingle();
+        if (coData) latestCoStatus = coData['order status'] || '';
+      }
+
+
+      const newCallDetails = currentCallDetails + `\nCall attempt: 1, Call duration: 00:00, Call recording - ${dateStr}`;
+
+      let riderName = 'Unknown';
+      let riderId = task['Rider id'] || '';
+      if (riderId) {
+         const { data: riderData } = await supabase.from('riders').select('rider_name').eq('id', riderId).maybeSingle();
+         if (riderData && riderData.rider_name) riderName = riderData.rider_name;
+      }
+
+      if (isQcPass) {
+         const orderUpdateLine = `Your order has been picked up successfully on ${dateStr} - Order ID: ${task['order ID']}`;
+         const shipmentUpdateLine = `Order Picked up AWB Number: ${awb} by ${riderName} (ID: ${riderId}) on ${dateStr}`;
+
+         const newOrderStatus = currentOrderStatus + (currentOrderStatus ? '\n' : '') + orderUpdateLine;
+         const newShipmentStatus = currentShipmentStatus + (currentShipmentStatus ? '\n' : '') + shipmentUpdateLine;
+
+         const currentAttempt = parseInt(task['attempt'] || '0');
+         const payload: any = {
+             'shipment type': isCustomerDelivery ? 'delivered' : 'picked up',
+             
+             'awb number': awb,
+             'pickup pin': '',
+             'call details': newCallDetails,
+             'digital signature': sigBase64 ? (signatory ? `${sigBase64}|||Selected Option: ${signatory}` : sigBase64) : ''
+         };
+         
+         if ((task['shipment type'] || '').toLowerCase() === 'out for delivery' && (task['shipment tag'] || '').toLowerCase() === 'customer delivery') {
+             let calculatedDays = 1;
+             if (task.created_at) {
+                 const diff = new Date().getTime() - new Date(task.created_at).getTime();
+                 calculatedDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+                 if (calculatedDays < 1) calculatedDays = 1;
+             } else {
+                 const currentDays = parseInt(task['days'] || '0', 10);
+                 calculatedDays = currentDays > 0 ? currentDays : 1;
+             }
+             payload['days'] = calculatedDays;
+             supabase.from('selller_income_estimate').update({ days: calculatedDays }).eq('order id', task['order ID']).then();
+         }
+         
+         payload['shipment status'] = await buildShipmentStatus(isCustomerDelivery ? 'Delivered' : 'Picked up', task, payload);
+         const nextAttempt = await getNextAttempt(task, isCustomerDelivery && payload['shipment type'] === 'delivered');
+         if (nextAttempt) payload['attempt'] = nextAttempt;
+         if (finalCapturedImages) {
+             payload['captured images'] = task['captured images'] ? task['captured images'] + '|||' + finalCapturedImages : finalCapturedImages;
+         }
+
+         await updateAcceptedShipment(payload, task.id, task);
+         
+         // Update exactly one corresponding row in customer_orders to avoid overwriting all split rows
+         const { data: coRows } = await supabase.from('customer_orders').select('id, "order status", "awb number"').eq('order ID', task['order ID']);
+         if (coRows && coRows.length > 0) {
+            let targetRow = coRows.find(r => !r['awb number'] || r['awb number'].trim() === '');
+            if (!targetRow) targetRow = coRows[0];
+            const currentCoStatus = targetRow['order status'] || '';
+            /* disabled customer_orders update */
+         }
+         
+      } else {
+         const shipmentUpdateLine = (task['shipment tag'] || '').toLowerCase().includes('seller pickup') 
+            ? `QC Failed Pickup on ${dateStr} by Rider: ${riderName}` 
+            : `Your order has been cancelled on ${dateStr} - Order ID: ${task['order ID']}`;
+         const newShipmentStatus = currentShipmentStatus + (currentShipmentStatus ? '\n' : '') + shipmentUpdateLine;
+            
+         const currentAttempt = parseInt(task['attempt'] || '0');
+         let newShipType = 'faild pickup';
+         let newShipTag = task['shipment tag'];
