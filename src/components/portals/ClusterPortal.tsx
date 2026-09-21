@@ -594,12 +594,21 @@ export const ClusterPortal: React.FC<PortalProps> = ({ onBack }) => {
     { value: '48:5', label: '48:5 (48 Hrs : 5 Days)' },
   ];
 
-  const parseRatio = (ratioStr: string): { hours: number; days: number } => {
-    if (!ratioStr) return { hours: 1, days: 2 };
+  const parseScheduleDays = (scheduleStr: string | null | undefined): number | null => {
+    if (!scheduleStr || scheduleStr.trim().toLowerCase() === 'none') return null;
+    const match = scheduleStr.match(/^(\d+)\s*Days?/i);
+    if (match) {
+      return parseInt(match[1], 10);
+    }
+    return null;
+  };
+
+  const parseRatio = (ratioStr: string): { hours: number; days: number; isNone: boolean } => {
+    if (!ratioStr || ratioStr.trim().toLowerCase() === 'none') return { hours: 0, days: 0, isNone: true };
     const parts = ratioStr.split(':').map(p => parseFloat(p.trim()));
     const hours = isNaN(parts[0]) || parts[0] <= 0 ? 1 : parts[0];
     const days = isNaN(parts[1]) || parts[1] <= 0 ? 2 : parts[1];
-    return { hours, days };
+    return { hours, days, isNone: false };
   };
 
   const getSavedClusterSecureTx = () => {
@@ -639,361 +648,43 @@ export const ClusterPortal: React.FC<PortalProps> = ({ onBack }) => {
   const [newMethodLink, setNewMethodLink] = useState('');
   const [secureSaveSuccess, setSecureSaveSuccess] = useState(false);
 
-  // Customer Settings
-  const [secureCustomerLockState, setSecureCustomerLockState] = useState<'Lock' | 'Release'>(
-    savedClusterTx?.customerLockState || 'Lock'
-  );
-  const [secureCustomerAutoMode, setSecureCustomerAutoMode] = useState<boolean>(
-    savedClusterTx?.customerAutoMode ?? false
-  );
-  const [secureCustomerAutoActiveTime, setSecureCustomerAutoActiveTime] = useState<string | null>(
-    savedClusterTx?.customerAutoActiveTime || null
-  );
-  const [secureCustomerSchedule, setSecureCustomerSchedule] = useState<string>(
-    savedClusterTx?.customerSchedule || '0 Days'
-  );
-  const [secureCustomerRatio, setSecureCustomerRatio] = useState<string>(
-    savedClusterTx?.customerRatio || '1:2'
-  );
-  const [secureCustomerLockedSnapshotIds, setSecureCustomerLockedSnapshotIds] = useState<string[] | null>(
-    savedClusterTx?.customerLockedSnapshotIds || null
-  );
-  const [secureCustomerLockedAt, setSecureCustomerLockedAt] = useState<number | null>(
-    savedClusterTx?.customerLockedAt || null
-  );
-  const [secureCustomerReleasedAt, setSecureCustomerReleasedAt] = useState<number | null>(
-    savedClusterTx?.customerReleasedAt || null
-  );
+  // Master Secure Transaction Settings from Admin Portal (Single Source of Truth)
+  const [masterAdminSettings, setMasterAdminSettings] = useState<any>(() => {
+    try {
+      const raw = typeof window !== 'undefined' ? localStorage.getItem('ss_secure_tx_settings_admin') : null;
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) {
+      return null;
+    }
+  });
 
-  // Seller Settings
-  const [secureSellerLockState, setSecureSellerLockState] = useState<'Lock' | 'Release'>(
-    savedClusterTx?.sellerLockState || 'Lock'
-  );
-  const [secureSellerAutoMode, setSecureSellerAutoMode] = useState<boolean>(
-    savedClusterTx?.sellerAutoMode ?? false
-  );
-  const [secureSellerAutoActiveTime, setSecureSellerAutoActiveTime] = useState<string | null>(
-    savedClusterTx?.sellerAutoActiveTime || null
-  );
-  const [secureSellerSchedule, setSecureSellerSchedule] = useState<string>(
-    savedClusterTx?.sellerSchedule || '0 Days'
-  );
-  const [secureSellerRatio, setSecureSellerRatio] = useState<string>(
-    savedClusterTx?.sellerRatio || '1:2'
-  );
-  const [secureSellerLockedSnapshotIds, setSecureSellerLockedSnapshotIds] = useState<string[] | null>(
-    savedClusterTx?.sellerLockedSnapshotIds || null
-  );
-  const [secureSellerLockedAt, setSecureSellerLockedAt] = useState<number | null>(
-    savedClusterTx?.sellerLockedAt || null
-  );
-  const [secureSellerReleasedAt, setSecureSellerReleasedAt] = useState<number | null>(
-    savedClusterTx?.sellerReleasedAt || null
-  );
-
-  // Rider Settings
-  const [secureRiderLockState, setSecureRiderLockState] = useState<'Lock' | 'Release'>(
-    savedClusterTx?.riderLockState || 'Lock'
-  );
-  const [secureRiderAutoMode, setSecureRiderAutoMode] = useState<boolean>(
-    savedClusterTx?.riderAutoMode ?? false
-  );
-  const [secureRiderAutoActiveTime, setSecureRiderAutoActiveTime] = useState<string | null>(
-    savedClusterTx?.riderAutoActiveTime || null
-  );
-  const [secureRiderSchedule, setSecureRiderSchedule] = useState<string>(
-    savedClusterTx?.riderSchedule || '0 Days'
-  );
-  const [secureRiderRatio, setSecureRiderRatio] = useState<string>(
-    savedClusterTx?.riderRatio || '1:2'
-  );
-  const [secureRiderLockedSnapshotIds, setSecureRiderLockedSnapshotIds] = useState<string[] | null>(
-    savedClusterTx?.riderLockedSnapshotIds || null
-  );
-  const [secureRiderLockedAt, setSecureRiderLockedAt] = useState<number | null>(
-    savedClusterTx?.riderLockedAt || null
-  );
-  const [secureRiderReleasedAt, setSecureRiderReleasedAt] = useState<number | null>(
-    savedClusterTx?.riderReleasedAt || null
-  );
-
-  // Hub Manager Settings
-  const [secureHmLockState, setSecureHmLockState] = useState<'Lock' | 'Release'>(
-    savedClusterTx?.hmLockState || 'Lock'
-  );
-  const [secureHmAutoMode, setSecureHmAutoMode] = useState<boolean>(
-    savedClusterTx?.hmAutoMode ?? false
-  );
-  const [secureHmAutoActiveTime, setSecureHmAutoActiveTime] = useState<string | null>(
-    savedClusterTx?.hmAutoActiveTime || null
-  );
-  const [secureHmSchedule, setSecureHmSchedule] = useState<string>(
-    savedClusterTx?.hmSchedule || '0 Days'
-  );
-  const [secureHmRatio, setSecureHmRatio] = useState<string>(
-    savedClusterTx?.hmRatio || '1:2'
-  );
-  const [secureHmLockedSnapshotIds, setSecureHmLockedSnapshotIds] = useState<string[] | null>(
-    savedClusterTx?.hmLockedSnapshotIds || null
-  );
-  const [secureHmLockedAt, setSecureHmLockedAt] = useState<number | null>(
-    savedClusterTx?.hmLockedAt || null
-  );
-  const [secureHmReleasedAt, setSecureHmReleasedAt] = useState<number | null>(
-    savedClusterTx?.hmReleasedAt || null
-  );
-
-  // Effective Lists based on Lock/Release state
-  const effectiveCustomerPayableList = (secureCustomerLockState === 'Lock' && secureCustomerLockedSnapshotIds)
-    ? customerPayableList.filter(c => secureCustomerLockedSnapshotIds.includes(c.id))
-    : customerPayableList;
-
-  const effectiveSellerPayableList = (secureSellerLockState === 'Lock' && secureSellerLockedSnapshotIds)
-    ? sellerPayableList.filter(s => secureSellerLockedSnapshotIds.includes(s.id))
-    : sellerPayableList;
-
-  const effectiveRiderPayableList = (secureRiderLockState === 'Lock' && secureRiderLockedSnapshotIds)
-    ? riderPayableList.filter(r => secureRiderLockedSnapshotIds.includes(r.id))
-    : riderPayableList;
-
-  const effectiveHmPayableList = (secureHmLockState === 'Lock' && secureHmLockedSnapshotIds)
-    ? hmPayableList.filter(h => secureHmLockedSnapshotIds.includes(h.id))
-    : hmPayableList;
-
-  // Real-time Auto Mode cycle
   useEffect(() => {
-    const interval = setInterval(() => {
-      const now = Date.now();
-      let updated = false;
-
-      // Customer Auto Cycle
-      if (secureCustomerAutoMode) {
-        const { hours, days } = parseRatio(secureCustomerRatio);
-        if (secureCustomerLockState === 'Lock') {
-          const lockMs = secureCustomerSchedule === 'Instant' ? 10000 : Math.max(10000, hours * 3600 * 1000);
-          const start = secureCustomerLockedAt || now;
-          if (now - start >= lockMs) {
-            setSecureCustomerLockState('Release');
-            setSecureCustomerLockedSnapshotIds(null);
-            setSecureCustomerReleasedAt(now);
-            updated = true;
-          }
-        } else if (secureCustomerLockState === 'Release') {
-          const relMs = secureCustomerSchedule === 'Instant' ? 10000 : Math.max(10000, days * 3600 * 1000);
-          const start = secureCustomerReleasedAt || now;
-          if (now - start >= relMs) {
-            setSecureCustomerLockState('Lock');
-            setSecureCustomerLockedSnapshotIds(customerPayableList.map(c => c.id));
-            setSecureCustomerLockedAt(now);
-            updated = true;
-          }
+    const syncFromAdmin = () => {
+      try {
+        const raw = localStorage.getItem('ss_secure_tx_settings_admin');
+        if (raw) {
+          setMasterAdminSettings(JSON.parse(raw));
         }
-      }
-
-      // Seller Auto Cycle
-      if (secureSellerAutoMode) {
-        const { hours, days } = parseRatio(secureSellerRatio);
-        if (secureSellerLockState === 'Lock') {
-          const lockMs = secureSellerSchedule === 'Instant' ? 10000 : Math.max(10000, hours * 3600 * 1000);
-          const start = secureSellerLockedAt || now;
-          if (now - start >= lockMs) {
-            setSecureSellerLockState('Release');
-            setSecureSellerLockedSnapshotIds(null);
-            setSecureSellerReleasedAt(now);
-            updated = true;
-          }
-        } else if (secureSellerLockState === 'Release') {
-          const relMs = secureSellerSchedule === 'Instant' ? 10000 : Math.max(10000, days * 3600 * 1000);
-          const start = secureSellerReleasedAt || now;
-          if (now - start >= relMs) {
-            setSecureSellerLockState('Lock');
-            setSecureSellerLockedSnapshotIds(sellerPayableList.map(s => s.id));
-            setSecureSellerLockedAt(now);
-            updated = true;
-          }
-        }
-      }
-
-      // Rider Auto Cycle
-      if (secureRiderAutoMode) {
-        const { hours, days } = parseRatio(secureRiderRatio);
-        if (secureRiderLockState === 'Lock') {
-          const lockMs = secureRiderSchedule === 'Instant' ? 10000 : Math.max(10000, hours * 3600 * 1000);
-          const start = secureRiderLockedAt || now;
-          if (now - start >= lockMs) {
-            setSecureRiderLockState('Release');
-            setSecureRiderLockedSnapshotIds(null);
-            setSecureRiderReleasedAt(now);
-            updated = true;
-          }
-        } else if (secureRiderLockState === 'Release') {
-          const relMs = secureRiderSchedule === 'Instant' ? 10000 : Math.max(10000, days * 3600 * 1000);
-          const start = secureRiderReleasedAt || now;
-          if (now - start >= relMs) {
-            setSecureRiderLockState('Lock');
-            setSecureRiderLockedSnapshotIds(riderPayableList.map(r => r.id));
-            setSecureRiderLockedAt(now);
-            updated = true;
-          }
-        }
-      }
-
-      // Hub Manager Auto Cycle
-      if (secureHmAutoMode) {
-        const { hours, days } = parseRatio(secureHmRatio);
-        if (secureHmLockState === 'Lock') {
-          const lockMs = secureHmSchedule === 'Instant' ? 10000 : Math.max(10000, hours * 3600 * 1000);
-          const start = secureHmLockedAt || now;
-          if (now - start >= lockMs) {
-            setSecureHmLockState('Release');
-            setSecureHmLockedSnapshotIds(null);
-            setSecureHmReleasedAt(now);
-            updated = true;
-          }
-        } else if (secureHmLockState === 'Release') {
-          const relMs = secureHmSchedule === 'Instant' ? 10000 : Math.max(10000, days * 3600 * 1000);
-          const start = secureHmReleasedAt || now;
-          if (now - start >= relMs) {
-            setSecureHmLockState('Lock');
-            setSecureHmLockedSnapshotIds(hmPayableList.map(h => h.id));
-            setSecureHmLockedAt(now);
-            updated = true;
-          }
-        }
-      }
-
-      if (updated) {
-        try {
-          const payload = {
-            customerLockState: secureCustomerLockState,
-            customerAutoMode: secureCustomerAutoMode,
-            customerAutoActiveTime: secureCustomerAutoActiveTime,
-            customerSchedule: secureCustomerSchedule,
-            customerRatio: secureCustomerRatio,
-            customerLockedSnapshotIds: secureCustomerLockedSnapshotIds,
-            customerLockedAt: secureCustomerLockedAt,
-            customerReleasedAt: secureCustomerReleasedAt,
-
-            sellerLockState: secureSellerLockState,
-            sellerAutoMode: secureSellerAutoMode,
-            sellerAutoActiveTime: secureSellerAutoActiveTime,
-            sellerSchedule: secureSellerSchedule,
-            sellerRatio: secureSellerRatio,
-            sellerLockedSnapshotIds: secureSellerLockedSnapshotIds,
-            sellerLockedAt: secureSellerLockedAt,
-            sellerReleasedAt: secureSellerReleasedAt,
-
-            riderLockState: secureRiderLockState,
-            riderAutoMode: secureRiderAutoMode,
-            riderAutoActiveTime: secureRiderAutoActiveTime,
-            riderSchedule: secureRiderSchedule,
-            riderRatio: secureRiderRatio,
-            riderLockedSnapshotIds: secureRiderLockedSnapshotIds,
-            riderLockedAt: secureRiderLockedAt,
-            riderReleasedAt: secureRiderReleasedAt,
-
-            hmLockState: secureHmLockState,
-            hmAutoMode: secureHmAutoMode,
-            hmAutoActiveTime: secureHmAutoActiveTime,
-            hmSchedule: secureHmSchedule,
-            hmRatio: secureHmRatio,
-            hmLockedSnapshotIds: secureHmLockedSnapshotIds,
-            hmLockedAt: secureHmLockedAt,
-            hmReleasedAt: secureHmReleasedAt,
-
-            selectedPaymentType,
-            paymentMethodsList,
-            selectedPaymentMethods,
-          };
-          localStorage.setItem('ss_secure_tx_settings_cluster', JSON.stringify(payload));
-        } catch (e) {}
-      }
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [
-    secureCustomerAutoMode, secureCustomerLockState, secureCustomerSchedule, secureCustomerRatio, secureCustomerLockedAt, secureCustomerReleasedAt,
-    secureSellerAutoMode, secureSellerLockState, secureSellerSchedule, secureSellerRatio, secureSellerLockedAt, secureSellerReleasedAt,
-    secureRiderAutoMode, secureRiderLockState, secureRiderSchedule, secureRiderRatio, secureRiderLockedAt, secureRiderReleasedAt,
-    secureHmAutoMode, secureHmLockState, secureHmSchedule, secureHmRatio, secureHmLockedAt, secureHmReleasedAt,
-    customerPayableList, sellerPayableList, riderPayableList, hmPayableList,
-    selectedPaymentType, paymentMethodsList, selectedPaymentMethods
-  ]);
+      } catch (e) {}
+    };
+    syncFromAdmin();
+    window.addEventListener('storage', syncFromAdmin);
+    window.addEventListener('secure_tx_settings_updated', syncFromAdmin);
+    const interval = setInterval(syncFromAdmin, 1000);
+    return () => {
+      window.removeEventListener('storage', syncFromAdmin);
+      window.removeEventListener('secure_tx_settings_updated', syncFromAdmin);
+      clearInterval(interval);
+    };
+  }, []);
 
   const handleSaveSecureSettings = () => {
     try {
-      const now = Date.now();
-      const custSnapshot = secureCustomerLockState === 'Lock' 
-        ? (secureCustomerLockedSnapshotIds || customerPayableList.map(c => c.id))
-        : null;
-      const sellerSnapshot = secureSellerLockState === 'Lock'
-        ? (secureSellerLockedSnapshotIds || sellerPayableList.map(s => s.id))
-        : null;
-      const riderSnapshot = secureRiderLockState === 'Lock'
-        ? (secureRiderLockedSnapshotIds || riderPayableList.map(r => r.id))
-        : null;
-      const hmSnapshot = secureHmLockState === 'Lock'
-        ? (secureHmLockedSnapshotIds || hmPayableList.map(h => h.id))
-        : null;
-
-      setSecureCustomerLockedSnapshotIds(custSnapshot);
-      if (secureCustomerLockState === 'Lock' && !secureCustomerLockedAt) setSecureCustomerLockedAt(now);
-      if (secureCustomerLockState === 'Release') { setSecureCustomerLockedAt(null); setSecureCustomerReleasedAt(now); }
-
-      setSecureSellerLockedSnapshotIds(sellerSnapshot);
-      if (secureSellerLockState === 'Lock' && !secureSellerLockedAt) setSecureSellerLockedAt(now);
-      if (secureSellerLockState === 'Release') { setSecureSellerLockedAt(null); setSecureSellerReleasedAt(now); }
-
-      setSecureRiderLockedSnapshotIds(riderSnapshot);
-      if (secureRiderLockState === 'Lock' && !secureRiderLockedAt) setSecureRiderLockedAt(now);
-      if (secureRiderLockState === 'Release') { setSecureRiderLockedAt(null); setSecureRiderReleasedAt(now); }
-
-      setSecureHmLockedSnapshotIds(hmSnapshot);
-      if (secureHmLockState === 'Lock' && !secureHmLockedAt) setSecureHmLockedAt(now);
-      if (secureHmLockState === 'Release') { setSecureHmLockedAt(null); setSecureHmReleasedAt(now); }
-
       const payload = {
-        customerLockState: secureCustomerLockState,
-        customerAutoMode: secureCustomerAutoMode,
-        customerAutoActiveTime: secureCustomerAutoActiveTime,
-        customerSchedule: secureCustomerSchedule,
-        customerRatio: secureCustomerRatio,
-        customerLockedSnapshotIds: custSnapshot,
-        customerLockedAt: secureCustomerLockState === 'Lock' ? (secureCustomerLockedAt || now) : null,
-        customerReleasedAt: secureCustomerLockState === 'Release' ? now : null,
-
-        sellerLockState: secureSellerLockState,
-        sellerAutoMode: secureSellerAutoMode,
-        sellerAutoActiveTime: secureSellerAutoActiveTime,
-        sellerSchedule: secureSellerSchedule,
-        sellerRatio: secureSellerRatio,
-        sellerLockedSnapshotIds: sellerSnapshot,
-        sellerLockedAt: secureSellerLockState === 'Lock' ? (secureSellerLockedAt || now) : null,
-        sellerReleasedAt: secureSellerLockState === 'Release' ? now : null,
-
-        riderLockState: secureRiderLockState,
-        riderAutoMode: secureRiderAutoMode,
-        riderAutoActiveTime: secureRiderAutoActiveTime,
-        riderSchedule: secureRiderSchedule,
-        riderRatio: secureRiderRatio,
-        riderLockedSnapshotIds: riderSnapshot,
-        riderLockedAt: secureRiderLockState === 'Lock' ? (secureRiderLockedAt || now) : null,
-        riderReleasedAt: secureRiderLockState === 'Release' ? now : null,
-
-        hmLockState: secureHmLockState,
-        hmAutoMode: secureHmAutoMode,
-        hmAutoActiveTime: secureHmAutoActiveTime,
-        hmSchedule: secureHmSchedule,
-        hmRatio: secureHmRatio,
-        hmLockedSnapshotIds: hmSnapshot,
-        hmLockedAt: secureHmLockState === 'Lock' ? (secureHmLockedAt || now) : null,
-        hmReleasedAt: secureHmLockState === 'Release' ? now : null,
-
         selectedPaymentType,
         paymentMethodsList,
         selectedPaymentMethods,
       };
-
       localStorage.setItem('ss_secure_tx_settings_cluster', JSON.stringify(payload));
       setSecureSaveSuccess(true);
       setTimeout(() => {
@@ -1006,20 +697,61 @@ export const ClusterPortal: React.FC<PortalProps> = ({ onBack }) => {
     }
   };
 
-  const displayCustomerPayableAmount = (secureCustomerLockState === 'Lock' && secureCustomerLockedSnapshotIds)
-    ? effectiveCustomerPayableList.reduce((acc, c) => acc + (parseFloat(c.sum) || 0), 0)
+  // Effective Lists based on Master Admin Policy Settings
+  const effectiveCustomerPayableList = (
+    masterAdminSettings?.customerSchedule !== 'None' &&
+    masterAdminSettings?.customerLockState === 'Lock' &&
+    masterAdminSettings?.customerLockedSnapshotIds
+  ) ? customerPayableList.filter(c => masterAdminSettings.customerLockedSnapshotIds.includes(c.id))
+    : customerPayableList;
+
+  const effectiveSellerPayableList = (
+    masterAdminSettings?.sellerSchedule !== 'None' &&
+    masterAdminSettings?.sellerLockState === 'Lock' &&
+    masterAdminSettings?.sellerLockedSnapshotIds
+  ) ? sellerPayableList.filter(s => masterAdminSettings.sellerLockedSnapshotIds.includes(s.id))
+    : sellerPayableList;
+
+  const effectiveRiderPayableList = (
+    masterAdminSettings?.riderSchedule !== 'None' &&
+    masterAdminSettings?.riderLockState === 'Lock' &&
+    masterAdminSettings?.riderLockedSnapshotIds
+  ) ? riderPayableList.filter(r => masterAdminSettings.riderLockedSnapshotIds.includes(r.id))
+    : riderPayableList;
+
+  const effectiveHmPayableList = (
+    masterAdminSettings?.hmSchedule !== 'None' &&
+    masterAdminSettings?.hmLockState === 'Lock' &&
+    masterAdminSettings?.hmLockedSnapshotIds
+  ) ? hmPayableList.filter(h => masterAdminSettings.hmLockedSnapshotIds.includes(h.id))
+    : hmPayableList;
+
+  const displayCustomerPayableAmount = (
+    masterAdminSettings?.customerSchedule !== 'None' &&
+    masterAdminSettings?.customerLockState === 'Lock' &&
+    masterAdminSettings?.customerLockedSnapshotIds
+  ) ? effectiveCustomerPayableList.reduce((acc, c) => acc + (parseFloat(c.sum) || 0), 0)
     : totalCustomerPayableAmount;
 
-  const displaySellerPayableAmount = (secureSellerLockState === 'Lock' && secureSellerLockedSnapshotIds)
-    ? effectiveSellerPayableList.reduce((acc, s) => acc + (parseFloat(s.amount) || 0), 0)
+  const displaySellerPayableAmount = (
+    masterAdminSettings?.sellerSchedule !== 'None' &&
+    masterAdminSettings?.sellerLockState === 'Lock' &&
+    masterAdminSettings?.sellerLockedSnapshotIds
+  ) ? effectiveSellerPayableList.reduce((acc, s) => acc + (parseFloat(s.amount) || 0), 0)
     : totalSellerPayableAmount;
 
-  const displayRiderPayableAmount = (secureRiderLockState === 'Lock' && secureRiderLockedSnapshotIds)
-    ? effectiveRiderPayableList.reduce((acc, r) => acc + (parseFloat(r.amount) || 0), 0)
+  const displayRiderPayableAmount = (
+    masterAdminSettings?.riderSchedule !== 'None' &&
+    masterAdminSettings?.riderLockState === 'Lock' &&
+    masterAdminSettings?.riderLockedSnapshotIds
+  ) ? effectiveRiderPayableList.reduce((acc, r) => acc + (parseFloat(r.amount) || 0), 0)
     : totalRiderPayableAmount;
 
-  const displayHmPayableAmount = (secureHmLockState === 'Lock' && secureHmLockedSnapshotIds)
-    ? effectiveHmPayableList.reduce((acc, h) => acc + (parseFloat(h.amount) || 0), 0)
+  const displayHmPayableAmount = (
+    masterAdminSettings?.hmSchedule !== 'None' &&
+    masterAdminSettings?.hmLockState === 'Lock' &&
+    masterAdminSettings?.hmLockedSnapshotIds
+  ) ? effectiveHmPayableList.reduce((acc, h) => acc + (parseFloat(h.amount) || 0), 0)
     : totalHmPayableAmount;
 
   const filteredCustomerPayableList = effectiveCustomerPayableList.filter(cust => {
@@ -1104,7 +836,7 @@ export const ClusterPortal: React.FC<PortalProps> = ({ onBack }) => {
 
       const { data: acceptedRows, error: acceptedErr } = await supabase
         .from('accepted_shipments')
-        .select('"selller id", "cluster id", "order ID", "awb number"')
+        .select('"id", "selller id", "cluster id", "order ID", "awb number", "days", "shipment type", "total selling price", "total delevery charge", "payout status"')
         .eq('cluster id', clusterId);
 
       if (acceptedErr) console.warn("Error fetching cluster accepted_shipments:", acceptedErr);
@@ -1113,13 +845,27 @@ export const ClusterPortal: React.FC<PortalProps> = ({ onBack }) => {
       const clusterOrderIds = new Set<string>();
       const clusterAwbs = new Set<string>();
 
+      const orderDaysMap: Record<string, number> = {};
+      const awbDaysMap: Record<string, number> = {};
+      const sellerShipmentsMap: Record<string, any[]> = {};
+
       (acceptedRows || []).forEach((row: any) => {
         const sId = row['selller id'] || row['seller id'];
         const ordId = row['order ID'] || row['order id'];
         const awb = row['awb number'];
+        const rawDays = row['days'];
+        const parsedDays = rawDays !== null && rawDays !== undefined && rawDays !== '' ? parseFloat(rawDays) : null;
+
         if (sId) clusterSellerIds.add(sId);
         if (ordId) clusterOrderIds.add(ordId);
         if (awb) clusterAwbs.add(awb);
+
+        if (ordId && parsedDays !== null && !isNaN(parsedDays)) {
+          orderDaysMap[ordId] = Math.max(orderDaysMap[ordId] ?? -Infinity, parsedDays);
+        }
+        if (awb && parsedDays !== null && !isNaN(parsedDays)) {
+          awbDaysMap[awb] = Math.max(awbDaysMap[awb] ?? -Infinity, parsedDays);
+        }
       });
 
       const { data: incomeData, error: incomeErr } = await supabase
@@ -1135,15 +881,11 @@ export const ClusterPortal: React.FC<PortalProps> = ({ onBack }) => {
         throw incomeErr;
       }
 
-      const clusterIncome = (incomeData || []).filter((row: any) => {
-        const sId = row['seller id'] || row['selller id'];
-        const ordId = row['order id'] || row['order ID'];
-        const awb = row['awb number'];
-        if (ordId && clusterOrderIds.has(ordId)) return true;
-        if (awb && clusterAwbs.has(awb)) return true;
-        if (sId && clusterSellerIds.has(sId)) return true;
-        return false;
-      });
+      // Read master admin schedule for seller (default: '4 Days')
+      const rawAdminTx = typeof window !== 'undefined' ? localStorage.getItem('ss_secure_tx_settings_admin') : null;
+      const parsedAdminTx = rawAdminTx ? JSON.parse(rawAdminTx) : null;
+      const currentSchedule = parsedAdminTx?.sellerSchedule || masterAdminSettings?.sellerSchedule || '4 Days';
+      const minDays = parseScheduleDays(currentSchedule);
 
       const { data: sellers } = await supabase.from('sellers').select('*');
       const sellerMap: Record<string, any> = {};
@@ -1153,12 +895,84 @@ export const ClusterPortal: React.FC<PortalProps> = ({ onBack }) => {
 
       let total = 0;
       const aggregated: Record<string, number> = {};
-      clusterIncome.forEach((row: any) => {
+      const processedOrderIds = new Set<string>();
+      const processedAwbs = new Set<string>();
+
+      (incomeData || []).forEach((row: any) => {
         const sId = row['seller id'] || row['selller id'];
+        const ordId = row['order id'] || row['order ID'];
+        const awb = row['awb number'];
         if (!sId) return;
+
+        const inCluster = (ordId && clusterOrderIds.has(ordId)) || (awb && clusterAwbs.has(awb)) || clusterSellerIds.has(sId);
+        if (!inCluster) return;
+
+        // Check days from accepted_shipments or income
+        const rawDays = row['days'];
+        const incomeDays = rawDays !== null && rawDays !== undefined && rawDays !== '' ? parseFloat(rawDays) : null;
+        let shipmentDays: number | null = null;
+        if (ordId && orderDaysMap[ordId] !== undefined) {
+          shipmentDays = orderDaysMap[ordId];
+        } else if (awb && awbDaysMap[awb] !== undefined) {
+          shipmentDays = awbDaysMap[awb];
+        } else if (incomeDays !== null && !isNaN(incomeDays)) {
+          shipmentDays = incomeDays;
+        }
+
+        // Apply schedule filter if not 'None'
+        if (minDays !== null) {
+          if (shipmentDays === null || shipmentDays < minDays) return;
+        }
+
         const amt = parseFloat(row['final payable amount'] || '0');
         total += amt;
         aggregated[sId] = (aggregated[sId] || 0) + amt;
+
+        if (ordId) processedOrderIds.add(ordId);
+        if (awb) processedAwbs.add(awb);
+
+        if (!sellerShipmentsMap[sId]) sellerShipmentsMap[sId] = [];
+        sellerShipmentsMap[sId].push({
+          orderId: ordId,
+          awb: awb,
+          days: shipmentDays,
+          amount: amt
+        });
+      });
+
+      // Also check accepted_shipments directly for any missing delivered/pending shipments
+      (acceptedRows || []).forEach((ship: any) => {
+        const ordId = ship['order ID'] || ship['order id'];
+        const awb = ship['awb number'];
+        const sId = ship['selller id'] || ship['seller id'];
+        const pStatus = (ship['payout status'] || '').toLowerCase();
+        if (pStatus === 'settled') return;
+        if (!sId) return;
+
+        if (ordId && processedOrderIds.has(ordId)) return;
+        if (awb && processedAwbs.has(awb)) return;
+
+        const rawDays = ship['days'];
+        const parsedDays = rawDays !== null && rawDays !== undefined && rawDays !== '' ? parseFloat(rawDays) : null;
+
+        if (minDays !== null) {
+          if (parsedDays === null || parsedDays < minDays) return;
+        }
+
+        const sp = parseFloat(ship['total selling price']) || parseFloat(ship['total amount']) || 0;
+        const dc = parseFloat(ship['total delevery charge']) || 0;
+        const amt = sp + dc;
+        if (amt > 0) {
+          total += amt;
+          aggregated[sId] = (aggregated[sId] || 0) + amt;
+          if (!sellerShipmentsMap[sId]) sellerShipmentsMap[sId] = [];
+          sellerShipmentsMap[sId].push({
+            orderId: ordId,
+            awb: awb,
+            days: parsedDays,
+            amount: amt
+          });
+        }
       });
 
       const list = Object.keys(aggregated).map(sId => {
@@ -1174,7 +988,8 @@ export const ClusterPortal: React.FC<PortalProps> = ({ onBack }) => {
           bank_name: sInfo.bank_name || 'N/A',
           account_no: sInfo.account_no || 'N/A',
           ifsc_code: sInfo.ifsc_code || 'N/A',
-          upi_id: sInfo.upi_id || 'N/A'
+          upi_id: sInfo.upi_id || 'N/A',
+          shipments: sellerShipmentsMap[sId] || []
         };
       });
 
@@ -1205,7 +1020,7 @@ export const ClusterPortal: React.FC<PortalProps> = ({ onBack }) => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [activeTab, clusterUserData?.id]);
+  }, [activeTab, clusterUserData?.id, masterAdminSettings?.sellerSchedule]);
  const [showCashHubManagersModal, setShowCashHubManagersModal] = useState(false);
  const [totalCashWithHubManagers, setTotalCashWithHubManagers] = useState(0);
  const [cashHubManagersList, setCashHubManagersList] = useState<any[]>([]);
@@ -5107,456 +4922,7 @@ const [portalSettings, setPortalSettings] = useState<Record<string, { enabled: b
 
             {/* Modal Body */}
             <div className="flex-1 overflow-y-auto p-4 sm:p-6 w-full max-w-xl mx-auto flex flex-col gap-5 pb-16">
-              {/* Card 1: Customer & Seller Card */}
-              <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col gap-4">
-                {/* Header with Title & Action Controls */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
-                  <div className="flex flex-col">
-                    <span className="text-xs sm:text-sm font-black text-slate-900 uppercase tracking-wide">
-                      Customer & Seller
-                    </span>
-                    <span className="text-[11px] text-slate-500 font-medium">
-                      Applicable to All Customers & Sellers across all channels
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
-                    {/* Lock / Release Toggle */}
-                    <div className="inline-flex rounded-lg border border-black overflow-hidden shadow-2xs">
-                      <button
-                        type="button"
-                        onClick={() => setSecureCustomerLockState('Lock')}
-                        className={`px-3 py-1.5 text-xs font-bold transition-colors cursor-pointer ${
-                          secureCustomerLockState === 'Lock'
-                            ? 'bg-black text-white'
-                            : 'bg-white text-black hover:bg-slate-100'
-                        }`}
-                      >
-                        Lock
-                      </button>
-                      <div className="w-[1px] bg-black"></div>
-                      <button
-                        type="button"
-                        onClick={() => setSecureCustomerLockState('Release')}
-                        className={`px-3 py-1.5 text-xs font-bold transition-colors cursor-pointer ${
-                          secureCustomerLockState === 'Release'
-                            ? 'bg-black text-white'
-                            : 'bg-white text-black hover:bg-slate-100'
-                        }`}
-                      >
-                        Release
-                      </button>
-                    </div>
-
-                    {/* Auto Mode button */}
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const next = !secureCustomerAutoMode;
-                        setSecureCustomerAutoMode(next);
-                        if (next) {
-                          setSecureCustomerAutoActiveTime(new Date().toLocaleString('en-IN', {
-                            day: '2-digit', month: 'short', year: 'numeric',
-                            hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true
-                          }));
-                        } else {
-                          setSecureCustomerAutoActiveTime(null);
-                        }
-                      }}
-                      className={`px-3 py-1.5 text-xs font-bold rounded-lg border transition-all cursor-pointer flex items-center gap-1.5 shadow-2xs ${
-                        secureCustomerAutoMode
-                          ? 'bg-emerald-600 text-white border-emerald-700 animate-pulse ring-2 ring-emerald-400/50'
-                          : 'bg-white text-slate-800 border-black hover:bg-slate-100'
-                      }`}
-                    >
-                      <span className={`w-2 h-2 rounded-full ${secureCustomerAutoMode ? 'bg-white animate-ping' : 'bg-slate-400'}`}></span>
-                      <span>Auto Mode</span>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Auto Mode Active Banner */}
-                {secureCustomerAutoMode && (
-                  <div className="bg-emerald-50 border border-emerald-300 text-emerald-900 rounded-xl p-3 text-xs flex items-center justify-between shadow-2xs">
-                    <div className="flex items-center gap-2 font-bold">
-                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                      <span>Auto Mode Sakriya (Active) - Original Real-Time</span>
-                    </div>
-                    <span className="text-[11px] font-mono font-bold text-emerald-800 bg-white/80 px-2.5 py-0.5 rounded-md border border-emerald-200">
-                      {secureCustomerAutoActiveTime}
-                    </span>
-                  </div>
-                )}
-
-                {/* Customer Section */}
-                <div className="flex flex-col gap-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-black text-slate-800 uppercase tracking-wider">Customer Policy</span>
-                    <span className="text-[10px] text-slate-500 font-semibold bg-slate-100 px-2 py-0.5 rounded">All Registered Customers</span>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                    {/* Box 1: Customer Entity */}
-                    <div className="border border-black bg-white rounded-xl p-3 flex flex-col justify-between min-h-[72px] shadow-2xs">
-                      <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Target Entity</label>
-                      <div className="flex flex-col mt-1">
-                        <span className="text-sm font-black text-slate-900 leading-tight">Customer</span>
-                        <span className="text-[10px] text-slate-500 font-medium">All Customers</span>
-                      </div>
-                    </div>
-
-                    {/* Box 2: Schedule */}
-                    <div className="border border-black bg-white rounded-xl p-3 flex flex-col justify-between min-h-[72px] shadow-2xs">
-                      <div className="flex items-center justify-between">
-                        <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Schedule</label>
-                        {secureCustomerSchedule.includes('Day') && (
-                          <span className="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
-                            ≥ {secureCustomerSchedule.split(' ')[0]}D
-                          </span>
-                        )}
-                      </div>
-                      <div className="mt-1">
-                        <select 
-                          value={secureCustomerSchedule} 
-                          onChange={(e) => setSecureCustomerSchedule(e.target.value)} 
-                          className="w-full bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 text-xs font-bold text-slate-900 focus:outline-none cursor-pointer truncate"
-                        >
-                          {SECURE_SCHEDULE_OPTIONS.map(opt => (
-                            <option key={opt.value} value={opt.value}>{opt.label}</option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-
-                    {/* Box 3: Ratio (Hours : Days) */}
-                    <div className="border border-black bg-white rounded-xl p-3 flex flex-col justify-between min-h-[72px] shadow-2xs">
-                      <div className="flex items-center justify-between">
-                        <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Ratio (H:D)</label>
-                        <span className="text-[9px] font-semibold text-slate-400">Hours : Days</span>
-                      </div>
-                      <div className="flex flex-col gap-1.5 mt-1">
-                        <div className="flex items-center gap-1.5 justify-between">
-                          <span className="text-[10px] font-semibold text-slate-600">Custom:</span>
-                          <input 
-                            type="text" 
-                            value={secureCustomerRatio} 
-                            onChange={(e) => setSecureCustomerRatio(e.target.value)} 
-                            placeholder="1:2"
-                            className="w-20 bg-slate-50 border border-slate-200 rounded-md px-1.5 py-0.5 text-xs font-bold text-center text-slate-900 focus:outline-none"
-                          />
-                        </div>
-                        <select 
-                          value={secureCustomerRatio} 
-                          onChange={(e) => setSecureCustomerRatio(e.target.value)} 
-                          className="w-full bg-slate-50 border border-slate-200 rounded-md px-1 py-0.5 text-[11px] font-semibold text-slate-700 focus:outline-none cursor-pointer truncate"
-                        >
-                          <option value="" disabled>Select Preset</option>
-                          {SECURE_RATIO_TEMPLATES.map(t => (
-                            <option key={t.value} value={t.value}>{t.label}</option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Seller Section */}
-                <div className="flex flex-col gap-2 pt-2 border-t border-slate-100">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-black text-slate-800 uppercase tracking-wider">Seller Policy</span>
-                    <span className="text-[10px] text-slate-500 font-semibold bg-slate-100 px-2 py-0.5 rounded">All Registered Sellers</span>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                    {/* Box 1: Seller Entity */}
-                    <div className="border border-black bg-white rounded-xl p-3 flex flex-col justify-between min-h-[72px] shadow-2xs">
-                      <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Target Entity</label>
-                      <div className="flex flex-col mt-1">
-                        <span className="text-sm font-black text-slate-900 leading-tight">Seller</span>
-                        <span className="text-[10px] text-slate-500 font-medium">All Sellers</span>
-                      </div>
-                    </div>
-
-                    {/* Box 2: Schedule */}
-                    <div className="border border-black bg-white rounded-xl p-3 flex flex-col justify-between min-h-[72px] shadow-2xs">
-                      <div className="flex items-center justify-between">
-                        <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Schedule</label>
-                        {secureSellerSchedule.includes('Day') && (
-                          <span className="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
-                            ≥ {secureSellerSchedule.split(' ')[0]}D
-                          </span>
-                        )}
-                      </div>
-                      <div className="mt-1">
-                        <select 
-                          value={secureSellerSchedule} 
-                          onChange={(e) => setSecureSellerSchedule(e.target.value)} 
-                          className="w-full bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 text-xs font-bold text-slate-900 focus:outline-none cursor-pointer truncate"
-                        >
-                          {SECURE_SCHEDULE_OPTIONS.map(opt => (
-                            <option key={opt.value} value={opt.value}>{opt.label}</option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-
-                    {/* Box 3: Ratio (Hours : Days) */}
-                    <div className="border border-black bg-white rounded-xl p-3 flex flex-col justify-between min-h-[72px] shadow-2xs">
-                      <div className="flex items-center justify-between">
-                        <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Ratio (H:D)</label>
-                        <span className="text-[9px] font-semibold text-slate-400">Hours : Days</span>
-                      </div>
-                      <div className="flex flex-col gap-1.5 mt-1">
-                        <div className="flex items-center gap-1.5 justify-between">
-                          <span className="text-[10px] font-semibold text-slate-600">Custom:</span>
-                          <input 
-                            type="text" 
-                            value={secureSellerRatio} 
-                            onChange={(e) => setSecureSellerRatio(e.target.value)} 
-                            placeholder="1:2"
-                            className="w-20 bg-slate-50 border border-slate-200 rounded-md px-1.5 py-0.5 text-xs font-bold text-center text-slate-900 focus:outline-none"
-                          />
-                        </div>
-                        <select 
-                          value={secureSellerRatio} 
-                          onChange={(e) => setSecureSellerRatio(e.target.value)} 
-                          className="w-full bg-slate-50 border border-slate-200 rounded-md px-1 py-0.5 text-[11px] font-semibold text-slate-700 focus:outline-none cursor-pointer truncate"
-                        >
-                          <option value="" disabled>Select Preset</option>
-                          {SECURE_RATIO_TEMPLATES.map(t => (
-                            <option key={t.value} value={t.value}>{t.label}</option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Card 2: Rider & Hub Manager Card */}
-              <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col gap-4">
-                {/* Header with Title & Action Controls */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
-                  <div className="flex flex-col">
-                    <span className="text-xs sm:text-sm font-black text-slate-900 uppercase tracking-wide">
-                      Rider & Hub Manager
-                    </span>
-                    <span className="text-[11px] text-slate-500 font-medium">
-                      Applicable to All Field Riders & Hub Managers across all clusters
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
-                    {/* Lock / Release Toggle */}
-                    <div className="inline-flex rounded-lg border border-black overflow-hidden shadow-2xs">
-                      <button
-                        type="button"
-                        onClick={() => setSecureRiderLockState('Lock')}
-                        className={`px-3 py-1.5 text-xs font-bold transition-colors cursor-pointer ${
-                          secureRiderLockState === 'Lock'
-                            ? 'bg-black text-white'
-                            : 'bg-white text-black hover:bg-slate-100'
-                        }`}
-                      >
-                        Lock
-                      </button>
-                      <div className="w-[1px] bg-black"></div>
-                      <button
-                        type="button"
-                        onClick={() => setSecureRiderLockState('Release')}
-                        className={`px-3 py-1.5 text-xs font-bold transition-colors cursor-pointer ${
-                          secureRiderLockState === 'Release'
-                            ? 'bg-black text-white'
-                            : 'bg-white text-black hover:bg-slate-100'
-                        }`}
-                      >
-                        Release
-                      </button>
-                    </div>
-
-                    {/* Auto Mode button */}
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const next = !secureRiderAutoMode;
-                        setSecureRiderAutoMode(next);
-                        if (next) {
-                          setSecureRiderAutoActiveTime(new Date().toLocaleString('en-IN', {
-                            day: '2-digit', month: 'short', year: 'numeric',
-                            hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true
-                          }));
-                        } else {
-                          setSecureRiderAutoActiveTime(null);
-                        }
-                      }}
-                      className={`px-3 py-1.5 text-xs font-bold rounded-lg border transition-all cursor-pointer flex items-center gap-1.5 shadow-2xs ${
-                        secureRiderAutoMode
-                          ? 'bg-emerald-600 text-white border-emerald-700 animate-pulse ring-2 ring-emerald-400/50'
-                          : 'bg-white text-slate-800 border-black hover:bg-slate-100'
-                      }`}
-                    >
-                      <span className={`w-2 h-2 rounded-full ${secureRiderAutoMode ? 'bg-white animate-ping' : 'bg-slate-400'}`}></span>
-                      <span>Auto Mode</span>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Auto Mode Active Banner */}
-                {secureRiderAutoMode && (
-                  <div className="bg-emerald-50 border border-emerald-300 text-emerald-900 rounded-xl p-3 text-xs flex items-center justify-between shadow-2xs">
-                    <div className="flex items-center gap-2 font-bold">
-                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                      <span>Auto Mode Sakriya (Active) - Original Real-Time</span>
-                    </div>
-                    <span className="text-[11px] font-mono font-bold text-emerald-800 bg-white/80 px-2.5 py-0.5 rounded-md border border-emerald-200">
-                      {secureRiderAutoActiveTime}
-                    </span>
-                  </div>
-                )}
-
-                {/* Rider Section */}
-                <div className="flex flex-col gap-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-black text-slate-800 uppercase tracking-wider">Rider Policy</span>
-                    <span className="text-[10px] text-slate-500 font-semibold bg-slate-100 px-2 py-0.5 rounded">All Registered Riders</span>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                    {/* Box 1: Rider Entity */}
-                    <div className="border border-black bg-white rounded-xl p-3 flex flex-col justify-between min-h-[72px] shadow-2xs">
-                      <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Target Entity</label>
-                      <div className="flex flex-col mt-1">
-                        <span className="text-sm font-black text-slate-900 leading-tight">Rider</span>
-                        <span className="text-[10px] text-slate-500 font-medium">All Riders</span>
-                      </div>
-                    </div>
-
-                    {/* Box 2: Schedule */}
-                    <div className="border border-black bg-white rounded-xl p-3 flex flex-col justify-between min-h-[72px] shadow-2xs">
-                      <div className="flex items-center justify-between">
-                        <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Schedule</label>
-                        {secureRiderSchedule.includes('Day') && (
-                          <span className="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
-                            ≥ {secureRiderSchedule.split(' ')[0]}D
-                          </span>
-                        )}
-                      </div>
-                      <div className="mt-1">
-                        <select 
-                          value={secureRiderSchedule} 
-                          onChange={(e) => setSecureRiderSchedule(e.target.value)} 
-                          className="w-full bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 text-xs font-bold text-slate-900 focus:outline-none cursor-pointer truncate"
-                        >
-                          {SECURE_SCHEDULE_OPTIONS.map(opt => (
-                            <option key={opt.value} value={opt.value}>{opt.label}</option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-
-                    {/* Box 3: Ratio (Hours : Days) */}
-                    <div className="border border-black bg-white rounded-xl p-3 flex flex-col justify-between min-h-[72px] shadow-2xs">
-                      <div className="flex items-center justify-between">
-                        <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Ratio (H:D)</label>
-                        <span className="text-[9px] font-semibold text-slate-400">Hours : Days</span>
-                      </div>
-                      <div className="flex flex-col gap-1.5 mt-1">
-                        <div className="flex items-center gap-1.5 justify-between">
-                          <span className="text-[10px] font-semibold text-slate-600">Custom:</span>
-                          <input 
-                            type="text" 
-                            value={secureRiderRatio} 
-                            onChange={(e) => setSecureRiderRatio(e.target.value)} 
-                            placeholder="1:2"
-                            className="w-20 bg-slate-50 border border-slate-200 rounded-md px-1.5 py-0.5 text-xs font-bold text-center text-slate-900 focus:outline-none"
-                          />
-                        </div>
-                        <select 
-                          value={secureRiderRatio} 
-                          onChange={(e) => setSecureRiderRatio(e.target.value)} 
-                          className="w-full bg-slate-50 border border-slate-200 rounded-md px-1 py-0.5 text-[11px] font-semibold text-slate-700 focus:outline-none cursor-pointer truncate"
-                        >
-                          <option value="" disabled>Select Preset</option>
-                          {SECURE_RATIO_TEMPLATES.map(t => (
-                            <option key={t.value} value={t.value}>{t.label}</option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Hub Manager Section */}
-                <div className="flex flex-col gap-2 pt-2 border-t border-slate-100">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-black text-slate-800 uppercase tracking-wider">Hub Manager Policy</span>
-                    <span className="text-[10px] text-slate-500 font-semibold bg-slate-100 px-2 py-0.5 rounded">All Registered Hub Managers</span>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                    {/* Box 1: Hub Manager Entity */}
-                    <div className="border border-black bg-white rounded-xl p-3 flex flex-col justify-between min-h-[72px] shadow-2xs">
-                      <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Target Entity</label>
-                      <div className="flex flex-col mt-1">
-                        <span className="text-sm font-black text-slate-900 leading-tight">Hub Manager</span>
-                        <span className="text-[10px] text-slate-500 font-medium">All Hub Managers</span>
-                      </div>
-                    </div>
-
-                    {/* Box 2: Schedule */}
-                    <div className="border border-black bg-white rounded-xl p-3 flex flex-col justify-between min-h-[72px] shadow-2xs">
-                      <div className="flex items-center justify-between">
-                        <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Schedule</label>
-                        {secureHmSchedule.includes('Day') && (
-                          <span className="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
-                            ≥ {secureHmSchedule.split(' ')[0]}D
-                          </span>
-                        )}
-                      </div>
-                      <div className="mt-1">
-                        <select 
-                          value={secureHmSchedule} 
-                          onChange={(e) => setSecureHmSchedule(e.target.value)} 
-                          className="w-full bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 text-xs font-bold text-slate-900 focus:outline-none cursor-pointer truncate"
-                        >
-                          {SECURE_SCHEDULE_OPTIONS.map(opt => (
-                            <option key={opt.value} value={opt.value}>{opt.label}</option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-
-                    {/* Box 3: Ratio (Hours : Days) */}
-                    <div className="border border-black bg-white rounded-xl p-3 flex flex-col justify-between min-h-[72px] shadow-2xs">
-                      <div className="flex items-center justify-between">
-                        <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Ratio (H:D)</label>
-                        <span className="text-[9px] font-semibold text-slate-400">Hours : Days</span>
-                      </div>
-                      <div className="flex flex-col gap-1.5 mt-1">
-                        <div className="flex items-center gap-1.5 justify-between">
-                          <span className="text-[10px] font-semibold text-slate-600">Custom:</span>
-                          <input 
-                            type="text" 
-                            value={secureHmRatio} 
-                            onChange={(e) => setSecureHmRatio(e.target.value)} 
-                            placeholder="1:2"
-                            className="w-20 bg-slate-50 border border-slate-200 rounded-md px-1.5 py-0.5 text-xs font-bold text-center text-slate-900 focus:outline-none"
-                          />
-                        </div>
-                        <select 
-                          value={secureHmRatio} 
-                          onChange={(e) => setSecureHmRatio(e.target.value)} 
-                          className="w-full bg-slate-50 border border-slate-200 rounded-md px-1 py-0.5 text-[11px] font-semibold text-slate-700 focus:outline-none cursor-pointer truncate"
-                        >
-                          <option value="" disabled>Select Preset</option>
-                          {SECURE_RATIO_TEMPLATES.map(t => (
-                            <option key={t.value} value={t.value}>{t.label}</option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-
-              {/* Card 2: Payment Category */}
+              {/* Payment Category */}
               <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col gap-3">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xs sm:text-sm font-black text-slate-900 uppercase tracking-wide">Payment Category</h3>
